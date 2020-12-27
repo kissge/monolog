@@ -1,20 +1,16 @@
-<script>
-  import successkid from 'images/successkid.jpg';
-</script>
-
 <style>
   h1,
   figure,
   p {
-    text-align: center;
     margin: 0 auto;
+    text-align: center;
   }
 
   h1 {
-    font-size: 2.8em;
+    margin: 0 0 0.5em 0;
     text-transform: uppercase;
     font-weight: 700;
-    margin: 0 0 0.5em 0;
+    font-size: 2.8em;
   }
 
   figure {
@@ -22,9 +18,9 @@
   }
 
   img {
-    width: 100%;
-    max-width: 400px;
     margin: 0 0 1em 0;
+    max-width: 400px;
+    width: 100%;
   }
 
   p {
@@ -45,7 +41,6 @@
 <h1>Great success!</h1>
 
 <figure>
-  <img alt="Success Kid" src={successkid} />
   <figcaption>Have fun with Sapper!</figcaption>
 </figure>
 
