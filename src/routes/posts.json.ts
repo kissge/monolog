@@ -6,6 +6,10 @@ const entries = [];
 
 (async () => {
   for (const type of await fs.promises.readdir(config.dataRootDir)) {
+    if (!(await fs.promises.lstat(config.dataRootDir + '/' + type)).isDirectory()) {
+      continue;
+    }
+
     for (const filename of await fs.promises.readdir(config.dataRootDir + '/' + type)) {
       if (filename.endsWith('.md')) {
         const body = fs.readFileSync(config.dataRootDir + '/' + type + '/' + filename, { encoding: 'utf-8' });
