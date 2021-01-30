@@ -6,7 +6,10 @@
     const data = await res.json();
 
     if (res.status === 200) {
-      return { post: data };
+      return {
+        post: data,
+        historyURL: `https://github.com/${config.dataGitHubRepo}/commits/master/${params.type}/${params.slug}.md`,
+      };
     } else {
       this.error(res.status, data.message);
     }
@@ -18,6 +21,8 @@
 
   import { toJSTISOString } from '../../utility';
   export let post: Post;
+
+  export let historyURL: string;
 </script>
 
 <svelte:head>
@@ -38,7 +43,7 @@
   </div>
 
   <p class="history">
-    <a href="https://github.com/{config.dataGitHubRepo}/commits/master/notes/{post.slug}.md">更新履歴</a>
+    <a href={historyURL}>更新履歴</a>
   </p>
 </header>
 
