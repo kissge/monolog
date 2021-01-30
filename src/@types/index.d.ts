@@ -53,3 +53,21 @@ declare namespace Sapper {
     next: ServerRoute,
   ) => void;
 }
+
+declare interface PostMetadata {
+  title: string;
+  date?: string;
+  from?: string;
+  tags?: string[];
+  header?: string;
+}
+
+declare interface PostMetadataParsed extends PostMetadata {
+  date?: Date;
+}
+
+declare interface Post extends PostMetadata {
+  type: string;
+  slug: string;
+  html: string;
+}

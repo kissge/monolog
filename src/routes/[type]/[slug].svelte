@@ -14,51 +14,128 @@
 </script>
 
 <script lang="ts">
-  export let post: { slug: string; title: string; html: any };
+  import { config } from '../../config';
+
+  import { toJSTISOString } from '../../utility';
+  export let post: Post;
 </script>
 
-<style>
-  /*
-		By default, CSS is locally scoped to the component,
-		and any unused styles are dead-code-eliminated.
-		In this page, Svelte can't know which elements are
-		going to appear inside the {{{post.html}}} block,
-		so we have to use the :global(...) modifier to target
-		all elements inside .content
-	*/
-  .content :global(h2) {
-    font-size: 1.4em;
-    font-weight: 500;
-  }
-
-  .content :global(pre) {
-    background-color: #f9f9f9;
-    box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.05);
-    padding: 0.5em;
-    border-radius: 2px;
-    overflow-x: auto;
-  }
-
-  .content :global(pre) :global(code) {
-    background-color: transparent;
-    padding: 0;
-  }
-
-  .content :global(ul) {
-    line-height: 1.5;
-  }
-
-  .content :global(li) {
-    margin: 0 0 0.5em 0;
-  }
-</style>
-
 <svelte:head>
-  <title>{post.title}</title>
+  <title>{post.title} - {new Date(post.date).toISOString().slice(0, 10)} | {config.title}</title>
 </svelte:head>
 
-<h1>{post.title}</h1>
+<header>
+  <div class="img-header" style={post.header ? `background-image: url(${post.header})` : ''} />
+  <h1>{post.title}</h1>
+  {#if post.date}
+    <time>{toJSTISOString(post.date)}</time>
+  {/if}
+
+  <div class="tags">
+    {#each post.tags || [] as tag}
+      <div class="tag">#{tag}</div>
+    {/each}
+  </div>
+</header>
+
+{#if post.from}
+  <div class="callout">
+    この記事は以前別のところにあったものを移してきたものです。完璧に移植できておらず、表示が崩れているかもしれません。
+  </div>
+{/if}
 
 <div class="content">
   {@html post.html}
 </div>
+
+<style type="text/sass">
+  header
+    padding-top: 360px
+
+    .img-header
+      position: absolute
+      background: linear-gradient(132deg, rgba(0,212,255,1) 0%, rgba(9,88,121,1) 35%, rgba(2,0,36,1) 100%)
+      background-size: cover
+      top: 0
+      left: 0
+      width: 100vw
+      height: 400px
+      z-index: -1
+
+    h1
+      text-shadow: 0 1px 5px #fff
+
+    time
+      display: block
+      text-align: right
+
+    .tags
+      .tag
+        display: inline-block
+        background: #d9d7d8
+        padding: 4px 8px
+        margin-right: 4px
+
+  .callout
+    margin: 4em 0
+    padding: 1em
+    background: #f0f091
+    color: #000
+
+    &::before
+      float: left
+      margin-right: 0.5em
+      margin-left: 0.25em
+      content: '⚠️'
+      font-size: 2em
+
+  .content
+    :global(p)
+      text-align: justify
+      text-indent: 1em
+
+    :global(h2)
+      font-weight: 500
+      font-size: 1.4em
+
+    :global(h3)
+      margin-top: 2em
+
+    :global(pre)
+      overflow-x: auto
+      padding: 1em
+      border-radius: 2px
+      background-color: #f9f9f9
+      box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.05)
+
+    :global(pre) :global(code)
+      padding: 0
+      background-color: transparent
+
+    :global(ul)
+      line-height: 1.5
+
+    :global(li)
+      margin: 0 0 0.5em 0
+
+    :global(hr)
+      margin: 5em auto
+      width: calc(100% - 3em)
+      border-style: dashed
+      border-color: #ddd
+
+    :global(img), :global(iframe)
+      display: block
+      margin: 3em auto
+      max-width: 100%
+
+    :global(blockquote)
+      padding-left: 1.2em
+      border-left: 5px solid #8fb6f0
+
+    :global(p) + :global(blockquote)
+      margin-top: 3em
+
+    :global(a)
+      color: #296fd8
+</style>

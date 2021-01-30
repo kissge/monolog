@@ -1,9 +1,26 @@
+@font-face {
+  font-weight: normal;
+  font-style: normal;
+  font-family: 'Klee One';
+  src: url('/fonts/KleeOne-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: bold;
+  font-style: normal;
+  font-family: 'Klee One';
+  src: url('/fonts/KleeOne-SemiBold.woff2') format('woff2');
+}
+
+html {
+  min-height: 100%;
+}
+
 body {
   margin: 0;
   color: #333;
   font-size: 14px;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
-    Helvetica Neue, sans-serif;
+  font-family: 'Avenir Light', 'Klee One', serif;
   line-height: 2;
 }
 
