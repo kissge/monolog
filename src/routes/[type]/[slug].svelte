@@ -36,6 +36,10 @@
       <div class="tag">#{tag}</div>
     {/each}
   </div>
+
+  <p class="history">
+    <a href="https://github.com/{config.dataGitHubRepo}/commits/master/notes/{post.slug}.md">更新履歴</a>
+  </p>
 </header>
 
 {#if post.from}
@@ -75,6 +79,10 @@
         background: #d9d7d8
         padding: 4px 8px
         margin-right: 4px
+
+    .history
+      text-align: right
+      font-size: 0.8em
 
   .callout
     margin: 4em 0
