@@ -20,6 +20,7 @@
   import { config } from '../../config';
   import { onMount } from 'svelte';
   import { toJSTISOString } from '../../utility';
+  import { defineCustomElement } from '../../components/x-script';
 
   export let post: Post;
   export let historyURL: string;
@@ -32,6 +33,7 @@
     );
     mentions = await res.json();
     mentions.children.sort((a, b) => (b.published || b['wm-received']).localeCompare(a.published || a['wm-received']));
+    defineCustomElement();
   });
 </script>
 
@@ -158,9 +160,13 @@
       text-align: justify
       text-indent: 1em
 
+    :global(h1)
+      margin-top: 2em
+
     :global(h2)
       font-weight: 500
       font-size: 1.4em
+      margin-top: 2em
 
     :global(h3)
       margin-top: 2em
