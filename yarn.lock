@@ -1900,6 +1900,11 @@ safe-buffer@^5.1.0:
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
 
+sapper-google-analytics@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/sapper-google-analytics/-/sapper-google-analytics-1.0.2.tgz#a2d3e38ef827ac31b2857f26b643510358affb84"
+  integrity sha512-l9e4dxUnk8zAxZNk44rGiIoRJK00R1RWPOGwDo62xvv7VepH8XpUG+gtLO0ow9UBmoglinzdnreD4KVNuhrYHQ==
+
 sapper@^0.28.0:
   version "0.28.10"
   resolved "https://registry.yarnpkg.com/sapper/-/sapper-0.28.10.tgz#fa3341f8e04fba7bc8b6c5faedb6cff7c3ac406b"

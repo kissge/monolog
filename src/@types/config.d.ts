@@ -7,4 +7,7 @@ declare interface Config {
 
   /** Site title (used in <title>) */
   title: string;
+
+  /** Google Analytics tracking ID */
+  googleAnalyticsTrackingID: string;
 }
