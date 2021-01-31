@@ -18,11 +18,20 @@
 
 <script lang="ts">
   import { config } from '../../config';
-
+  import { onMount } from 'svelte';
   import { toJSTISOString } from '../../utility';
-  export let post: Post;
 
+  export let post: Post;
   export let historyURL: string;
+  export let mentions: JF2;
+
+  onMount(async () => {
+    const res = await fetch(
+      'https://webmention.io/api/mentions.jf2?target=' +
+        encodeURIComponent(config.host + location.pathname.replace(/(?<!\/)$/, '/')),
+    );
+    mentions = await res.json();
+  });
 </script>
 
 <svelte:head>
@@ -71,6 +80,32 @@
 <div class="content">
   {@html post.html}
 </div>
+
+<section class="mentions">
+  <h1>Recent public mentions on Twitter</h1>
+  <ol>
+    {#if mentions}
+      {#each mentions.children as mention}
+        <li>
+          <a href={mention.url}>{mention['wm-property']}</a>
+          <a href={mention.author.url}>
+            <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
+          </a>
+          at {toJSTISOString(mention['wm-received'])}
+          {#if mention['wm-property'] === 'mention-of'}
+            <blockquote>
+              {mention.content.text}
+            </blockquote>
+          {/if}
+        </li>
+      {:else}
+        Twitterで言及していただけると自動的にここに収集されます。
+      {/each}
+    {:else}
+      Loading mentions...
+    {/if}
+  </ol>
+</section>
 
 <style type="text/sass">
   header
@@ -166,4 +201,23 @@
 
     :global(a)
       color: #296fd8
+
+  .mentions
+    margin-top: 3em
+    padding: 2em
+    #border-top: 1px solid #ccc
+    background-color: #f7f7f7
+
+    h1
+      font-size: 1.2em
+
+    img
+      width: 1em
+      height: 1em
+      margin: 0 0.5em
+
+    blockquote
+      font-style: italic
+      border-left: 3px solid #dfecda
+      padding-left: 1em
 </style>
