@@ -27,6 +27,21 @@
 
 <svelte:head>
   <title>{post.title} - {new Date(post.date).toISOString().slice(0, 10)} | {config.title}</title>
+  <meta property="og:type" content="article" />
+  <meta
+    property="og:title"
+    content="{post.title} - {new Date(post.date).toISOString().slice(0, 10)} | {config.title}"
+  />
+  <meta property="og:description" content={post.headline} />
+  <meta property="og:site_name" content={config.title} />
+  <meta
+    property="og:image"
+    content={post.header
+      ? /^\.{0,2}\//.test(post.header)
+        ? config.host + '/' + post.header
+        : post.header
+      : config.host + '/images/default.png'}
+  />
 </svelte:head>
 
 <header>

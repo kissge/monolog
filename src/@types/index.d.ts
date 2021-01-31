@@ -70,4 +70,5 @@ declare interface Post extends PostMetadata {
   type: string;
   slug: string;
   html: string;
+  headline: string;
 }
