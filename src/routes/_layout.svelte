@@ -7,9 +7,17 @@
   export let segment: string;
 </script>
 
-{#if config.googleAnalyticsTrackingID}
-  <GoogleAnalytics {stores} id={config.googleAnalyticsTrackingID} />
-{/if}
+<svelte:head>
+  {#if config.googleAnalyticsTrackingID}
+    <GoogleAnalytics {stores} id={config.googleAnalyticsTrackingID} />
+  {/if}
+  {#if config.twitter}
+    <link href="https://twitter.com/{config.twitter}" rel="me" />
+    <link rel="webmention" href="https://webmention.io/{config.host.split('//')[1]}/webmention" />
+    <link rel="pingback" href="https://webmention.io/{config.host.split('//')[1]}/xmlrpc" />
+  {/if}
+</svelte:head>
+
 <Nav {segment} />
 
 <main>
