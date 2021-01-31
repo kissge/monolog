@@ -52,6 +52,10 @@ code {
   font-family: menlo, inconsolata, monospace;
 }
 
+.date-weak {
+  opacity: 0.25;
+}
+
 @media (min-width: 400px) {
   body {
     font-size: 16px;

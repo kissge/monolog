@@ -58,7 +58,7 @@
   <div class="img-header" style={post.header ? `background-image: url(${post.header})` : ''} />
   <h1>{post.title}</h1>
   {#if post.date}
-    <time>{toJSTISOString(post.date)}</time>
+    <time>{@html toJSTISOString(post.date)}</time>
   {/if}
 
   <div class="tags">
@@ -92,7 +92,7 @@
           <a href={mention.author.url}>
             <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
           </a>
-          at {toJSTISOString(mention.published || mention['wm-received'])}
+          at {@html toJSTISOString(mention.published || mention['wm-received'])}
           {#if mention['wm-property'] === 'mention-of'}
             <blockquote>
               {mention.content.text}
