@@ -8,8 +8,8 @@ declare interface Child {
   type: ChildType;
   author: Author;
   url: string;
-  published: Date;
-  'wm-received': Date;
+  published: string;
+  'wm-received': string;
   'wm-id': number;
   'wm-source': string;
   'wm-target': string;

@@ -31,6 +31,7 @@
         encodeURIComponent(config.host + location.pathname.replace(/(?<!\/)$/, '/')),
     );
     mentions = await res.json();
+    mentions.children.sort((a, b) => (b.published || b['wm-received']).localeCompare(a.published || a['wm-received']));
   });
 </script>
 
@@ -91,7 +92,7 @@
           <a href={mention.author.url}>
             <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
           </a>
-          at {toJSTISOString(mention['wm-received'])}
+          at {toJSTISOString(mention.published || mention['wm-received'])}
           {#if mention['wm-property'] === 'mention-of'}
             <blockquote>
               {mention.content.text}
