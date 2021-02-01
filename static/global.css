@@ -3,6 +3,8 @@
   font-style: normal;
   font-family: 'Klee One';
   src: url('/fonts/KleeOne-Regular.woff2') format('woff2');
+
+  font-display: swap;
 }
 
 @font-face {
@@ -10,6 +12,8 @@
   font-style: normal;
   font-family: 'Klee One';
   src: url('/fonts/KleeOne-SemiBold.woff2') format('woff2');
+
+  font-display: swap;
 }
 
 html {
