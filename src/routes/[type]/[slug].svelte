@@ -84,6 +84,14 @@
   {@html post.html}
 </div>
 
+{#if config.googleAdSenseClientID}
+  <x-script
+    data-ad-client={config.googleAdSenseClientID}
+    async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+  />
+{/if}
+
 <section class="mentions">
   <h1>Recent public mentions on Twitter</h1>
   <ol>

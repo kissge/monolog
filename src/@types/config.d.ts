@@ -16,4 +16,7 @@ declare interface Config {
 
   /** Google Analytics tracking ID */
   googleAnalyticsTrackingID: string;
+
+  /** Google AdSense client ID */
+  googleAdSenseClientID?: string;
 }
