@@ -26,13 +26,18 @@
   export let historyURL: string;
   export let mentions: JF2;
 
-  onMount(async () => {
-    const res = await fetch(
+  onMount(() => {
+    fetch(
       'https://webmention.io/api/mentions.jf2?target=' +
-        encodeURIComponent(config.host + location.pathname.replace(/(?<!\/)$/, '/')),
+        encodeURIComponent(config.host + location.pathname + (location.pathname.match(/\/$/) ? '' : '/')),
+    ).then((res) =>
+      res.json().then((jf2) => {
+        mentions = jf2;
+        mentions.children.sort((a, b) =>
+          (b.published || b['wm-received']).localeCompare(a.published || a['wm-received']),
+        );
+      }),
     );
-    mentions = await res.json();
-    mentions.children.sort((a, b) => (b.published || b['wm-received']).localeCompare(a.published || a['wm-received']));
     defineCustomElement();
   });
 </script>
