@@ -222,6 +222,9 @@
     :global(a)
       color: #296fd8
 
+    :global(strong)
+      background: linear-gradient(transparent 60%, #efa 60%)
+
   .mentions
     margin-top: 3em
     padding: 2em
