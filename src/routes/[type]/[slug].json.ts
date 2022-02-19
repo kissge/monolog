@@ -1,9 +1,11 @@
 import fs from 'fs';
 import MarkdownIt from 'markdown-it';
+import MarkdownItHighlightJs from 'markdown-it-highlightjs';
 import yaml from 'js-yaml';
 import { config } from '../../config';
 
 const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
+md.use(MarkdownItHighlightJs);
 
 export const get: Sapper.ServerRoute<{ type: string; slug: string }> = (req, res) => {
   const { type, slug } = req.params;
