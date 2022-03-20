@@ -13,7 +13,7 @@ export const get: Sapper.ServerRoute<{ type: string; slug: string }> = (req, res
   try {
     const data = fs.readFileSync(`${config.dataRootDir}/${type}/${slug}.md`, { encoding: 'utf-8' }).split(/(\n--\n)/);
     const metadata = <PostMetadataParsed>yaml.safeLoad(data[0]);
-    const body = md.render(data.slice(2).join(''));
+    const body = md.render(data.slice(2).join('')).replace(/^<p>(<x-script.+<\/x-script>)<\/p>$/gm, '$1');
     res
       .writeHead(200, { 'Content-Type': 'application/json' })
       .end(
