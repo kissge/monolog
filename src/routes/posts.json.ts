@@ -1,6 +1,7 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
 import { config } from '../config';
+import { debugPrint } from '../utility';
 
 const entries: (PostMetadataParsed & { type: string; slug: string })[] = [];
 
@@ -25,7 +26,13 @@ const entries: (PostMetadataParsed & { type: string; slug: string })[] = [];
 
   entries.sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
 
-  console.debug(entries);
+  [
+    { t: 'head', entries: entries.slice(0, 2) },
+    { t: 'tail', entries: entries.slice(-2) },
+  ].forEach(({ t, entries }) => {
+    console.log(t);
+    entries.forEach((entry) => console.log(debugPrint(entry, null, 2)));
+  });
 })();
 
 export const get: Sapper.ServerRoute = (_, res) => {
