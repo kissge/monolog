@@ -53,12 +53,12 @@
 
 html {
   min-height: 100%;
+  font-size: 14px;
 }
 
 body {
   margin: 0;
   color: #333;
-  font-size: 14px;
   font-family: Emoji, Lato, 'Klee One', serif;
   line-height: 2;
 }
@@ -101,7 +101,7 @@ code {
 }
 
 @media (min-width: 400px) {
-  body {
+  html {
     font-size: 16px;
   }
 }
