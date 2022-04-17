@@ -93,6 +93,11 @@ code {
 
 .date-weak {
   opacity: 0.25;
+  transition: opacity 0.2s;
+}
+
+*:hover > .date-weak {
+  opacity: 0.6;
 }
 
 @media (min-width: 400px) {
