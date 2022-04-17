@@ -101,7 +101,7 @@
 
 <section class="mentions">
   <h1>Recent public mentions on Twitter</h1>
-  <ol>
+  <ol reversed>
     {#if mentions}
       {#each mentions.children as mention}
         <li>
