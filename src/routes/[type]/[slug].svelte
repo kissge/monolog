@@ -227,6 +227,10 @@
     :global(strong)
       background: linear-gradient(transparent 60%, #efa 60%)
 
+    :global(.footnote-backref)
+      // prevent color emoji
+      font-family: serif
+
   .mentions
     margin-top: 3em
     padding: 2em
