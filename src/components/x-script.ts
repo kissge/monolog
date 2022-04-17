@@ -8,15 +8,24 @@ export const defineCustomElement = () => {
       iframe.style.border = '0';
       iframe.style.width = '100%';
       iframe.style.height = '0';
-      iframe.srcdoc = '<body style="margin: 0">' + this.innerHTML + script.outerHTML;
+      iframe.style.maxHeight = '100vh';
+      iframe.srcdoc = '<body injected style="margin: 0">' + this.innerHTML + script.outerHTML;
       this.innerHTML = '';
       this.appendChild(iframe);
 
-      for (let i = 0; i < 5000; i += 100) {
-        setTimeout(() => {
-          iframe.style.height = (iframe.contentDocument?.body?.clientHeight || 0) + 30 + 'px';
-        }, i);
-      }
+      setTimeout(function check() {
+        if (iframe.contentDocument?.body?.hasAttribute('injected')) {
+          const resize = () => {
+            if (iframe.contentDocument?.body?.parentElement) {
+              iframe.style.height = `${iframe.contentDocument.body.parentElement.offsetHeight}px`;
+            }
+          };
+          new ResizeObserver(resize).observe(iframe.contentDocument.body);
+          resize();
+        } else {
+          setTimeout(check, 250);
+        }
+      }, 1);
     }
   }
 
