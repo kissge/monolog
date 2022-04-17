@@ -109,7 +109,6 @@
           <a href={mention.author.url}>
             <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
           </a>
-          at
           <time title={toRelative(mention.published || mention['wm-received'])}>
             {@html toJSTISOHTMLString(mention.published || mention['wm-received'])}
           </time>
@@ -240,6 +239,10 @@
     padding: 2em
     background-color: #f7f7f7
 
+    ol
+      padding-right: calc(40px - 1em) // 数字の分寄せる
+      padding-left: 40px
+
     h1
       font-size: 1.2em
 
@@ -252,4 +255,7 @@
       padding-left: 1em
       border-left: 3px solid #dfecda
       font-style: italic
+
+    time
+      float: right
 </style>
