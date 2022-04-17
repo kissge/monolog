@@ -45,6 +45,20 @@
     );
     defineCustomElement();
   });
+
+  function inView(node: HTMLElement) {
+    const observer = new IntersectionObserver(([{ isIntersecting }]) => {
+      document.body.classList.toggle('scrolled-down', !isIntersecting);
+    });
+    observer.observe(node);
+
+    return {
+      destroy() {
+        observer.disconnect();
+        document.body.classList.remove('scrolled-down');
+      },
+    };
+  }
 </script>
 
 <svelte:head>
@@ -65,7 +79,7 @@
 
 <header>
   <div class="img-header" style={post.header ? `background-image: url(${post.header})` : ''} />
-  <h1>{post.title}</h1>
+  <h1 use:inView>{post.title}</h1>
   {#if post.date}
     <time title={toRelative(post.date)}>{@html toJSTISOHTMLString(post.date)}</time>
   {/if}
@@ -80,6 +94,8 @@
     <a href={historyURL}>更新履歴</a>
   </p>
 </header>
+
+<h1 class="floating-header">{post.title}</h1>
 
 {#if post.from}
   <div class="callout">
@@ -128,134 +144,155 @@
 </section>
 
 <style type="text/sass" lang="sass">
-  header
-    padding-top: 360px
+header
+  padding-top: 360px
 
-    .img-header
-      position: absolute
-      top: 0
-      left: 0
-      z-index: -1
-      width: 100%
-      height: 400px
-      background: linear-gradient(132deg, rgba(0,212,255,1) 0%, rgba(9,88,121,1) 35%, rgba(2,0,36,1) 100%)
-      background-size: cover
+  .img-header
+    position: absolute
+    top: 0
+    left: 0
+    z-index: -1
+    width: 100%
+    height: 400px
+    background: linear-gradient(132deg, rgba(0,212,255,1) 0%, rgba(9,88,121,1) 35%, rgba(2,0,36,1) 100%)
+    background-size: cover
 
-    h1
-      text-shadow: 0 1px 5px #fff
+  h1
+    text-shadow: 0 1px 5px #fff
 
-    time
-      display: block
-      text-align: right
+  time
+    display: block
+    text-align: right
 
-    .tags
-      .tag
-        display: inline-block
-        margin-right: 4px
-        padding: 4px 8px
-        background: #d9d7d8
+  .tags
+    .tag
+      display: inline-block
+      margin-right: 4px
+      padding: 4px 8px
+      background: #d9d7d8
 
-    .history
-      text-align: right
-      font-size: 0.8em
+  .history
+    text-align: right
+    font-size: 0.8em
 
-  .callout
-    margin: 4em 0
+.floating-header
+  position: fixed
+  top: 1.4rem
+  right: calc(-1 * (100% - 220px))
+  font-size: 0
+  transition: none
+
+  :global(.scrolled-down) &
+    right: 2.2rem
+    display: block
+    overflow: hidden
+    margin: 0
+    width: calc(100% - 220px)
+    color: #aaa
+    text-align: right
+    text-overflow: ellipsis
+    white-space: nowrap
+    font-weight: normal
+    font-size: 1rem
+    transition: right 0.5s ease-in-out
+
+.callout
+  margin: 4em 0
+  padding: 1em
+  background: #f0f091
+  color: #000
+
+  &::before
+    float: left
+    margin-right: 0.5em
+    margin-left: 0.25em
+    content: '⚠️'
+    font-size: 2em
+
+.content
+  :global(p)
+    text-align: justify
+    text-indent: 1em
+
+  :global(h1)
+    margin-top: 2em
+
+  :global(h2)
+    margin-top: 2em
+    font-weight: 500
+    font-size: 1.4em
+
+  :global(h3)
+    margin-top: 2em
+
+  :global(pre)
+    overflow: auto
     padding: 1em
-    background: #f0f091
-    color: #000
+    max-height: 80vh
+    border-radius: 2px
+    background-color: #f9f9f9
+    box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.05)
 
-    &::before
-      float: left
-      margin-right: 0.5em
-      margin-left: 0.25em
-      content: '⚠️'
-      font-size: 2em
+    :global(code)
+      padding: 0
+      background-color: transparent
 
-  .content
-    :global(p)
-      text-align: justify
-      text-indent: 1em
+  :global(ul)
+    line-height: 1.5
 
-    :global(h1)
-      margin-top: 2em
+  :global(li)
+    margin: 0 0 0.5em 0
 
-    :global(h2)
-      margin-top: 2em
-      font-weight: 500
-      font-size: 1.4em
+  :global(hr)
+    margin: 5em auto
+    width: calc(100% - 3em)
+    border-style: dashed
+    border-color: #ddd
 
-    :global(h3)
-      margin-top: 2em
+  :global(img), :global(iframe)
+    display: block
+    margin: 3em auto
+    max-width: 100%
 
-    :global(pre)
-      overflow: auto
-      padding: 1em
-      max-height: 80vh
-      border-radius: 2px
-      background-color: #f9f9f9
-      box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.05)
+  :global(blockquote)
+    padding-left: 1.2em
+    border-left: 5px solid #8fb6f0
 
-      :global(code)
-        padding: 0
-        background-color: transparent
-
-    :global(ul)
-      line-height: 1.5
-
-    :global(li)
-      margin: 0 0 0.5em 0
-
-    :global(hr)
-      margin: 5em auto
-      width: calc(100% - 3em)
-      border-style: dashed
-      border-color: #ddd
-
-    :global(img), :global(iframe)
-      display: block
-      margin: 3em auto
-      max-width: 100%
-
-    :global(blockquote)
-      padding-left: 1.2em
-      border-left: 5px solid #8fb6f0
-
-    :global(p) + :global(blockquote)
-      margin-top: 3em
-
-    :global(a)
-      color: #296fd8
-
-    :global(strong)
-      background: linear-gradient(transparent 60%, #efa 60%)
-
-    :global(.footnote-backref)
-      // prevent color emoji
-      font-family: serif
-
-  .mentions
+  :global(p) + :global(blockquote)
     margin-top: 3em
-    padding: 2em
-    background-color: #f7f7f7
 
-    ol
-      padding-right: calc(40px - 1em) // 数字の分寄せる
-      padding-left: 40px
+  :global(a)
+    color: #296fd8
 
-    h1
-      font-size: 1.2em
+  :global(strong)
+    background: linear-gradient(transparent 60%, #efa 60%)
 
-    img
-      margin: 0 0.5em
-      width: 1em
-      height: 1em
+  :global(.footnote-backref)
+    // prevent color emoji
+    font-family: serif
 
-    blockquote
-      padding-left: 1em
-      border-left: 3px solid #dfecda
-      font-style: italic
+.mentions
+  margin-top: 3em
+  padding: 2em
+  background-color: #f7f7f7
 
-    time
-      float: right
+  ol
+    padding-right: calc(40px - 1em) // 数字の分寄せる
+    padding-left: 40px
+
+  h1
+    font-size: 1.2em
+
+  img
+    margin: 0 0.5em
+    width: 1em
+    height: 1em
+
+  blockquote
+    padding-left: 1em
+    border-left: 3px solid #dfecda
+    font-style: italic
+
+  time
+    float: right
 </style>
