@@ -184,6 +184,7 @@ header
 
   :global(.scrolled-down) &
     right: 2.2rem
+    z-index: 19920929
     display: block
     overflow: hidden
     margin: 0
