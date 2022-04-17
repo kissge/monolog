@@ -2,7 +2,7 @@
   import type SapperCommon from '@sapper/common';
 
   export async function preload(this: SapperCommon.PreloadContext) {
-    const response = await this.fetch('posts.json');
+    const response = await this.fetch('/posts.json');
     const posts = await response.json();
     return { posts };
   }

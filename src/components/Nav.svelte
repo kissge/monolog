@@ -4,8 +4,8 @@
 
 <nav>
   <ul>
-    <li><a rel="prefetch" aria-current={segment === undefined ? 'page' : undefined} href=".">articles</a></li>
-    <li><a rel="prefetch" aria-current={segment === 'about' ? 'page' : undefined} href="about">about</a></li>
+    <li><a rel="prefetch" aria-current={segment === undefined ? 'page' : undefined} href="/">articles</a></li>
+    <li><a rel="prefetch" aria-current={segment === 'about' ? 'page' : undefined} href="/about">about</a></li>
   </ul>
 </nav>
 
