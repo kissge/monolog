@@ -134,7 +134,7 @@
       top: 0
       left: 0
       z-index: -1
-      width: 100vw
+      width: 100%
       height: 400px
       background: linear-gradient(132deg, rgba(0,212,255,1) 0%, rgba(9,88,121,1) 35%, rgba(2,0,36,1) 100%)
       background-size: cover
