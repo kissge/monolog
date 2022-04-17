@@ -190,15 +190,16 @@
       margin-top: 2em
 
     :global(pre)
-      overflow-x: auto
+      overflow: auto
       padding: 1em
+      max-height: 80vh
       border-radius: 2px
       background-color: #f9f9f9
       box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.05)
 
-    :global(pre) :global(code)
-      padding: 0
-      background-color: transparent
+      :global(code)
+        padding: 0
+        background-color: transparent
 
     :global(ul)
       line-height: 1.5
