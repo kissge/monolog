@@ -24,7 +24,7 @@
 <script lang="ts">
   import { config } from '../../config';
   import { onMount } from 'svelte';
-  import { toJSTISOString } from '../../utility';
+  import { toJSTISODateString, toJSTISOHTMLString } from '../../utility';
   import { defineCustomElement } from '../../components/x-script';
 
   export let post: Post;
@@ -48,12 +48,9 @@
 </script>
 
 <svelte:head>
-  <title>{post.title} - {new Date(post.date).toISOString().slice(0, 10)} | {config.title}</title>
+  <title>{post.title} - {toJSTISODateString(post.date)} | {config.title}</title>
   <meta property="og:type" content="article" />
-  <meta
-    property="og:title"
-    content="{post.title} - {new Date(post.date).toISOString().slice(0, 10)} | {config.title}"
-  />
+  <meta property="og:title" content="{post.title} - {toJSTISODateString(post.date)} | {config.title}" />
   <meta property="og:description" content={post.headline} />
   <meta property="og:site_name" content={config.title} />
   <meta
@@ -70,7 +67,7 @@
   <div class="img-header" style={post.header ? `background-image: url(${post.header})` : ''} />
   <h1>{post.title}</h1>
   {#if post.date}
-    <time>{@html toJSTISOString(post.date)}</time>
+    <time>{@html toJSTISOHTMLString(post.date)}</time>
   {/if}
 
   <div class="tags">
@@ -112,7 +109,7 @@
           <a href={mention.author.url}>
             <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
           </a>
-          at {@html toJSTISOString(mention.published || mention['wm-received'])}
+          at {@html toJSTISOHTMLString(mention.published || mention['wm-received'])}
           {#if mention['wm-property'] === 'mention-of'}
             <blockquote>
               {mention.content.text}
