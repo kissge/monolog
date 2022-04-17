@@ -1,27 +1,8 @@
-import fs from 'fs';
-import MarkdownIt from 'markdown-it';
-// @ts-expect-error
-import MarkdownItFootnote from 'markdown-it-footnote';
-import MarkdownItHighlightJs from 'markdown-it-highlightjs';
-import yaml from 'js-yaml';
-import { config } from '../../config';
+import { parseMarkdownFile } from '../../parse';
 
-const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
-md.use(MarkdownItFootnote);
-md.use(MarkdownItHighlightJs);
-
-export const get: Sapper.ServerRoute<{ type: string; slug: string }> = (req, res) => {
-  const { type, slug } = req.params;
-
+export const get: Sapper.ServerRoute<{ type: string; slug: string }> = ({ params: { type, slug } }, res) => {
   try {
-    const data = fs.readFileSync(`${config.dataRootDir}/${type}/${slug}.md`, { encoding: 'utf-8' }).split(/(\n--\n)/);
-    const metadata = <PostMetadataParsed>yaml.safeLoad(data[0]);
-    const body = md.render(data.slice(2).join('')).replace(/^<p>(<x-script.+<\/x-script>)<\/p>$/gm, '$1');
-    res
-      .writeHead(200, { 'Content-Type': 'application/json' })
-      .end(
-        JSON.stringify({ ...metadata, slug, html: body, headline: data[2].slice(0, 100).replace(/\s+/g, ' ').trim() }),
-      );
+    res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(parseMarkdownFile(type, slug, true)));
   } catch (e: any) {
     if (e.code === 'ENOENT') {
       res.writeHead(404, { 'Content-Type': 'application/json' }).end(JSON.stringify({ message: 'Not found' }));

@@ -1,6 +1,6 @@
 import fs from 'fs';
-import yaml from 'js-yaml';
 import { config } from '../config';
+import { parseMarkdownFile } from '../parse';
 import { debugPrint } from '../utility';
 
 const entries: (PostMetadataParsed & { type: string; slug: string })[] = [];
@@ -9,17 +9,11 @@ const entries: (PostMetadataParsed & { type: string; slug: string })[] = [];
   console.debug('Loading posts...');
 
   for (const type of await fs.promises.readdir(config.dataRootDir)) {
-    console.debug('type =', type);
-
-    if (!(await fs.promises.lstat(config.dataRootDir + '/' + type)).isDirectory()) {
-      continue;
-    }
-
-    for (const filename of await fs.promises.readdir(config.dataRootDir + '/' + type)) {
-      if (filename.endsWith('.md')) {
-        const body = fs.readFileSync(config.dataRootDir + '/' + type + '/' + filename, { encoding: 'utf-8' });
-        const metadata = <PostMetadataParsed>yaml.safeLoad(body.split('\n--\n')[0]);
-        entries.push({ ...metadata, type, slug: filename.replace(/\.md$/, '') });
+    if ((await fs.promises.lstat(config.dataRootDir + '/' + type)).isDirectory()) {
+      for (const filename of await fs.promises.readdir(config.dataRootDir + '/' + type)) {
+        if (filename.endsWith('.md')) {
+          entries.push(parseMarkdownFile(type, filename.slice(0, -3)));
+        }
       }
     }
   }
