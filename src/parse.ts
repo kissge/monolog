@@ -14,7 +14,7 @@ export function parseMarkdownFile(type: string, slug: string, withBody?: boolean
   const [, , front, , ...rest] = fs
     .readFileSync(`${config.dataRootDir}/${type}/${slug}.md`, { encoding: 'utf-8' })
     .split(/(^---$)/m);
-  const metadata = yaml.safeLoad(front) as PostMetadataParsed;
+  const metadata = yaml.load(front) as PostMetadataParsed;
 
   if (!withBody) {
     return { ...metadata, type, slug };

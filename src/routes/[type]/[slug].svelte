@@ -264,16 +264,16 @@ header
   :global(a)
     color: #296fd8
 
-    &[href^="/"]::before
-      display: inline-block
-      margin-right: 3px
-      margin-left: 1px
-      width: 1em
-      height: 1em
-      background-image: url(/images/favicon.svg)
-      background-size: contain
-      content: ''
-      vertical-align: middle
+  :global(a[href^="/"]::before)
+    display: inline-block
+    margin-right: 3px
+    margin-left: 1px
+    width: 1em
+    height: 1em
+    background-image: url(/images/favicon.svg)
+    background-size: contain
+    content: ''
+    vertical-align: middle
 
   :global(strong)
     background: linear-gradient(transparent 60%, #efa 60%)
