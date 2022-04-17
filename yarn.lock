@@ -1010,6 +1010,13 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@stadtlandnetz/rollup-plugin-postprocess@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@stadtlandnetz/rollup-plugin-postprocess/-/rollup-plugin-postprocess-1.1.0.tgz#b754df3b315f1ba1af0ae2ca4ccad047f71086b0"
+  integrity sha512-mj3Da2lsAX4+7V8AEQLrVDf1c9wTT9QFm8AZaYdnaU82cLEN9Xix9m27w6m5leVxXFpMWnOnRVq14HF/8/1/eQ==
+  dependencies:
+    magic-string "^0.25.7"
+
 "@tsconfig/svelte@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@tsconfig/svelte/-/svelte-3.0.0.tgz#b06e059209f04c414de0069f2f0e2796d979fc6f"

@@ -28,8 +28,10 @@ export default {
     plugins: [
       replace({
         preventAssignment: true,
-        'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        values: {
+          'process.browser': true,
+          'process.env.NODE_ENV': JSON.stringify(mode),
+        },
       }),
       svelte({
         preprocess: sveltePreprocess(),
@@ -89,8 +91,10 @@ export default {
     plugins: [
       replace({
         preventAssignment: true,
-        'process.browser': false,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        values: {
+          'process.browser': false,
+          'process.env.NODE_ENV': JSON.stringify(mode),
+        },
       }),
       svelte({
         preprocess: sveltePreprocess(),
@@ -125,8 +129,10 @@ export default {
       resolve(),
       replace({
         preventAssignment: true,
-        'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        values: {
+          'process.browser': true,
+          'process.env.NODE_ENV': JSON.stringify(mode),
+        },
       }),
       commonjs(),
       typescript({ sourceMap: dev }),
