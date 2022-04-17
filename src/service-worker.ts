@@ -7,14 +7,14 @@ const ASSETS = `cache${timestamp}`;
 const to_cache = (shell as string[]).concat(files as string[]);
 const staticAssets = new Set(to_cache);
 
+declare const self: ServiceWorkerGlobalScope;
+
 self.addEventListener('install', (event: ExtendableEvent) => {
   event.waitUntil(
     caches
       .open(ASSETS)
       .then((cache) => cache.addAll(to_cache))
-      .then(() => {
-        ((self as any) as ServiceWorkerGlobalScope).skipWaiting();
-      }),
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -26,7 +26,7 @@ self.addEventListener('activate', (event: ExtendableEvent) => {
         if (key !== ASSETS) await caches.delete(key);
       }
 
-      ((self as any) as ServiceWorkerGlobalScope).clients.claim();
+      self.clients.claim();
     }),
   );
 });

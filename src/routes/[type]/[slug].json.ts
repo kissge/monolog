@@ -19,7 +19,7 @@ export const get: Sapper.ServerRoute<{ type: string; slug: string }> = (req, res
       .end(
         JSON.stringify({ ...metadata, slug, html: body, headline: data[2].slice(0, 100).replace(/\s+/g, ' ').trim() }),
       );
-  } catch (e) {
+  } catch (e: any) {
     if (e.code === 'ENOENT') {
       res.writeHead(404, { 'Content-Type': 'application/json' }).end(JSON.stringify({ message: 'Not found' }));
     } else {

@@ -14,7 +14,7 @@ export const defineCustomElement = () => {
 
       for (let i = 0; i < 5000; i += 100) {
         setTimeout(() => {
-          iframe.style.height = iframe.contentDocument.body?.clientHeight + 30 + 'px';
+          iframe.style.height = (iframe.contentDocument?.body.clientHeight || 0) + 30 + 'px';
         }, i);
       }
     }

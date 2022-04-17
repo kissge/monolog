@@ -2,7 +2,7 @@ import fs from 'fs';
 import yaml from 'js-yaml';
 import { config } from '../config';
 
-const entries = [];
+const entries: (PostMetadataParsed & { type: string; slug: string })[] = [];
 
 (async () => {
   console.debug('Loading posts...');
@@ -19,13 +19,11 @@ const entries = [];
         const body = fs.readFileSync(config.dataRootDir + '/' + type + '/' + filename, { encoding: 'utf-8' });
         const metadata = <PostMetadataParsed>yaml.safeLoad(body.split('\n--\n')[0]);
         entries.push({ ...metadata, type, slug: filename.replace(/\.md$/, '') });
-
-        console.debug(filename + ': ' + JSON.stringify(metadata));
       }
     }
   }
 
-  entries.sort((a, b) => (b.date || 0) - (a.date || 0));
+  entries.sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
 
   console.debug(entries);
 })();

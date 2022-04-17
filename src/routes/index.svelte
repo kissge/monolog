@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
-  export function preload() {
-    return this.fetch(`posts.json`)
-      .then((r: { json: () => any }) => r.json())
-      .then((posts: Post[]) => {
-        return { posts };
-      });
+  import type SapperCommon from '@sapper/common';
+
+  export async function preload(this: SapperCommon.PreloadContext) {
+    const response = await this.fetch('posts.json');
+    const posts = await response.json();
+    return { posts };
   }
 </script>
 

@@ -1,5 +1,10 @@
 <script context="module" lang="ts">
-  export async function preload({ params }) {
+  import type SapperCommon from '@sapper/common';
+
+  export async function preload(
+    this: SapperCommon.PreloadContext,
+    { params }: { params: { type: string; slug: string } },
+  ) {
     // the `slug` parameter is available because
     // this file is called [slug].svelte
     const res = await this.fetch(`${params.type}/${params.slug}.json`);

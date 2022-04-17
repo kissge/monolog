@@ -1,7 +1,9 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "lib": ["DOM", "ES2017", "WebWorker"],
+    "strict": true,
+    "target": "es2020",
+    "lib": ["DOM", "es2020", "WebWorker"],
     "typeRoots": ["./node_modules/@types", "src/@types"]
   },
   "include": ["src/**/*", "src/node_modules/**/*"],
