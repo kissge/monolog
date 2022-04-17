@@ -57,6 +57,7 @@ a
     position: fixed
     top: 0
     left: 0
+    z-index: 19920928
     width: 100%
 
     backdrop-filter: blur(8px)
