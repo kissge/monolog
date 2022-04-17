@@ -10,7 +10,7 @@
 
 <script lang="ts">
   import { config } from '../config';
-  import { toJSTISODateString } from '../utility';
+  import { toJSTISODateString, toRelative } from '../utility';
 
   export let posts: Post[];
 </script>
@@ -22,7 +22,9 @@
 <ul>
   {#each posts as post}
     <li class:old={post.from}>
-      <small title={post.date}>{toJSTISODateString(post.date)}</small>
+      <small title={post.date ? `${toRelative(post.date)} (${post.date})` : '何だこれ'}>
+        {toJSTISODateString(post.date)}
+      </small>
       {#if post.from}
         ⚠️
       {/if}

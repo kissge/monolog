@@ -24,7 +24,7 @@
 <script lang="ts">
   import { config } from '../../config';
   import { onMount } from 'svelte';
-  import { toJSTISODateString, toJSTISOHTMLString } from '../../utility';
+  import { toJSTISODateString, toJSTISOHTMLString, toRelative } from '../../utility';
   import { defineCustomElement } from '../../components/x-script';
 
   export let post: Post;
@@ -67,7 +67,7 @@
   <div class="img-header" style={post.header ? `background-image: url(${post.header})` : ''} />
   <h1>{post.title}</h1>
   {#if post.date}
-    <time>{@html toJSTISOHTMLString(post.date)}</time>
+    <time title={toRelative(post.date)}>{@html toJSTISOHTMLString(post.date)}</time>
   {/if}
 
   <div class="tags">
@@ -109,7 +109,10 @@
           <a href={mention.author.url}>
             <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
           </a>
-          at {@html toJSTISOHTMLString(mention.published || mention['wm-received'])}
+          at
+          <time title={toRelative(mention.published || mention['wm-received'])}>
+            {@html toJSTISOHTMLString(mention.published || mention['wm-received'])}
+          </time>
           {#if mention['wm-property'] === 'mention-of'}
             <blockquote>
               {mention.content.text}
