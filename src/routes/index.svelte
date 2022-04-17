@@ -31,7 +31,7 @@
   {/each}
 </ul>
 
-<style type="text/sass">
+<style type="text/sass" lang="sass">
   ul
     display: table
 

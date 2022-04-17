@@ -128,19 +128,19 @@
   </ol>
 </section>
 
-<style type="text/sass">
+<style type="text/sass" lang="sass">
   header
     padding-top: 360px
 
     .img-header
       position: absolute
-      background: linear-gradient(132deg, rgba(0,212,255,1) 0%, rgba(9,88,121,1) 35%, rgba(2,0,36,1) 100%)
-      background-size: cover
       top: 0
       left: 0
+      z-index: -1
       width: 100vw
       height: 400px
-      z-index: -1
+      background: linear-gradient(132deg, rgba(0,212,255,1) 0%, rgba(9,88,121,1) 35%, rgba(2,0,36,1) 100%)
+      background-size: cover
 
     h1
       text-shadow: 0 1px 5px #fff
@@ -152,9 +152,9 @@
     .tags
       .tag
         display: inline-block
-        background: #d9d7d8
-        padding: 4px 8px
         margin-right: 4px
+        padding: 4px 8px
+        background: #d9d7d8
 
     .history
       text-align: right
@@ -182,9 +182,9 @@
       margin-top: 2em
 
     :global(h2)
+      margin-top: 2em
       font-weight: 500
       font-size: 1.4em
-      margin-top: 2em
 
     :global(h3)
       margin-top: 2em
@@ -233,19 +233,18 @@
   .mentions
     margin-top: 3em
     padding: 2em
-    #border-top: 1px solid #ccc
     background-color: #f7f7f7
 
     h1
       font-size: 1.2em
 
     img
+      margin: 0 0.5em
       width: 1em
       height: 1em
-      margin: 0 0.5em
 
     blockquote
-      font-style: italic
-      border-left: 3px solid #dfecda
       padding-left: 1em
+      border-left: 3px solid #dfecda
+      font-style: italic
 </style>
