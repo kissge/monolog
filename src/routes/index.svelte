@@ -1,2 +1,16 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+  import type { APIResponse } from '.';
+
+  export let notes: APIResponse['notes'];
+</script>
+
+<ol>
+  {#each notes as note}
+    <li>
+      <a sveltekit:prefetch href="notes/{note.slug}">
+        {note.attributes.date}
+        {note.attributes.title}
+      </a>
+    </li>
+  {/each}
+</ol>
