@@ -1,4 +1,6 @@
-module.exports = {
+// @ts-check
+
+module.exports = /** @type {import('eslint').Linter.Config} */ ({
   root: true,
   parser: '@typescript-eslint/parser',
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
@@ -17,4 +19,7 @@ module.exports = {
     es2017: true,
     node: true,
   },
-};
+  rules: {
+    '@typescript-eslint/no-non-null-assertion': 'off',
+  },
+});

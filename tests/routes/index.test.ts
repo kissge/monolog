@@ -9,3 +9,8 @@ test('List of notes', async ({ page }) => {
   await page.goto('/');
   expect(await page.$('li a')).not.toBeNull();
 });
+
+test('List of groups', async ({ page }) => {
+  await page.goto('/');
+  expect(await page.$('li li')).not.toBeNull();
+});

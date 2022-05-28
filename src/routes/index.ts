@@ -3,6 +3,7 @@ import type { RequestHandler } from './__types/index';
 import type { JSON, NoteAttributes } from '$lib/@types';
 import Config from '$lib/config';
 import { ParseService } from '$lib/services';
+import { FileUtility } from '$lib/utilities';
 
 export const get: RequestHandler<Body> = () => ({
   body: {
@@ -16,6 +17,16 @@ export const get: RequestHandler<Body> = () => ({
         ),
       }))
       .sort((a, b) => b.attributes.date.getTime() - a.attributes.date.getTime()),
+    groups: fs
+      .readdirSync(Config.dataRootDir)
+      .filter((group) => /^\d+[._-]/.test(group))
+      .map((group) => {
+        const [, prefix, name] = group.match(/^(\d+)[._-](.+)$/)!;
+        const entities = Array.from(FileUtility.listMarkdownFilesRecursive(Config.dataRootDir, group));
+
+        return { order: Number.parseInt(prefix), name, entities };
+      })
+      .sort((a, b) => a.order - b.order),
   },
 });
 
@@ -23,6 +34,12 @@ interface Body {
   notes: {
     slug: string;
     attributes: NoteAttributes;
+  }[];
+  groups: {
+    name: string;
+    entities: {
+      name: string;
+    }[];
   }[];
 }
 export type APIResponse = JSON<Body>;
