@@ -1,27 +1,17 @@
-import fs from 'fs';
 import type { RequestHandler } from '../mono/__types/[name]';
-import type { JSON } from '$lib/@types';
+import type { EntityWithBody, JSON } from '$lib/@types';
 import Config from '$lib/config';
-import { ParseService } from '$lib/services';
-import { FileUtility } from '$lib/utilities';
+import { EntityService } from '$lib/services';
 
 export const get: RequestHandler<Body> = ({ params: { name } }) => {
-  const file = FileUtility.findMarkdownFileRecursive(Config.dataRootDir, name);
+  const entity = EntityService.findEntityRecursive(Config.dataRootDir, name);
 
-  if (!file) {
+  if (!entity) {
     return { status: 404 };
   }
 
-  return {
-    body: {
-      ...ParseService.parse(fs.readFileSync(Config.dataRootDir + '/' + file.path, 'utf-8')),
-      ...file,
-    },
-  };
+  return { body: entity };
 };
 
-interface Body extends ReturnType<typeof ParseService.parse> {
-  name: string;
-  path: string;
-}
+type Body = EntityWithBody;
 export type APIResponse = JSON<Body>;

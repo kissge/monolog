@@ -5,3 +5,11 @@
 </nav>
 
 <slot />
+
+<footer>
+  Built with <a href="https://github.com/kissge/monolog">monolog</a>
+</footer>
+
+<style lang="sass" global>
+  @use '../assets/global'
+</style>

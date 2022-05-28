@@ -1,0 +1,37 @@
+@use 'the-new-css-reset/css/reset'
+
+@use './color-emoji'
+
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;700&display=swap')
+
+html
+    color: #222
+    font-family: Emoji, 'Zen Kaku Gothic New', sans-serif
+    line-height: 1.8
+
+    text-underline-offset: 0.1em
+
+a
+    color: #3d2fb9
+    text-decoration: underline
+    transition: text-decoration-color 0.15s ease-in-out
+
+    text-decoration-color: lighten(#54e, 30%)
+
+    &:hover
+        text-decoration-color: transparent
+
+*:focus:not(:hover)
+    outline: 1px solid #54e
+
+nav
+    padding: 1.5em
+    border-bottom: 1px solid #ccc
+
+footer
+    padding: 2em
+    text-align: center
+    font-size: 0.8em
+
+    &:not(:hover)
+        opacity: 0.5

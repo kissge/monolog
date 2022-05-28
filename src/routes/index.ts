@@ -1,9 +1,8 @@
 import fs from 'fs';
 import type { RequestHandler } from './__types/index';
-import type { JSON, NoteAttributes } from '$lib/@types';
+import type { Entity, JSON, NoteAttributes } from '$lib/@types';
 import Config from '$lib/config';
-import { ParseService } from '$lib/services';
-import { FileUtility } from '$lib/utilities';
+import { EntityService, ParseService } from '$lib/services';
 
 export const get: RequestHandler<Body> = () => ({
   body: {
@@ -22,7 +21,9 @@ export const get: RequestHandler<Body> = () => ({
       .filter((group) => /^\d+[._-]/.test(group))
       .map((group) => {
         const [, prefix, name] = group.match(/^(\d+)[._-](.+)$/)!;
-        const entities = Array.from(FileUtility.listMarkdownFilesRecursive(Config.dataRootDir, group));
+        const entities = Array.from(EntityService.listEntitiesRecursive(Config.dataRootDir, 2, group));
+
+        entities.sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
 
         return { order: Number.parseInt(prefix), name, entities };
       })
@@ -37,9 +38,7 @@ interface Body {
   }[];
   groups: {
     name: string;
-    entities: {
-      name: string;
-    }[];
+    entities: Entity[];
   }[];
 }
 export type APIResponse = JSON<Body>;

@@ -1,1 +1,1 @@
-export * as FileUtility from './file';
+export * as FormatUtility from './format';
