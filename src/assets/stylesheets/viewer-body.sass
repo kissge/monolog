@@ -97,6 +97,37 @@ ul
 li
     transition: opacity 0.5s 0s ease-in-out
 
+.table-wrapper
+    overflow: auto
+
+table
+    overflow: auto
+    margin: 1.5em -0.5em
+    margin-right: -50%
+    max-width: 150%
+    width: auto
+    border-spacing: .5em
+    border-collapse: separate
+    font-size: 0.8em
+    line-height: 1.4
+
+    thead
+        th
+            border-bottom: 2px solid #888
+            font-weight: bold
+
+    tbody
+        tr:nth-child(even)
+            background-color: #fafafa
+
+    th, td
+        padding: 0.4em
+
+    [align="center"]
+        text-align: center
+    [align="right"]
+        text-align: right
+
 hr
     display: block
     margin: 3em 0
@@ -133,3 +164,11 @@ a[href^="/"]::before
     background-size: contain
     content: ''
     vertical-align: middle
+
+[lang]:not([lang="ja"])
+    font-family: sans-serif
+
+    -webkit-locale: auto
+
+.ipa
+    font-family: 'Charis SIL', 'Doulos SIL', 'DejaVu Sans', 'Code2000', 'Hiragino Kaku Gothic Pro', 'Matrix Unicode', 'Tahoma', 'Microsoft Sans Serif',sans-serif
