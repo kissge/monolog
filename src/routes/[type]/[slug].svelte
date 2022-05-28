@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { APIResponse } from './[slug]';
+  import Viewer from '../../components/viewer.svelte';
 
   export let attributes: APIResponse['attributes'];
   export let body: APIResponse['body'];
+  export let historyURL: APIResponse['historyURL'];
 </script>
 
-<h1>{attributes.title}</h1>
-
-{@html body}
+<Viewer title={attributes.title} date={attributes.date} {historyURL} tags={attributes.tags} {body} />

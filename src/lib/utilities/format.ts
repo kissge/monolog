@@ -1,15 +1,25 @@
 const ThinSpace = '\u2009';
 
-export function date(date: string | undefined) {
+export function date(date: Date | string | undefined) {
   return date ? new Date(date).toLocaleString('sv', { timeZone: 'Asia/Tokyo', dateStyle: 'short' }) : '????-??-??';
 }
 
-export function relative(date: string | undefined) {
+export function datetime(date: Date | string | undefined) {
+  return date
+    ? new Date(date).toLocaleString('sv', { timeZone: 'Asia/Tokyo', dateStyle: 'short', timeStyle: 'medium' })
+    : '????-??-?? ??:??:??';
+}
+
+export function relative(date: Date | string | undefined) {
   if (!date) {
     return '';
   }
 
   const seconds = (new Date().getTime() - new Date(date).getTime()) / 1000;
+
+  if (seconds < 0) {
+    return '未来';
+  }
 
   for (const { unit, by } of [
     { unit: '年', by: 365.2425 * 24 * 60 * 60 },

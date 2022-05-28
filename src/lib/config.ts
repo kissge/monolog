@@ -1,5 +1,6 @@
 const Config = {
   dataRootDir: assertNonEmptyString(import.meta.env.VITE_DATA_ROOT_DIR),
+  dataGitHubRepo: assertNonEmptyString(import.meta.env.VITE_DATA_GITHUB_REPO),
 };
 
 function assertNonEmptyString(value: unknown): string {

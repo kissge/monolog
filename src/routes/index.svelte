@@ -15,7 +15,7 @@
       <ol class="notes">
         {#each notes as note}
           <li class="note">
-            <small>
+            <small title={note.attributes.date}>
               <time>
                 {FormatUtility.date(note.attributes.date)}
               </time>

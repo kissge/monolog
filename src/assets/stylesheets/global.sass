@@ -2,11 +2,12 @@
 
 @use './color-emoji'
 
-@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;700&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;400&display=swap')
 
 html
     color: #222
-    font-family: Emoji, 'Zen Kaku Gothic New', sans-serif
+    font-weight: 300
+    font-family: Emoji, 'Noto Sans JP', sans-serif
     line-height: 1.8
 
     text-underline-offset: 0.1em
@@ -35,3 +36,8 @@ footer
 
     &:not(:hover)
         opacity: 0.5
+
+main
+    margin: 40px auto
+    padding: 0 40px
+    max-width: 900px
