@@ -4,6 +4,7 @@
   import Time from './time.svelte';
 
   export let title: string;
+  export let headline: string | undefined = undefined;
   export let date: string | undefined;
   export let historyURL: string;
   export let tags: string[] | undefined;
@@ -15,10 +16,17 @@
     <header>
       <h1>{title}</h1>
 
+      {#if headline}
+        <h2>{headline}</h2>
+      {/if}
+
       <section class="meta">
-        <p>
-          <Time {date} />
-        </p>
+        {#if date}
+          <p>
+            <Time {date} />
+          </p>
+        {/if}
+
         <p>
           <a href={historyURL}>更新履歴</a>
         </p>

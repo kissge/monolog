@@ -10,8 +10,17 @@ export const get: RequestHandler<Body> = ({ params: { name } }) => {
     return { status: 404 };
   }
 
-  return { body: entity };
+  return {
+    body: {
+      ...entity,
+      name,
+      historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${entity.path}`,
+    },
+  };
 };
 
-type Body = EntityWithBody;
+interface Body extends EntityWithBody {
+  name: string;
+  historyURL: string;
+}
 export type APIResponse = JSON<Body>;
