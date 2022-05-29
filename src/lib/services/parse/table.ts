@@ -1,20 +1,20 @@
 import { marked } from 'marked';
 
+interface TableCell extends marked.Tokens.TableCell {
+  rowspan: number;
+}
+
 marked.use({
   walkTokens(token) {
     if (token.type === 'table') {
-      const rows: (marked.Tokens.TableCell & { rowspan: number })[][] = token.rows.map(() => []);
+      const rows: TableCell[][] = token.rows.map(() => []);
 
       for (const [x] of token.header.entries()) {
         for (let y = token.rows.length - 1; y >= 0; --y) {
           let rowspan = 1;
-          while (y >= 0 && token.rows[y][x].tokens.length === 0) {
+          while (y > 0 && token.rows[y][x].tokens.length === 0) {
             ++rowspan;
             --y;
-          }
-
-          if (y < 0) {
-            y = 0;
           }
 
           rows[y].push({ ...token.rows[y][x], rowspan });
@@ -42,7 +42,7 @@ marked.use({
             .join(''),
         );
 
-        const body = (token.rows as (marked.Tokens.TableCell & { rowspan: number })[][])
+        const body = (token.rows as TableCell[][])
           .map((row) =>
             this.parser.renderer.tablerow(
               row
