@@ -147,12 +147,16 @@ del
         text-decoration-color: transparent
 
 strong
-    background: linear-gradient(transparent 60%, #eef7cd 60%)
     font-weight: bold
 
+:not(em) > strong
+    background: linear-gradient(transparent 60%, #eef7cd 60%)
+
 em
-    background: linear-gradient(transparent 60%, #e0f3f8 60%)
     font-style: italic
+
+:not(strong) > em
+    background: linear-gradient(transparent 60%, #e0f3f8 60%)
 
 :not(pre) > code
     padding: 0.2em 0.4em
