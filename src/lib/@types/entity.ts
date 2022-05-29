@@ -2,7 +2,7 @@ import type { HTMLString } from './brand';
 
 export interface Entity {
   name: string;
-  kind: string;
+  kind?: string;
   path: string;
   lastModified: Date;
   attributes: EntityAttributes;

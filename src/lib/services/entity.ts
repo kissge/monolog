@@ -26,7 +26,7 @@ export function* listEntitiesRecursive(
       yield* listEntitiesRecursive(rootDirPath, maxDepth - 1, path, withBody as never);
     } else if (dirPath && file.isFile() && file.name.endsWith('.md')) {
       const name = file.name.slice(0, -3);
-      const kind = dirPath.split('/').pop()!;
+      const kind = dirPath.split('/').slice(1).pop();
       const lastModified = fs.statSync(`${rootDirPath}/${path}`).mtime;
       const source = fs.readFileSync(`${rootDirPath}/${path}`, 'utf-8');
 
