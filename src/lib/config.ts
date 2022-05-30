@@ -12,3 +12,4 @@ function assertNonEmptyString(value: unknown): string {
 }
 
 export default Config;
+export type Config = typeof Config;

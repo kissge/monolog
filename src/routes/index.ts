@@ -1,6 +1,6 @@
 import fs from 'fs';
 import type { RequestHandler } from './__types/index';
-import type { Entity, JSON, NoteAttributes } from '$lib/@types';
+import type { EntityGroup, JSON, NoteAttributes } from '$lib/@types';
 import Config from '$lib/config';
 import { EntityService, ParseService } from '$lib/services';
 
@@ -16,18 +16,7 @@ export const get: RequestHandler<Body> = () => ({
         ),
       }))
       .sort((a, b) => b.attributes.date.getTime() - a.attributes.date.getTime()),
-    groups: fs
-      .readdirSync(Config.dataRootDir)
-      .filter((group) => /^\d+[._-]/.test(group))
-      .map((group) => {
-        const [, prefix, name] = group.match(/^(\d+)[._-](.+)$/)!;
-        const entities = Array.from(EntityService.listEntitiesRecursive(Config.dataRootDir, 2, group));
-
-        entities.sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
-
-        return { order: Number.parseInt(prefix), name, entities };
-      })
-      .sort((a, b) => a.order - b.order),
+    groups: EntityService.groups,
   },
 });
 
@@ -36,9 +25,6 @@ interface Body {
     slug: string;
     attributes: NoteAttributes;
   }[];
-  groups: {
-    name: string;
-    entities: Entity[];
-  }[];
+  groups: EntityGroup[];
 }
 export type APIResponse = JSON<Body>;

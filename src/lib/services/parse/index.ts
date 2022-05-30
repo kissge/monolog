@@ -11,3 +11,5 @@ export function parse<Attributes>(source: string) {
   const { attributes, body } = frontMatter<Attributes>(source);
   return { attributes, body: marked.parse(body, { smartypants: true }) as HTMLString };
 }
+
+export * from './entity';

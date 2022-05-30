@@ -17,3 +17,8 @@ export interface EntityAttributes {
 export interface EntityWithBody extends Entity {
   body: HTMLString;
 }
+
+export interface EntityGroup {
+  name: string;
+  entities: Entity[];
+}
