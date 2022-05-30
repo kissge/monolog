@@ -1,5 +1,7 @@
 import { dev } from '$app/env';
 
+let lastReloaded = 0;
+
 const AutoReload =
   () =>
   (
@@ -12,14 +14,20 @@ const AutoReload =
       // method
       const original = descriptor.value;
       descriptor.value = function (this: typeof target, ...args: unknown[]) {
-        this.initialize();
+        if (Date.now() - lastReloaded > 10000) {
+          lastReloaded = Date.now();
+          this.initialize();
+        }
         return original.apply(this, args);
       };
     } else if (descriptor.get) {
       // getter
       const original = descriptor.get;
       descriptor.get = function (this: typeof target) {
-        this.initialize();
+        if (Date.now() - lastReloaded > 10000) {
+          lastReloaded = Date.now();
+          this.initialize();
+        }
         return original.apply(this);
       };
     }

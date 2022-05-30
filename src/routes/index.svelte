@@ -26,7 +26,7 @@
             {#if note.attributes.from}
               <span title="インポートされた記事">⚠️</span>
             {/if}
-            <a sveltekit:prefetch href="notes/{note.slug}">
+            <a sveltekit:prefetch href={note.urlPath}>
               {note.attributes.title}
             </a>
             {#each note.attributes.tags || [] as tag}
@@ -43,15 +43,15 @@
     {#each groups as group}
       <li class="group">
         <h1 class="group-title">{group.name}</h1>
-        <ol class="entities">
-          {#each group.entities as entity}
-            <li class="entity">
-              <a sveltekit:prefetch href="mono/{entity.name}">
-                {entity.name}
+        <ol class="monos">
+          {#each group.monos as mono}
+            <li class="mono">
+              <a sveltekit:prefetch href={mono.urlPath}>
+                {mono.name}
               </a>
               <p>
-                {entity.attributes.definition ?? ''}
-                {#each entity.attributes.tags || [] as tag}
+                {mono.attributes.definition ?? ''}
+                {#each mono.attributes.tags || [] as tag}
                   <span class="tag">#{tag}</span>
                 {/each}
               </p>

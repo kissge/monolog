@@ -1,24 +1,16 @@
 import type { HTMLString } from './brand';
 
-export interface Entity {
+export interface Entity<Attributes = unknown> {
   name: string;
   kind?: string;
-  path: string;
+  /** Path to source Markdown file, relative to the data root directory */
+  sourceFilePath: string;
+  urlPath: string;
+  historyURL: string;
   lastModified: Date;
-  attributes: EntityAttributes;
+  attributes: Attributes;
 }
 
-export interface EntityAttributes {
-  definition?: string;
-  date?: Date;
-  tags?: string[];
-}
-
-export interface EntityWithBody extends Entity {
+export interface EntityWithBody<Attributes = unknown> extends Entity<Attributes> {
   body: HTMLString;
-}
-
-export interface EntityGroup {
-  name: string;
-  entities: Entity[];
 }

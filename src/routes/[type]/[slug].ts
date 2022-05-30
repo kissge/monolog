@@ -1,19 +1,12 @@
-import fs from 'fs';
 import type { RequestHandler } from '../[type]/__types/[slug]';
-import type { HTMLString, JSON, NoteAttributes } from '$lib/@types';
-import Config from '$lib/config';
+import type { JSON, NoteWithBody } from '$lib/@types';
 import { EntityService } from '$lib/services';
 
-export const get: RequestHandler<Body> = ({ params: { type, slug } }) => ({
-  body: {
-    ...EntityService.parse<NoteAttributes>(fs.readFileSync(`${Config.dataRootDir}/${type}/${slug}.md`, 'utf-8')),
-    historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${type}/${slug}.md`,
-  },
-});
+export const get: RequestHandler<Body> = ({ url }) => {
+  const entity = EntityService.get<NoteWithBody>(url.pathname);
 
-interface Body {
-  body: HTMLString;
-  attributes: NoteAttributes;
-  historyURL: string;
-}
+  return entity ? { body: entity } : { status: 404 };
+};
+
+type Body = NoteWithBody;
 export type APIResponse = JSON<Body>;

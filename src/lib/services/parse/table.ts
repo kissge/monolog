@@ -1,10 +1,10 @@
-import { marked } from 'marked';
+import type { marked } from 'marked';
 
 interface TableCell extends marked.Tokens.TableCell {
   rowspan: number;
 }
 
-marked.use({
+const TableExtension: marked.MarkedExtension = {
   walkTokens(token) {
     if (token.type === 'table') {
       const rows: TableCell[][] = token.rows.map(() => []);
@@ -66,4 +66,6 @@ marked.use({
       },
     },
   ],
-});
+};
+
+export default TableExtension;

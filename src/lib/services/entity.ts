@@ -1,12 +1,13 @@
-import type { EntityAttributes, EntityGroup, EntityWithBody } from '$lib/@types';
-import fs from 'fs';
-import * as ParseService from './parse'; // TODO: ??
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import type { EntityWithBody, MonoGroup, MonoWithBody, NoteAttributes } from '$lib/@types';
 import config, { type Config } from '$lib/config';
 import { AutoReload } from '$lib/utilities';
+import ParseService from './parse';
 
 class EntityService {
   protected all = new Map<string, EntityWithBody>();
-  protected _groups: EntityGroup[] = [];
+  protected _groups: MonoGroup[] = [];
 
   constructor(private config: Config) {
     this.initialize();
@@ -17,41 +18,61 @@ class EntityService {
     return this._groups;
   }
 
+  @AutoReload()
+  get notes() {
+    return (
+      (Array.from(this.all.values()) as EntityWithBody<NoteAttributes>[])
+        .filter(({ sourceFilePath }) => sourceFilePath.startsWith('notes/'))
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .map(({ body, ...note }) => note)
+        .sort((a, b) => b.attributes.date.getTime() - a.attributes.date.getTime())
+    );
+  }
+
   initialize() {
     const firstPass = new Map<string, EntityWithBody & { source: string }>();
-    const groups: { name: string; entityNames: string[] }[] = [];
+    const groups: { name: string; urlPaths: string[] }[] = [];
+    const seenNames = new Set<string>();
 
     // 1st pass
     for (const entity of this.listEntitiesRecursive()) {
-      if (/^\d+[._-]/.test(entity.path) && !/(?:\/.*){3}/.test(entity.path)) {
-        firstPass.set(entity.name, entity);
+      firstPass.set(entity.urlPath, entity);
 
-        const [, prefix, name] = entity.path.match(/^(\d+)[._-]([^/]+)/)!;
+      assert.equal(seenNames.has(entity.name), false, `Duplicate entity name: ${entity.name}`);
+      seenNames.add(entity.name);
+
+      if (this.isShownOnTopPage(entity.sourceFilePath)) {
+        const [, prefix, name] = entity.sourceFilePath.match(/^(\d+)[._-]([^/]+)/)!;
         const order = Number.parseInt(prefix);
 
-        (groups[order] ??= { name, entityNames: [] }).entityNames.push(entity.name);
+        (groups[order] ??= { name, urlPaths: [] }).urlPaths.push(entity.urlPath);
       }
     }
 
     // 2nd pass
-    ParseService.updateEntityNames(Array.from(firstPass.keys()));
+    ParseService.updateEntities(firstPass.values());
     this.all = new Map(
-      Array.from(firstPass.entries()).map(([name, { source, ...entity }]) => [
-        name,
+      Array.from(firstPass.entries()).map(([urlPath, { source, ...entity }]) => [
+        urlPath,
         { ...entity, body: ParseService.parse(source).body },
       ]),
     );
 
     this._groups = groups
       .filter((group) => group)
-      .map(({ name, entityNames }) => ({
+      .map(({ name, urlPaths }) => ({
         name,
-        entities: entityNames
-          .map((name) => this.all.get(name)!)
+        monos: urlPaths
+          .map((urlPath) => this.get<MonoWithBody>(urlPath)!)
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           .map(({ body, ...entity }) => entity)
           .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime()),
       }));
+  }
+
+  @AutoReload()
+  get<T extends EntityWithBody<unknown>>(name: string) {
+    return this.all.get(name) as T | undefined;
   }
 
   protected *listEntitiesRecursive(dirPath?: string): Generator<EntityWithBody & { source: string }> {
@@ -65,20 +86,28 @@ class EntityService {
         const kind = dirPath.split('/').slice(1).pop();
         const lastModified = fs.statSync(`${this.config.dataRootDir}/${path}`).mtime;
         const source = fs.readFileSync(`${this.config.dataRootDir}/${path}`, 'utf-8');
+        const urlPath = this.isMono(path) ? '/mono/' + encodeURI(name) : '/' + encodeURI(path.slice(0, -3));
 
-        yield { name, kind, path, lastModified, ...ParseService.parse<EntityAttributes>(source), source };
+        yield {
+          name,
+          kind,
+          sourceFilePath: path,
+          urlPath,
+          historyURL: `https://github.com/${this.config.dataGitHubRepo}/commits/master/${path}`,
+          lastModified,
+          ...ParseService.parse(source),
+          source,
+        };
       }
     }
   }
 
-  @AutoReload()
-  get(name: string) {
-    return this.all.get(name);
+  protected isMono(path: string) {
+    return /^\d+[._-]/.test(path);
   }
 
-  @AutoReload()
-  parse<Attributes>(source: string) {
-    return ParseService.parse<Attributes>(source);
+  protected isShownOnTopPage(path: string) {
+    return this.isMono(path) && !new RegExp(`(?:/.*){${this.config.maxDepthForTopPage + 1}}`).test(path);
   }
 }
 

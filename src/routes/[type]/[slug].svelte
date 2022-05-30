@@ -4,7 +4,8 @@
 
   export let attributes: APIResponse['attributes'];
   export let body: APIResponse['body'];
+  export let name: APIResponse['name'];
   export let historyURL: APIResponse['historyURL'];
 </script>
 
-<Viewer title={attributes.title} date={attributes.date} {historyURL} tags={attributes.tags} {body} />
+<Viewer title={attributes.title ?? name} date={attributes.date} {historyURL} tags={attributes.tags} {body} />

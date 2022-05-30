@@ -1,24 +1,12 @@
 import type { RequestHandler } from '../mono/__types/[name]';
-import type { EntityWithBody, JSON } from '$lib/@types';
-import Config from '$lib/config';
+import type { JSON, MonoWithBody } from '$lib/@types';
 import { EntityService } from '$lib/services';
 
-export const get: RequestHandler<Body> = ({ params: { name } }) => {
-  const entity = EntityService.get(name);
+export const get: RequestHandler<Body> = ({ url }) => {
+  const entity = EntityService.get<MonoWithBody>(url.pathname);
 
-  if (!entity) {
-    return { status: 404 };
-  }
-
-  return {
-    body: {
-      ...entity,
-      historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${entity.path}`,
-    },
-  };
+  return entity ? { body: entity } : { status: 404 };
 };
 
-interface Body extends EntityWithBody {
-  historyURL: string;
-}
+type Body = MonoWithBody;
 export type APIResponse = JSON<Body>;
