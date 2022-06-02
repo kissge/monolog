@@ -13,4 +13,7 @@ export interface Entity<Attributes = unknown> {
 
 export interface EntityWithBody<Attributes = unknown> extends Entity<Attributes> {
   body: HTMLString;
+  links: Record<LinkCategory, Entity[]>;
 }
+
+export type LinkCategory = 'to';

@@ -8,8 +8,3 @@ export interface MonoAttributes {
   date?: Date;
   tags?: string[];
 }
-
-export interface MonoGroup {
-  name: string;
-  monos: Mono[];
-}

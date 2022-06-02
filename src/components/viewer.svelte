@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { HTMLString } from '$lib/@types';
-
+  import type { Entity, HTMLString, JSON, LinkCategory } from '$lib/@types';
+  import Links from './links.svelte';
   import Time from './time.svelte';
 
   export let title: string;
@@ -9,6 +9,15 @@
   export let historyURL: string;
   export let tags: string[] | undefined;
   export let body: HTMLString;
+  export let links: JSON<Record<LinkCategory, Entity<any>[]>>;
+  export let isMono: boolean = false;
+
+  const linkCategories: { id: LinkCategory; name: string }[] = [
+    {
+      id: 'to',
+      name: (isMono ? title : 'この記事') + 'がリンクしているもの',
+    },
+  ];
 </script>
 
 <main>
@@ -43,6 +52,12 @@
 
     <section class="body">
       {@html body}
+    </section>
+
+    <section>
+      <ul class="links">
+        <Links links={linkCategories.map(({ id, name }) => ({ name, entities: links[id] }))} />
+      </ul>
     </section>
   </article>
 </main>

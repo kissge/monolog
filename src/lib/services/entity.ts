@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import type { EntityWithBody, MonoGroup, MonoWithBody, NoteAttributes } from '$lib/@types';
+import type { EntityWithBody, LinkGroup, MonoAttributes, MonoWithBody, NoteAttributes } from '$lib/@types';
 import config, { type Config } from '$lib/config';
-import { AutoReload } from '$lib/utilities';
+import { AutoReload, EntityUtility } from '$lib/utilities';
 import ParseService from './parse';
 
 class EntityService {
   protected all = new Map<string, EntityWithBody>();
-  protected _groups: MonoGroup[] = [];
+  protected _groups: LinkGroup<MonoAttributes>[] = [];
 
   constructor(private config: Config) {
     this.initialize();
@@ -52,20 +52,29 @@ class EntityService {
     // 2nd pass
     ParseService.updateEntities(firstPass.values());
     this.all = new Map(
-      Array.from(firstPass.entries()).map(([urlPath, { source, ...entity }]) => [
-        urlPath,
-        { ...entity, body: ParseService.parse(source).body },
-      ]),
+      Array.from(firstPass.entries()).map(([urlPath, { source, ...entity }]) => {
+        const { body, links } = ParseService.parse(source);
+
+        return [
+          urlPath,
+          {
+            ...entity,
+            body,
+            links: {
+              to: Array.from(links, (urlPath) => EntityUtility.strip(firstPass.get(urlPath)!)),
+            },
+          },
+        ];
+      }),
     );
 
     this._groups = groups
       .filter((group) => group)
       .map(({ name, urlPaths }) => ({
         name,
-        monos: urlPaths
+        entities: urlPaths
           .map((urlPath) => this.get<MonoWithBody>(urlPath)!)
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          .map(({ body, ...entity }) => entity)
+          .map(EntityUtility.strip)
           .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime()),
       }));
   }
@@ -96,6 +105,7 @@ class EntityService {
           historyURL: `https://github.com/${this.config.dataGitHubRepo}/commits/master/${path}`,
           lastModified,
           ...ParseService.parse(source),
+          links: { to: [] },
           source,
         };
       }

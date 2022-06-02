@@ -1,6 +1,7 @@
 <script lang="ts">
   import { FormatUtility } from '$lib/utilities';
   import type { APIResponse } from '.';
+  import Links from '../components/links.svelte';
 
   export let notes: APIResponse['notes'];
   export let groups: APIResponse['groups'];
@@ -9,10 +10,10 @@
 <input type="checkbox" id="notes-expanded" />
 
 <main>
-  <ol class="groups">
-    <li class="group">
-      <h1 class="group-title">書いたもの</h1>
-      <ol class="notes">
+  <ol class="links">
+    <li class="link-group">
+      <h1 class="link-group-title">書いたもの</h1>
+      <ol class="link-group-links notes">
         {#each notes as note}
           <li class="note">
             <small title={note.attributes.date}>
@@ -40,26 +41,7 @@
       </ol>
     </li>
 
-    {#each groups as group}
-      <li class="group">
-        <h1 class="group-title">{group.name}</h1>
-        <ol class="monos">
-          {#each group.monos as mono}
-            <li class="mono">
-              <a sveltekit:prefetch href={mono.urlPath}>
-                {mono.name}
-              </a>
-              <p>
-                {mono.attributes.definition ?? ''}
-                {#each mono.attributes.tags || [] as tag}
-                  <span class="tag">#{tag}</span>
-                {/each}
-              </p>
-            </li>
-          {/each}
-        </ol>
-      </li>
-    {/each}
+    <Links links={groups} />
   </ol>
 </main>
 

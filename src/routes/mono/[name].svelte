@@ -3,6 +3,7 @@
   import Viewer from '../../components/viewer.svelte';
 
   export let attributes: APIResponse['attributes'];
+  export let links: APIResponse['links'];
   export let body: APIResponse['body'];
   export let name: APIResponse['name'];
   export let historyURL: APIResponse['historyURL'];
@@ -15,4 +16,6 @@
   {historyURL}
   tags={attributes.tags}
   {body}
+  {links}
+  isMono
 />
