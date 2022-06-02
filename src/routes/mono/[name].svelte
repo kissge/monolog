@@ -2,20 +2,7 @@
   import type { APIResponse } from './[name]';
   import Viewer from '../../components/viewer.svelte';
 
-  export let attributes: APIResponse['attributes'];
-  export let links: APIResponse['links'];
-  export let body: APIResponse['body'];
-  export let name: APIResponse['name'];
-  export let historyURL: APIResponse['historyURL'];
+  export let entity: APIResponse['entity'];
 </script>
 
-<Viewer
-  title={name}
-  headline={attributes.definition}
-  date={attributes.date}
-  {historyURL}
-  tags={attributes.tags}
-  {body}
-  {links}
-  isMono
-/>
+<Viewer title={entity.name} headline={entity.attributes.definition} {entity} isMono />

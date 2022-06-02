@@ -5,8 +5,10 @@ import { EntityService } from '$lib/services';
 export const get: RequestHandler<Body> = ({ url }) => {
   const entity = EntityService.get<MonoWithBody>(url.pathname);
 
-  return entity ? { body: entity } : { status: 404 };
+  return entity ? { body: { entity } } : { status: 404 };
 };
 
-type Body = MonoWithBody;
+interface Body {
+  entity: MonoWithBody;
+}
 export type APIResponse = JSON<Body>;

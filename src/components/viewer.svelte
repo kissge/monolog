@@ -1,29 +1,28 @@
 <script lang="ts">
-  import type { Entity, HTMLString, JSON, LinkCategory } from '$lib/@types';
+  import type { EntityWithBody, JSON } from '$lib/@types';
   import Links from './links.svelte';
   import Time from './time.svelte';
 
   export let title: string;
   export let headline: string | undefined = undefined;
-  export let date: string | undefined;
-  export let historyURL: string;
-  export let tags: string[] | undefined;
-  export let body: HTMLString;
-  export let links: JSON<Record<LinkCategory, Entity<any>[]>>;
+  export let entity: JSON<EntityWithBody<any>>;
   export let isMono: boolean = false;
 
-  const linkCategories: { id: LinkCategory; name: string }[] = [
+  $: hasLink = Object.values(entity.links).some((entities) => entities.length > 0);
+  $: links = [
     {
-      id: 'to',
+      id: 'to' as const,
       name: (isMono ? title : 'この記事') + 'がリンクしているもの',
     },
     {
-      id: 'from',
+      id: 'from' as const,
       name: (isMono ? title : 'この記事') + 'にリンクしているもの',
     },
-  ];
-
-  const hasLink = Object.values(links).some((entities) => entities.length > 0);
+    {
+      id: 'kind' as const,
+      name: entity.kind ? 'ほかの' + entity.kind : '',
+    },
+  ].map(({ id, name }) => ({ name, entities: entity.links[id] }));
 </script>
 
 <main>
@@ -36,20 +35,20 @@
       {/if}
 
       <section class="meta">
-        {#if date}
+        {#if entity.attributes.date}
           <p>
-            <Time {date} />
+            <Time date={entity.attributes.date} />
           </p>
         {/if}
 
         <p>
-          <a href={historyURL}>更新履歴</a>
+          <a href={entity.historyURL}>更新履歴</a>
         </p>
       </section>
 
-      {#if tags}
+      {#if entity.attributes.tags}
         <section>
-          {#each tags as tag}
+          {#each entity.attributes.tags as tag}
             <div class="tag">#{tag}</div>
           {/each}
         </section>
@@ -57,13 +56,13 @@
     </header>
 
     <section class="body">
-      {@html body}
+      {@html entity.body}
     </section>
 
     {#if hasLink}
       <section class="links-section">
         <ul class="links">
-          <Links links={linkCategories.map(({ id, name }) => ({ name, entities: links[id] }))} />
+          <Links {links} />
         </ul>
       </section>
     {/if}

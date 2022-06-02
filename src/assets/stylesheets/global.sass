@@ -65,7 +65,7 @@ main
 .link-group-title
     display: table-cell
     padding-right: 1em
-    width: 10em
+    width: 11em
 
 .link-group-links
     display: table-cell
@@ -74,15 +74,19 @@ main
 
 .link
     display: flex
+    flex-wrap: wrap
 
-    gap: 0.5em
+    gap: 0 0.5em
 
     a
         flex: 0 0 auto
+        max-width: 100%
 
     p
+        flex: 1 1 1em
         color: #999
 
     small
         color: #333
+        white-space: nowrap
         font-size: 0.6em

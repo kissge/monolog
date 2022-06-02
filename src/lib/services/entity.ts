@@ -33,6 +33,7 @@ class EntityService {
     const firstPass = new Map<string, EntityWithBody & { source: string }>();
     const groups: { name: string; urlPaths: string[] }[] = [];
     const seenNames = new Set<string>();
+    const kinds = new Map<string, string[]>();
 
     // 1st pass
     for (const entity of this.listEntitiesRecursive()) {
@@ -40,6 +41,14 @@ class EntityService {
 
       assert.equal(seenNames.has(entity.name), false, `Duplicate entity name: ${entity.name}`);
       seenNames.add(entity.name);
+
+      if (entity.kind) {
+        if (!kinds.has(entity.kind)) {
+          kinds.set(entity.kind, []);
+        }
+
+        kinds.get(entity.kind)!.push(entity.urlPath);
+      }
 
       if (this.isShownOnTopPage(entity.sourceFilePath)) {
         const [, prefix, name] = entity.sourceFilePath.match(/^(\d+)[._-]([^/]+)/)!;
@@ -63,6 +72,13 @@ class EntityService {
             links: {
               to: Array.from(links, (urlPath) => EntityUtility.strip(firstPass.get(urlPath)!)),
               from: [],
+              kind:
+                entity.kind && entity.kind !== 'note'
+                  ? kinds
+                      .get(entity.kind)!
+                      .filter((x) => x !== urlPath)
+                      .map((urlPath) => EntityUtility.strip(firstPass.get(urlPath)!))
+                  : [],
             },
           },
         ];
@@ -116,7 +132,7 @@ class EntityService {
           historyURL: `https://github.com/${this.config.dataGitHubRepo}/commits/master/${path}`,
           lastModified,
           ...ParseService.parse(source),
-          links: { to: [], from: [] },
+          links: { to: [], from: [], kind: [] },
           source,
         };
       }
