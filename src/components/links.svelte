@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { JSON, LinkGroup } from '$lib/@types';
+  import { FormatUtility } from '$lib/utilities';
 
   export let links: JSON<LinkGroup<any>>[];
 </script>
@@ -12,7 +13,14 @@
         {#each entities as entity}
           <li class="link">
             <a sveltekit:prefetch href={entity.urlPath}>
-              {entity.name}
+              {entity.attributes.title || entity.name}
+              {#if entity.attributes.date}
+                <small title={entity.attributes.date}>
+                  <time>
+                    {FormatUtility.date(entity.attributes.date)}
+                  </time>
+                </small>
+              {/if}
             </a>
             <p>
               {entity.attributes.definition ?? ''}

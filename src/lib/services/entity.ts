@@ -62,11 +62,22 @@ class EntityService {
             body,
             links: {
               to: Array.from(links, (urlPath) => EntityUtility.strip(firstPass.get(urlPath)!)),
+              from: [],
             },
           },
         ];
       }),
     );
+
+    // 3rd pass
+    for (const fromEntity of this.all.values()) {
+      fromEntity.links.to.forEach((to) => {
+        const toEntity = this.all.get(to.urlPath)!;
+        if (!toEntity.links.from.some(({ urlPath }) => urlPath === fromEntity.urlPath)) {
+          toEntity.links.from.push(EntityUtility.strip(fromEntity));
+        }
+      });
+    }
 
     this._groups = groups
       .filter((group) => group)
@@ -92,7 +103,7 @@ class EntityService {
         yield* this.listEntitiesRecursive(path);
       } else if (dirPath && file.isFile() && file.name.endsWith('.md')) {
         const name = file.name.slice(0, -3);
-        const kind = dirPath.split('/').slice(1).pop();
+        const kind = path.startsWith('notes/') ? 'note' : dirPath.split('/').slice(1).pop();
         const lastModified = fs.statSync(`${this.config.dataRootDir}/${path}`).mtime;
         const source = fs.readFileSync(`${this.config.dataRootDir}/${path}`, 'utf-8');
         const urlPath = this.isMono(path) ? '/mono/' + encodeURI(name) : '/' + encodeURI(path.slice(0, -3));
@@ -105,7 +116,7 @@ class EntityService {
           historyURL: `https://github.com/${this.config.dataGitHubRepo}/commits/master/${path}`,
           lastModified,
           ...ParseService.parse(source),
-          links: { to: [] },
+          links: { to: [], from: [] },
           source,
         };
       }

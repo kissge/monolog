@@ -17,7 +17,13 @@
       id: 'to',
       name: (isMono ? title : 'この記事') + 'がリンクしているもの',
     },
+    {
+      id: 'from',
+      name: (isMono ? title : 'この記事') + 'にリンクしているもの',
+    },
   ];
+
+  const hasLink = Object.values(links).some((entities) => entities.length > 0);
 </script>
 
 <main>
@@ -54,11 +60,13 @@
       {@html body}
     </section>
 
-    <section>
-      <ul class="links">
-        <Links links={linkCategories.map(({ id, name }) => ({ name, entities: links[id] }))} />
-      </ul>
-    </section>
+    {#if hasLink}
+      <section class="links-section">
+        <ul class="links">
+          <Links links={linkCategories.map(({ id, name }) => ({ name, entities: links[id] }))} />
+        </ul>
+      </section>
+    {/if}
   </article>
 </main>
 

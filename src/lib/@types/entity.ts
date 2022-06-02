@@ -16,4 +16,4 @@ export interface EntityWithBody<Attributes = unknown> extends Entity<Attributes>
   links: Record<LinkCategory, Entity[]>;
 }
 
-export type LinkCategory = 'to';
+export type LinkCategory = 'to' | 'from';

@@ -12,6 +12,8 @@ export default class EntityExtension {
   };
 
   get extension(): marked.MarkedExtension {
+    const self = this;
+
     return {
       walkTokens: (token) => {
         assert.equal(this.state.parsing, true);
@@ -37,6 +39,8 @@ export default class EntityExtension {
           name: 'link',
           level: 'inline',
           renderer: function (token: marked.Tokens.Link & { mono?: true }): string | false {
+            assert.equal(self.state.parsing, true);
+
             if (token.mono) {
               const href = cleanUrl(
                 this.parser.options.sanitize ?? false,
@@ -51,6 +55,13 @@ export default class EntityExtension {
               return `<a href="${href}" class="mono-link" sveltekit:prefetch${
                 token.title ? ' title="' + token.title + '"' : ''
               }>${text}</a>`;
+            }
+
+            if (token.href.startsWith('/')) {
+              const href = token.href.replace(/\/$/, '');
+              if (new Set(self.service.entities.values()).has(href)) {
+                self.state.links.push(href);
+              }
             }
 
             return false;
