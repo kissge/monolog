@@ -124,14 +124,17 @@ class EntityService {
         const source = fs.readFileSync(`${this.config.dataRootDir}/${path}`, 'utf-8');
         const urlPath = this.isMono(path) ? '/mono/' + encodeURI(name) : '/' + encodeURI(path.slice(0, -3));
 
+        const { attributes, body } = ParseService.parse(source);
+
         yield {
-          name,
+          name: (attributes as NoteAttributes).title || name,
           kind,
           sourceFilePath: path,
           urlPath,
           historyURL: `https://github.com/${this.config.dataGitHubRepo}/commits/master/${path}`,
           lastModified,
-          ...ParseService.parse(source),
+          attributes,
+          body,
           links: { to: [], from: [], kind: [] },
           source,
         };

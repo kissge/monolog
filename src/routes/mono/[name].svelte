@@ -5,4 +5,4 @@
   export let entity: APIResponse['entity'];
 </script>
 
-<Viewer title={entity.name} headline={entity.attributes.definition} {entity} isMono />
+<Viewer headline={entity.attributes.definition} {entity} isMono />

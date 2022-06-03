@@ -3,7 +3,6 @@
   import Links from './links.svelte';
   import Time from './time.svelte';
 
-  export let title: string;
   export let headline: string | undefined = undefined;
   export let entity: JSON<EntityWithBody<any>>;
   export let isMono: boolean = false;
@@ -12,11 +11,11 @@
   $: links = [
     {
       id: 'to' as const,
-      name: (isMono ? title : 'この記事') + 'がリンクしているもの',
+      name: (isMono ? entity.name : 'この記事') + 'がリンクしているもの',
     },
     {
       id: 'from' as const,
-      name: (isMono ? title : 'この記事') + 'にリンクしているもの',
+      name: (isMono ? entity.name : 'この記事') + 'にリンクしているもの',
     },
     {
       id: 'kind' as const,
@@ -28,7 +27,7 @@
 <main>
   <article>
     <header>
-      <h1>{title}</h1>
+      <h1>{entity.name}</h1>
 
       {#if headline}
         <h2>{headline}</h2>

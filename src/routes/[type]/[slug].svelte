@@ -5,4 +5,4 @@
   export let entity: APIResponse['entity'];
 </script>
 
-<Viewer title={entity.attributes.title ?? entity.name} {entity} />
+<Viewer {entity} />
