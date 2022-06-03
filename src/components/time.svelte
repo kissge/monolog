@@ -3,7 +3,7 @@
 
   export let date: string | undefined;
 
-  let [d, t] = FormatUtility.datetime(date).split(' ');
+  $: [d, t] = FormatUtility.datetime(date).split(' ');
 </script>
 
 <time title={FormatUtility.relative(date)}>{d}<span class="weak">T</span>{t}<span class="weak">+09:00</span></time>

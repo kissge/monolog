@@ -8,6 +8,7 @@ export default class EntityExtension {
 
   protected state = {
     parsing: false,
+    selfUrlPath: '',
     links: <string[]>[],
   };
 
@@ -38,10 +39,14 @@ export default class EntityExtension {
         {
           name: 'link',
           level: 'inline',
-          renderer: function (token: marked.Tokens.Link & { mono?: true }): string | false {
+          renderer: function (token: marked.Tokens.Link): string | false {
             assert.equal(self.state.parsing, true);
 
-            if (token.mono) {
+            const urlPath = token.href.replace(/\/$/, '');
+
+            if (token.href.startsWith('/') && new Set(self.service.entities.values()).has(urlPath)) {
+              self.state.links.push(urlPath);
+
               const href = cleanUrl(
                 this.parser.options.sanitize ?? false,
                 this.parser.options.baseUrl ?? '',
@@ -52,16 +57,9 @@ export default class EntityExtension {
                 return text;
               }
 
-              return `<a href="${href}" class="mono-link" sveltekit:prefetch${
+              return `<a href="${href}" class="monolog-link" sveltekit:prefetch${
                 token.title ? ' title="' + token.title + '"' : ''
               }>${text}</a>`;
-            }
-
-            if (token.href.startsWith('/')) {
-              const href = token.href.replace(/\/$/, '');
-              if (new Set(self.service.entities.values()).has(href)) {
-                self.state.links.push(href);
-              }
             }
 
             return false;
@@ -71,9 +69,9 @@ export default class EntityExtension {
     };
   }
 
-  startParsing() {
+  startParsing(urlPath: string) {
     assert.equal(this.state.parsing, false);
-    this.state = { parsing: true, links: [] };
+    this.state = { parsing: true, selfUrlPath: urlPath, links: [] };
   }
 
   endParsing() {
@@ -88,6 +86,10 @@ export default class EntityExtension {
     }
 
     for (const [entityName, href] of this.service.entities) {
+      if (href === this.state.selfUrlPath) {
+        continue;
+      }
+
       token.tokens = token.tokens.flatMap((token) => {
         if (token.type === 'text') {
           assert.equal('tokens' in token, false, JSON.stringify(token));
@@ -107,7 +109,6 @@ export default class EntityExtension {
                     title: entityName,
                     text: entityName,
                     tokens: [{ type: 'text', raw: entityName, text: entityName }],
-                    mono: true,
                   },
                   { type: 'text', raw: chunk, text: chunk },
                 ];

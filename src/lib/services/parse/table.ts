@@ -28,9 +28,7 @@ const TableExtension: marked.MarkedExtension = {
     {
       name: 'table',
       level: 'block',
-      renderer(_token) {
-        const token = _token as marked.Tokens.Table;
-
+      renderer: function (token: marked.Tokens.Table): string | false {
         const header = this.parser.renderer.tablerow(
           token.header
             .map(({ tokens }, x) =>
@@ -63,7 +61,7 @@ const TableExtension: marked.MarkedExtension = {
           .join('');
 
         return '<div class="table-wrapper">' + this.parser.renderer.table(header, body) + '</div>';
-      },
+      } as marked.RendererExtension['renderer'],
     },
   ],
 };

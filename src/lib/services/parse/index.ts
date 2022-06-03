@@ -16,8 +16,8 @@ class ParseService {
     marked.use(ParagraphExtension);
   }
 
-  parse<Attributes>(source: string) {
-    this.entityExtension.startParsing();
+  parse<Attributes>(source: string, urlPath: string) {
+    this.entityExtension.startParsing(urlPath);
 
     const { attributes, body: markdown } = frontMatter<Attributes>(source);
     const body = marked.parse(markdown, { smartypants: true }) as HTMLString;

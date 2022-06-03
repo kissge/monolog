@@ -25,7 +25,7 @@
     },
   ].map(({ id, name }) => ({ name, entities: entity.links[id] }));
 
-  $: noHeaderImage = entity.attributes.header === false;
+  $: noHeaderImage = entity.attributes.header === false || (isMono && !entity.attributes.header);
 
   onMount(() => {
     defineXScriptCustomElement();

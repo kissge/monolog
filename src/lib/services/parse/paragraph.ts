@@ -5,9 +5,7 @@ const ParagraphExtension: marked.MarkedExtension = {
     {
       name: 'paragraph',
       level: 'block',
-      renderer(_token) {
-        const token = _token as marked.Tokens.Paragraph;
-
+      renderer: function (token: marked.Tokens.Paragraph): string | false {
         if (token.tokens.length === 0) {
           return false;
         }
@@ -38,7 +36,7 @@ const ParagraphExtension: marked.MarkedExtension = {
         }
 
         return false;
-      },
+      } as marked.RendererExtension['renderer'],
     },
   ],
 };

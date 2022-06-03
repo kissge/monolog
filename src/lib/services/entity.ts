@@ -62,7 +62,7 @@ class EntityService {
     ParseService.updateEntities(firstPass.values());
     this.all = new Map(
       Array.from(firstPass.entries()).map(([urlPath, { source, ...entity }]) => {
-        const { body, links } = ParseService.parse(source);
+        const { body, links } = ParseService.parse(source, urlPath);
 
         return [
           urlPath,
@@ -124,7 +124,7 @@ class EntityService {
         const source = fs.readFileSync(`${this.config.dataRootDir}/${path}`, 'utf-8');
         const urlPath = this.isMono(path) ? '/mono/' + encodeURI(name) : '/' + encodeURI(path.slice(0, -3));
 
-        const { attributes, body } = ParseService.parse(source);
+        const { attributes, body } = ParseService.parse(source, urlPath);
 
         yield {
           name: (attributes as NoteAttributes).title || name,
