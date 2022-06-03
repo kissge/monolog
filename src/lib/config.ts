@@ -1,4 +1,5 @@
 const Config = {
+  siteTitle: assertNonEmptyString(import.meta.env.VITE_SITE_TITLE),
   dataRootDir: assertNonEmptyString(import.meta.env.VITE_DATA_ROOT_DIR),
   dataGitHubRepo: assertNonEmptyString(import.meta.env.VITE_DATA_GITHUB_REPO),
   maxDepthForTopPage: assertInteger(import.meta.env.VITE_MAX_DEPTH_FOR_TOP_PAGE),

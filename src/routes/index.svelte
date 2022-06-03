@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { page } from '$app/stores';
+  import Config from '$lib/config';
   import { FormatUtility } from '$lib/utilities';
   import type { APIResponse } from '.';
   import Links from '../components/links.svelte';
@@ -6,6 +8,14 @@
   export let notes: APIResponse['notes'];
   export let groups: APIResponse['groups'];
 </script>
+
+<svelte:head>
+  <title>{Config.siteTitle}</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={Config.siteTitle} />
+  <meta property="og:site_name" content={Config.siteTitle} />
+  <meta property="og:image" content="{$page.url.origin}/images/favicon.svg" />
+</svelte:head>
 
 <input type="checkbox" id="notes-expanded" />
 

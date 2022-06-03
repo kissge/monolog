@@ -135,6 +135,7 @@ class EntityService {
           lastModified,
           attributes,
           body,
+          headline: body.replace(/<[^>]+>|\n/g, '').slice(0, 512),
           links: { to: [], from: [], kind: [] },
           source,
         };

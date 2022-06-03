@@ -1,10 +1,18 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
+  import Config from '$lib/config';
+  import { FormatUtility } from '$lib/utilities';
   import { Links, Time, defineXScriptCustomElement } from '../components';
   import type { APIResponse } from './[...entity]';
 
   export let entity: APIResponse['entity'];
+
+  $: title =
+    entity.name +
+    (entity.attributes.date ? ' - ' + FormatUtility.date(entity.attributes.date) : '') +
+    ' | ' +
+    Config.siteTitle;
 
   $: isMono = $page.url.pathname.startsWith('/mono/');
 
@@ -30,6 +38,22 @@
     defineXScriptCustomElement();
   });
 </script>
+
+<svelte:head>
+  <title>{title}</title>
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={entity.headline} />
+  <meta property="og:site_name" content={Config.siteTitle} />
+  <meta
+    property="og:image"
+    content={entity.attributes.header
+      ? /^\.{0,2}\//.test(entity.attributes.header)
+        ? $page.url.origin + '/' + entity.attributes.header
+        : entity.attributes.header
+      : $page.url.origin + '/images/default.png'}
+  />
+</svelte:head>
 
 <main>
   <article>
