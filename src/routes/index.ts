@@ -1,5 +1,5 @@
 import type { RequestHandler } from './__types/index';
-import type { JSON, LinkGroup, MonoAttributes, Note } from '$lib/@types';
+import type { JSON, LinkGroup, Note } from '$lib/@types';
 import { EntityService } from '$lib/services';
 
 export const get: RequestHandler<Body> = () => ({
@@ -11,6 +11,6 @@ export const get: RequestHandler<Body> = () => ({
 
 interface Body {
   notes: Note[];
-  groups: LinkGroup<MonoAttributes>[];
+  groups: LinkGroup[];
 }
 export type APIResponse = JSON<Body>;

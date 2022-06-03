@@ -1,15 +1,7 @@
-import type { Entity, EntityWithBody } from './entity';
+import type { Entity, EntityAttributes } from '.';
 
 export type Note = Entity<NoteAttributes>;
-export type NoteWithBody = EntityWithBody<NoteAttributes>;
 
-export interface NoteAttributes {
-  title: string;
+export interface NoteAttributes extends EntityAttributes {
   date: Date;
-  tags?: string[];
-
-  /** ヘッダ画像のパス、またはURL、またはfalse（非表示） */
-  header?: string | false;
-  /** 別のブログシステムから移植してきた場合、そのソース */
-  from?: string;
 }

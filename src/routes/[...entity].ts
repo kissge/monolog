@@ -1,14 +1,14 @@
-import type { RequestHandler } from '../mono/__types/[name]';
-import type { JSON, MonoWithBody } from '$lib/@types';
+import type { RequestHandler } from './__types/[...entity]';
+import type { EntityWithBody, JSON } from '$lib/@types';
 import { EntityService } from '$lib/services';
 
 export const get: RequestHandler<Body> = ({ url }) => {
-  const entity = EntityService.get<MonoWithBody>(url.pathname);
+  const entity = EntityService.get(url.pathname);
 
   return entity ? { body: { entity } } : { status: 404 };
 };
 
 interface Body {
-  entity: MonoWithBody;
+  entity: EntityWithBody;
 }
 export type APIResponse = JSON<Body>;

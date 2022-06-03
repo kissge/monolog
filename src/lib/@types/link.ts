@@ -1,6 +1,6 @@
-import type { Entity } from '.';
+import type { Entity, EntityAttributes } from '.';
 
-export interface LinkGroup<Attributes> {
+export interface LinkGroup<Attributes = EntityAttributes> {
   name: string;
   entities: Entity<Attributes>[];
 }

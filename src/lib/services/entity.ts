@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import type { EntityWithBody, LinkGroup, MonoAttributes, MonoWithBody, NoteAttributes } from '$lib/@types';
+import type { EntityWithBody, LinkGroup, NoteAttributes } from '$lib/@types';
 import config, { type Config } from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
 import ParseService from './parse';
 
 class EntityService {
   protected all = new Map<string, EntityWithBody>();
-  protected _groups: LinkGroup<MonoAttributes>[] = [];
+  protected _groups: LinkGroup[] = [];
 
   constructor(private config: Config) {
     this.initialize();
@@ -100,14 +100,14 @@ class EntityService {
       .map(({ name, urlPaths }) => ({
         name,
         entities: urlPaths
-          .map((urlPath) => this.get<MonoWithBody>(urlPath)!)
+          .map((urlPath) => this.get(urlPath)!)
           .map(EntityUtility.strip)
           .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime()),
       }));
   }
 
   @AutoReload()
-  get<T extends EntityWithBody<unknown>>(name: string) {
+  get<T extends EntityWithBody>(name: string) {
     return this.all.get(name) as T | undefined;
   }
 

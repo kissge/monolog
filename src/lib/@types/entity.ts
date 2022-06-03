@@ -1,6 +1,6 @@
 import type { HTMLString } from './brand';
 
-export interface Entity<Attributes = unknown> {
+export interface Entity<Attributes = EntityAttributes> {
   name: string;
   kind?: string;
   /** Path to source Markdown file, relative to the data root directory */
@@ -11,9 +11,22 @@ export interface Entity<Attributes = unknown> {
   attributes: Attributes;
 }
 
-export interface EntityWithBody<Attributes = unknown> extends Entity<Attributes> {
+export interface EntityWithBody<Attributes = EntityAttributes> extends Entity<Attributes> {
   body: HTMLString;
   links: Record<LinkCategory, Entity[]>;
 }
 
 export type LinkCategory = 'to' | 'from' | 'kind';
+
+export interface EntityAttributes {
+  title: string;
+  date?: Date;
+  tags?: string[];
+
+  /** ヘッダ画像のパス、またはURL、またはfalse（非表示） */
+  header?: string | false;
+  /** 別のブログシステムから移植してきた場合、そのソース */
+  from?: string;
+
+  definition?: string;
+}

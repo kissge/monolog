@@ -1,6 +1,6 @@
 import frontMatter from 'front-matter';
 import { marked } from 'marked';
-import type { Entity, HTMLString } from '$lib/@types';
+import type { Entity, EntityAttributes, HTMLString } from '$lib/@types';
 import TableExtension from './table';
 import EntityExtension from './entity';
 import ParagraphExtension from './paragraph';
@@ -16,7 +16,7 @@ class ParseService {
     marked.use(ParagraphExtension);
   }
 
-  parse<Attributes>(source: string, urlPath: string) {
+  parse<Attributes = EntityAttributes>(source: string, urlPath: string) {
     this.entityExtension.startParsing(urlPath);
 
     const { attributes, body: markdown } = frontMatter<Attributes>(source);

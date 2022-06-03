@@ -1,13 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { EntityWithBody, JSON } from '$lib/@types';
-  import Links from './links.svelte';
-  import Time from './time.svelte';
-  import { defineXScriptCustomElement } from './x-script';
+  import { page } from '$app/stores';
+  import { Links, Time, defineXScriptCustomElement } from '../components';
+  import type { APIResponse } from './[...entity]';
 
-  export let headline: string | undefined = undefined;
-  export let entity: JSON<EntityWithBody<any>>;
-  export let isMono: boolean = false;
+  export let entity: APIResponse['entity'];
+
+  $: isMono = $page.url.pathname.startsWith('/mono/');
 
   $: hasLink = Object.values(entity.links).some((entities) => entities.length > 0);
   $: links = [
@@ -37,8 +36,8 @@
     <header class:noHeaderImage>
       <h1>{entity.name}</h1>
 
-      {#if headline}
-        <h2>{headline}</h2>
+      {#if entity.attributes.definition}
+        <h2>{entity.attributes.definition}</h2>
       {/if}
 
       <section class="meta">
