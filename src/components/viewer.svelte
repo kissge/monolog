@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import type { EntityWithBody, JSON } from '$lib/@types';
   import Links from './links.svelte';
   import Time from './time.svelte';
+  import { defineXScriptCustomElement } from './x-script';
 
   export let headline: string | undefined = undefined;
   export let entity: JSON<EntityWithBody<any>>;
@@ -22,6 +24,10 @@
       name: entity.kind ? 'ほかの' + entity.kind : '',
     },
   ].map(({ id, name }) => ({ name, entities: entity.links[id] }));
+
+  onMount(() => {
+    defineXScriptCustomElement();
+  });
 </script>
 
 <main>

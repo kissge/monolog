@@ -3,6 +3,7 @@ import { marked } from 'marked';
 import type { Entity, HTMLString } from '$lib/@types';
 import TableExtension from './table';
 import EntityExtension from './entity';
+import ParagraphExtension from './paragraph';
 
 class ParseService {
   entities = new Map<string, string>();
@@ -12,6 +13,7 @@ class ParseService {
     this.entityExtension = new EntityExtension(this);
     marked.use(TableExtension);
     marked.use(this.entityExtension.extension);
+    marked.use(ParagraphExtension);
   }
 
   parse<Attributes>(source: string) {
