@@ -1,4 +1,4 @@
-import type { RequestHandler } from '../[type]/__types/[slug]';
+import type { RequestHandler } from './__types/[...note]';
 import type { JSON, NoteWithBody } from '$lib/@types';
 import { EntityService } from '$lib/services';
 

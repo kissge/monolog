@@ -25,6 +25,8 @@
     },
   ].map(({ id, name }) => ({ name, entities: entity.links[id] }));
 
+  $: noHeaderImage = entity.attributes.header === false;
+
   onMount(() => {
     defineXScriptCustomElement();
   });
@@ -32,7 +34,7 @@
 
 <main>
   <article>
-    <header>
+    <header class:noHeaderImage>
       <h1>{entity.name}</h1>
 
       {#if headline}
@@ -58,6 +60,12 @@
           {/each}
         </section>
       {/if}
+
+      <section
+        class="header-image"
+        class:noHeaderImage
+        style={entity.attributes.header ? `background-image: url(${entity.attributes.header})` : ''}
+      />
     </header>
 
     <section class="body">

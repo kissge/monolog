@@ -8,8 +8,8 @@ export interface NoteAttributes {
   date: Date;
   tags?: string[];
 
-  /** ヘッダ画像のパス、またはURL */
-  header?: string;
+  /** ヘッダ画像のパス、またはURL、またはfalse（非表示） */
+  header?: string | false;
   /** 別のブログシステムから移植してきた場合、そのソース */
   from?: string;
 }

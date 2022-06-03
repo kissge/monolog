@@ -29,8 +29,55 @@ a
     outline: 1px solid #54e
 
 nav
-    padding: 1.5em
+    padding: 1rem 0.5rem
+    height: 4rem
     border-bottom: 1px solid #ccc
+
+    li
+        display: inline-block
+        margin-right: 5px
+
+    a
+        padding: 0 1em
+        color: #222
+        text-decoration: none
+        text-shadow: 0 0 8px #fff, 0 0 8px #fff, 0 0 8px #fff
+        transition: text-shadow 4s ease-in-out
+
+        &::after
+            position: absolute
+            bottom: calc(-1rem - 5px)
+            left: 0
+            display: block
+            width: 0
+            height: 3px
+            background-color: #eee
+            content: ''
+            transition: width 0.2s ease-in-out
+
+        &:hover, &[aria-current]
+            position: relative
+            text-shadow: 0 0 8px #fff, 0 0 8px #fff, 0 0 8px #fff,0 0 8px #fff, 0 0 8px #fff, 0 0 8px #fff,0 0 8px #fff, 0 0 8px #fff, 0 0 8px #fff
+            transition-duration: 0.2s
+
+            &::after
+                width: 100%
+
+        &[href="/"]::before
+            display: inline-block
+            margin-right: 3px
+            margin-left: 1px
+            width: 1em
+            height: 1em
+            background-image: url(/images/favicon.svg)
+            background-size: contain
+            content: ''
+            vertical-align: middle
+
+    &.isTop
+        background-image: url(/images/default.png)
+        background-position: left top
+        background-size: cover
 
 footer
     padding: 2em

@@ -117,9 +117,9 @@ class EntityService {
 
       if (file.isDirectory()) {
         yield* this.listEntitiesRecursive(path);
-      } else if (dirPath && file.isFile() && file.name.endsWith('.md')) {
+      } else if (file.isFile() && file.name.endsWith('.md')) {
         const name = file.name.slice(0, -3);
-        const kind = path.startsWith('notes/') ? 'note' : dirPath.split('/').slice(1).pop();
+        const kind = path.startsWith('notes/') ? 'note' : dirPath?.split('/').slice(1).pop();
         const lastModified = fs.statSync(`${this.config.dataRootDir}/${path}`).mtime;
         const source = fs.readFileSync(`${this.config.dataRootDir}/${path}`, 'utf-8');
         const urlPath = this.isMono(path) ? '/mono/' + encodeURI(name) : '/' + encodeURI(path.slice(0, -3));
