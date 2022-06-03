@@ -4,6 +4,7 @@ const Config = {
   dataGitHubRepo: assertNonEmptyString(import.meta.env.VITE_DATA_GITHUB_REPO),
   maxDepthForTopPage: assertInteger(import.meta.env.VITE_MAX_DEPTH_FOR_TOP_PAGE),
   navLinks: JSON.parse(import.meta.env.VITE_NAV_LINKS || '"[]"') as { href: string; title: string }[],
+  twitterID: import.meta.env.VITE_TWITTER_ID as string | undefined,
 };
 
 function assertNonEmptyString(value: unknown): string {

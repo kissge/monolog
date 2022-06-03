@@ -3,7 +3,7 @@
   import { page } from '$app/stores';
   import Config from '$lib/config';
   import { FormatUtility } from '$lib/utilities';
-  import { Links, Time, defineXScriptCustomElement } from '../components';
+  import { Links, Mentions, Time, defineXScriptCustomElement } from '../components';
   import type { APIResponse } from './[...entity]';
 
   export let entity: APIResponse['entity'];
@@ -102,6 +102,8 @@
         </ul>
       </section>
     {/if}
+
+    <Mentions />
   </article>
 </main>
 

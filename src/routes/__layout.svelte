@@ -5,6 +5,14 @@
   $: isTop = $page.url.pathname === '/';
 </script>
 
+<svelte:head>
+  {#if Config.twitterID}
+    <link href="https://twitter.com/{Config.twitterID}" rel="me" />
+    <link rel="webmention" href="https://webmention.io/{$page.url.host}/webmention" />
+    <link rel="pingback" href="https://webmention.io/{$page.url.host}/xmlrpc" />
+  {/if}
+</svelte:head>
+
 <nav class:isTop>
   <ul>
     {#each Config.navLinks as { href, title }}

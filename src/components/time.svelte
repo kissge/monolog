@@ -9,6 +9,9 @@
 <time title={FormatUtility.relative(date)}>{d}<span class="weak">T</span>{t}<span class="weak">+09:00</span></time>
 
 <style lang="sass">
+time
+  white-space: nowrap
+
 .weak
   opacity: 0.1
   transition: opacity 0.1s ease-in-out

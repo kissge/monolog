@@ -1,4 +1,4 @@
-import type { HTMLString } from './brand';
+import type { HTMLString } from '.';
 
 export interface Entity<Attributes = EntityAttributes> {
   name: string;
