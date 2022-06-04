@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import type { EntityWithBody, LinkGroup, NoteAttributes } from '$lib/@types';
+import type { Entity, EntityWithBody, LinkGroup, NoteAttributes } from '$lib/@types';
 import config, { type Config } from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
 import ParseService from './parse';
@@ -50,11 +50,9 @@ class EntityService {
         kinds.get(entity.kind)!.push(entity.urlPath);
       }
 
-      if (this.isShownOnTopPage(entity.sourceFilePath)) {
-        const [, prefix, name] = entity.sourceFilePath.match(/^(\d+)[._-]([^/]+)/)!;
-        const order = Number.parseInt(prefix);
-
-        (groups[order] ??= { name, urlPaths: [] }).urlPaths.push(entity.urlPath);
+      const order = this.getOrderOnTopPage(entity);
+      if (order != null) {
+        (groups[order] ??= { name: this.config.topTags[order], urlPaths: [] }).urlPaths.push(entity.urlPath);
       }
     }
 
@@ -144,11 +142,11 @@ class EntityService {
   }
 
   protected isMono(path: string) {
-    return /^\d+[._-]/.test(path);
+    return path.startsWith('mono/');
   }
 
-  protected isShownOnTopPage(path: string) {
-    return this.isMono(path) && !new RegExp(`(?:/.*){${this.config.maxDepthForTopPage + 1}}`).test(path);
+  protected getOrderOnTopPage(entity: Entity) {
+    return this.config.topTags.findIndex((tag) => entity.attributes.tags?.includes(tag));
   }
 }
 

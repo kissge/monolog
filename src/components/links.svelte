@@ -25,7 +25,9 @@
             <p>
               {entity.attributes.definition ?? ''}
               {#each entity.attributes.tags || [] as tag}
-                <span class="tag">#{tag}</span>
+                {#if tag !== name}
+                  <span class="tag">#{tag}</span>
+                {/if}
               {/each}
             </p>
           </li>
