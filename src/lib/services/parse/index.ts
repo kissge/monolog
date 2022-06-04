@@ -4,6 +4,7 @@ import type { Entity, EntityAttributes, HTMLString } from '$lib/@types';
 import TableExtension from './table';
 import EntityExtension from './entity';
 import ParagraphExtension from './paragraph';
+import HighlightExtension from './highlight';
 
 class ParseService {
   entities = new Map<string, string>();
@@ -14,6 +15,7 @@ class ParseService {
     marked.use(TableExtension);
     marked.use(this.entityExtension.extension);
     marked.use(ParagraphExtension);
+    marked.use(HighlightExtension);
   }
 
   parse<Attributes = EntityAttributes>(source: string, urlPath: string) {
