@@ -9,7 +9,7 @@ export default class EntityExtension {
   protected state = {
     parsing: false,
     selfUrlPath: '',
-    links: <string[]>[],
+    links: [] as string[],
   };
 
   get extension(): marked.MarkedExtension {
