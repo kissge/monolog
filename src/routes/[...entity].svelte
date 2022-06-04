@@ -51,7 +51,7 @@
       ? /^\.{0,2}\//.test(entity.attributes.header)
         ? $page.url.origin + '/' + entity.attributes.header
         : entity.attributes.header
-      : $page.url.origin + '/images/default.png'}
+      : $page.url.origin + '/images/favicon.svg'}
   />
 </svelte:head>
 
