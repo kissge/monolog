@@ -36,12 +36,33 @@ class EntityService {
   }
 
   initialize() {
+    const { firstPass, groups, kinds } = this.initialize1stPass();
+    const all = this.initialize2ndPass(firstPass, kinds);
+    this.initialize3rdPass(all);
+
+    this.all = all;
+    this._groups = groups
+      .filter((group) => group)
+      .map(({ name, urlPaths }) => ({
+        name,
+        entities: urlPaths
+          .map((urlPath) => this.get(urlPath)!)
+          .map(EntityUtility.strip)
+          .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime()),
+      }));
+  }
+
+  @AutoReload()
+  get<T extends EntityWithBody>(name: string) {
+    return this.all.get(name) as T | undefined;
+  }
+
+  protected initialize1stPass() {
     const firstPass = new Map<string, EntityWithBody & { source: string }>();
     const groups: { name: string; urlPaths: string[] }[] = [];
     const seenNames = new Set<string>();
     const kinds = new Map<string, string[]>();
 
-    // 1st pass
     for (const entity of this.listEntitiesRecursive()) {
       firstPass.set(entity.urlPath, entity);
 
@@ -62,9 +83,16 @@ class EntityService {
       }
     }
 
-    // 2nd pass
+    return { firstPass, groups, kinds };
+  }
+
+  protected initialize2ndPass(
+    firstPass: Map<string, EntityWithBody & { source: string }>,
+    kinds: Map<string, string[]>,
+  ) {
     ParseService.updateEntities(firstPass.values());
-    this.all = new Map(
+
+    return new Map(
       Array.from(firstPass.entries()).map(([urlPath, { source, ...entity }]) => {
         const { body, links } = ParseService.parse(source, urlPath);
 
@@ -88,31 +116,17 @@ class EntityService {
         ];
       }),
     );
+  }
 
-    // 3rd pass
-    for (const fromEntity of this.all.values()) {
+  protected initialize3rdPass(all: Map<string, EntityWithBody>) {
+    for (const fromEntity of all.values()) {
       fromEntity.links.to.forEach((to) => {
-        const toEntity = this.all.get(to.urlPath)!;
+        const toEntity = all.get(to.urlPath)!;
         if (!toEntity.links.from.some(({ urlPath }) => urlPath === fromEntity.urlPath)) {
           toEntity.links.from.push(EntityUtility.strip(fromEntity));
         }
       });
     }
-
-    this._groups = groups
-      .filter((group) => group)
-      .map(({ name, urlPaths }) => ({
-        name,
-        entities: urlPaths
-          .map((urlPath) => this.get(urlPath)!)
-          .map(EntityUtility.strip)
-          .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime()),
-      }));
-  }
-
-  @AutoReload()
-  get<T extends EntityWithBody>(name: string) {
-    return this.all.get(name) as T | undefined;
   }
 
   protected *listEntitiesRecursive(dirPath?: string): Generator<EntityWithBody & { source: string }> {
