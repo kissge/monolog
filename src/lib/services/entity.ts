@@ -171,16 +171,32 @@ class EntityService {
   }
 
   protected initialize4thPass(all: Map<string, EntityWithBody>) {
+    const linksFrom = new Map<string, string[]>();
+
     for (const fromEntity of all.values()) {
       fromEntity.links.to.forEach((to) => {
         const toEntity = all.get(to.urlPath)!;
         if (!toEntity.links.from.some(({ urlPath }) => urlPath === fromEntity.urlPath)) {
           toEntity.links.from.push(EntityUtility.strip(fromEntity));
         }
+
+        if (!linksFrom.has(to.urlPath)) {
+          linksFrom.set(to.urlPath, []);
+        }
+
+        linksFrom.get(to.urlPath)!.push(fromEntity.urlPath);
       });
     }
 
     for (const entity of all.values()) {
+      entity.links.to.forEach((to) => {
+        entity.links[EntityUtility.getOneHopCategoryName(to.name)] = linksFrom
+          .get(to.urlPath)!
+          .map((urlPath) => all.get(urlPath)!)
+          .map<Entity>(EntityUtility.strip)
+          .sort(EntityUtility.compare);
+      });
+
       entity.links.from.sort(EntityUtility.compare);
     }
   }

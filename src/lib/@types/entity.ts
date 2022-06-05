@@ -24,7 +24,7 @@ export interface FileEntity<Attributes = EntityAttributes> extends Entity<Attrib
 
 export type FileEntityWithBody<Attributes = EntityAttributes> = FileEntity<Attributes> & EntityWithBody<Attributes>;
 
-export type LinkCategory = 'to' | 'from' | 'kind';
+export type LinkCategory = 'to' | 'from' | 'kind' | `one_hop_${string}`;
 
 export interface EntityAttributes {
   title: string;

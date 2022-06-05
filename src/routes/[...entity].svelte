@@ -5,6 +5,7 @@
   import { FormatUtility } from '$lib/utilities';
   import { Links, Mentions, Time, defineXScriptCustomElement } from '../components';
   import type { APIResponse } from './[...entity]';
+  import type { LinkCategory } from '$lib/@types';
 
   export let entity: APIResponse['entity'];
 
@@ -18,20 +19,31 @@
     $page.url.pathname.startsWith('/mono/') || $page.url.pathname.startsWith('/tag/') ? entity.name : 'この記事';
 
   $: hasLink = Object.values(entity.links).some((entities) => entities.length > 0);
-  $: links = [
-    {
-      id: 'to' as const,
-      name: name + 'がリンクしているもの',
-    },
-    {
-      id: 'from' as const,
-      name: name + 'にリンクしているもの',
-    },
-    {
-      id: 'kind' as const,
-      name: entity.kind ? 'ほかの' + entity.kind : '',
-    },
-  ].map(({ id, name }) => ({ name, entities: entity.links[id] }));
+  $: links = (
+    [
+      {
+        id: 'to',
+        name: name + 'がリンクしているもの',
+      },
+      {
+        id: 'from',
+        name: name + 'にリンクしているもの',
+      },
+      {
+        id: 'kind',
+        name: entity.kind ? 'ほかの' + entity.kind : '',
+      },
+      ...Object.entries(entity.links)
+        .filter(([id]) => id.startsWith('one_hop_'))
+        .map(([id]) => ({
+          id,
+          name: id.replace(/^one_hop_/, '') + 'にリンクしているもの',
+        })),
+    ] as { id: LinkCategory; name: string }[]
+  ).map(({ id, name }) => ({
+    name,
+    entities: entity.links[id].filter(({ urlPath }) => urlPath !== $page.url.pathname),
+  }));
 
   $: noHeaderImage = entity.attributes?.header === false || (entity.kind !== 'note' && !entity.attributes?.header);
 

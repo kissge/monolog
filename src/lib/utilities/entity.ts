@@ -26,3 +26,7 @@ export function compare(a: Entity, b: Entity) {
 
   return !ad && !bd ? 0 : !ad ? -1 : !bd ? 1 : new Date(bd).getTime() - new Date(ad).getTime();
 }
+
+export function getOneHopCategoryName(name: string): `one_hop_${string}` {
+  return `one_hop_${name}`;
+}
