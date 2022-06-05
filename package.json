@@ -9,11 +9,13 @@
     "build": "svelte-kit build",
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
-    "prepare": "svelte-kit sync",
+    "prepare": "svelte-kit sync && husky install",
     "test": "playwright test",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
+    "lint:prettier": "prettier --check --plugin-search-dir=.",
+    "lint:eslint": "eslint",
     "format": "prettier --write --plugin-search-dir=. ."
   },
   "devDependencies": {
@@ -25,7 +27,10 @@
     "@typescript-eslint/parser": "^5.10.1",
     "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-svelte3": "^4.0.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "prettier": "^2.5.1",
     "prettier-plugin-svelte": "^2.5.0",
     "sass": "^1.52.1",
@@ -41,5 +46,14 @@
     "highlight.js": "^11.5.1",
     "marked": "^4.0.16",
     "the-new-css-reset": "^1.6.1"
+  },
+  "lint-staged": {
+    "*.{ts,svelte}": [
+      "yarn lint:prettier",
+      "yarn lint:eslint"
+    ],
+    "*.{sass,md,json,html}": [
+      "yarn lint:prettier"
+    ]
   }
 }

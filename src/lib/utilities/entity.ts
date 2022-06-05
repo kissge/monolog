@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import type { EntityWithBody, Entity, FileEntity, FileEntityWithBody, NoteWithBody, Note } from '$lib/@types';
+import type { Entity, EntityWithBody, FileEntity, FileEntityWithBody, Note, NoteWithBody } from '$lib/@types';
 
 export function strip(entity: EntityWithBody): Entity;
 export function strip(entity: FileEntityWithBody): FileEntity;

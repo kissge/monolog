@@ -4,7 +4,7 @@ module.exports = /** @type {import('eslint').Linter.Config} */ ({
   root: true,
   parser: '@typescript-eslint/parser',
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
-  plugins: ['svelte3', '@typescript-eslint'],
+  plugins: ['svelte3', '@typescript-eslint', 'import'],
   ignorePatterns: ['*.cjs'],
   overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
   settings: {
@@ -22,5 +22,7 @@ module.exports = /** @type {import('eslint').Linter.Config} */ ({
   rules: {
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-this-alias': 'off',
+    'import/order': ['error', { pathGroups: [{ pattern: '$app/*', group: 'external' }] }],
+    'sort-imports': ['error', { ignoreDeclarationSort: true }],
   },
 });

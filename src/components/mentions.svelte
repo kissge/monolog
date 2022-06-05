@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { dev } from '$app/env';
-  import type { JF2MentionItem } from '$lib/@types';
   import Time from './time.svelte';
+  import type { JF2MentionItem } from '$lib/@types';
 
   let mentions: JF2MentionItem[] | undefined;
 

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import Links from '../components/links.svelte';
+  import type { APIResponse } from '.';
   import * as Config from '$lib/config';
   import { FormatUtility } from '$lib/utilities';
-  import type { APIResponse } from '.';
-  import Links from '../components/links.svelte';
 
   export let notes: APIResponse['notes'];
   export let groups: APIResponse['groups'];

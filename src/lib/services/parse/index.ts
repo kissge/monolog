@@ -1,11 +1,11 @@
 import frontMatter from 'front-matter';
 import { marked } from 'marked';
-import type { Entity, EntityAttributes, HTMLString } from '$lib/@types';
 import TableExtension from './table';
 import EntityExtension from './entity';
 import ParagraphExtension from './paragraph';
 import HighlightExtension from './highlight';
 import FootnoteExtension from './footnote';
+import type { Entity, EntityAttributes, HTMLString } from '$lib/@types';
 
 class ParseService {
   entities = new Map<string, string>();

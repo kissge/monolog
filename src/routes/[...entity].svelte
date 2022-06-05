@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import * as Config from '$lib/config';
-  import { FormatUtility } from '$lib/utilities';
   import { Links, Mentions, Time, defineXScriptCustomElement } from '../components';
   import type { APIResponse } from './[...entity]';
+  import * as Config from '$lib/config';
+  import { FormatUtility } from '$lib/utilities';
   import type { LinkCategory } from '$lib/@types';
 
   export let entity: APIResponse['entity'];

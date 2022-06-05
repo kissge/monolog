@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import ParseService from './parse';
 import { block } from '$lib/vendor/marked/src/rules';
 import type { Entity, EntityWithBody, FileEntity, HTMLString, LinkGroup, NoteAttributes } from '$lib/@types';
 import * as Config from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
-import ParseService from './parse';
 
 class EntityService {
   protected all = new Map<string, EntityWithBody>();
