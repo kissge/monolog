@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { block } from '$lib/vendor/marked/src/rules';
 import type { Entity, EntityWithBody, LinkGroup, NoteAttributes } from '$lib/@types';
-import config, { type Config } from '$lib/config';
+import * as Config from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
 import ParseService from './parse';
 
@@ -15,7 +15,7 @@ class EntityService {
     'g',
   );
 
-  constructor(private config: Config) {
+  constructor() {
     this.initialize();
   }
 
@@ -58,7 +58,7 @@ class EntityService {
 
       const order = this.getOrderOnTopPage(entity);
       if (order != null) {
-        (groups[order] ??= { name: this.config.topTags[order], urlPaths: [] }).urlPaths.push(entity.urlPath);
+        (groups[order] ??= { name: Config.topTags[order], urlPaths: [] }).urlPaths.push(entity.urlPath);
       }
     }
 
@@ -116,7 +116,7 @@ class EntityService {
   }
 
   protected *listEntitiesRecursive(dirPath?: string): Generator<EntityWithBody & { source: string }> {
-    for (const file of fs.readdirSync(`${this.config.dataRootDir}/${dirPath ?? ''}`, { withFileTypes: true })) {
+    for (const file of fs.readdirSync(`${Config.dataRootDir}/${dirPath ?? ''}`, { withFileTypes: true })) {
       const path = dirPath ? `${dirPath}/${file.name}` : file.name;
 
       if (file.isDirectory()) {
@@ -124,8 +124,8 @@ class EntityService {
       } else if (file.isFile() && file.name.endsWith('.md')) {
         const name = file.name.slice(0, -3);
         const kind = path.startsWith('notes/') ? 'note' : dirPath?.split('/').slice(1).pop();
-        const lastModified = fs.statSync(`${this.config.dataRootDir}/${path}`).mtime;
-        const source = fs.readFileSync(`${this.config.dataRootDir}/${path}`, 'utf-8');
+        const lastModified = fs.statSync(`${Config.dataRootDir}/${path}`).mtime;
+        const source = fs.readFileSync(`${Config.dataRootDir}/${path}`, 'utf-8');
         const urlPath = this.isMono(path) ? '/mono/' + encodeURI(name) : '/' + encodeURI(path.slice(0, -3));
 
         const { attributes, body } = ParseService.parse(source, urlPath);
@@ -135,7 +135,7 @@ class EntityService {
           kind,
           sourceFilePath: path,
           urlPath,
-          historyURL: `https://github.com/${this.config.dataGitHubRepo}/commits/master/${path}`,
+          historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${path}`,
           lastModified,
           attributes,
           body,
@@ -158,9 +158,8 @@ class EntityService {
   }
 
   protected getOrderOnTopPage(entity: Entity) {
-    return this.config.topTags.findIndex((tag) => entity.attributes.tags?.includes(tag));
+    return Config.topTags.findIndex((tag) => entity.attributes.tags?.includes(tag));
   }
 }
 
-const entityService = new EntityService(config);
-export default entityService;
+export default new EntityService();

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import Config from '$lib/config';
+  import * as Config from '$lib/config';
 
   $: isTop = $page.url.pathname === '/';
 </script>

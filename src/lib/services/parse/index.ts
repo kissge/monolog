@@ -41,6 +41,5 @@ class ParseService {
   }
 }
 
-const parseService = new ParseService();
-export default parseService;
+export default new ParseService();
 export { ParseService };
