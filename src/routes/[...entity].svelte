@@ -65,7 +65,7 @@
 </svelte:head>
 
 <main>
-  <article>
+  <article data-kind={entity.kind}>
     <header class:noHeaderImage>
       <h1>{entity.name}</h1>
 

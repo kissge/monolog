@@ -46,7 +46,7 @@ class EntityService {
           .get(encodeURI('/mono/' + name))
           ?.links.from.entities.filter(({ tags }) => tags.some((tag) => tag.name === name)),
       }))
-      .filter((group): group is LinkGroup<FileEntity> => !group.entities?.length);
+      .filter((group): group is LinkGroup<FileEntity> => !!group.entities?.length);
   }
 
   @AutoReload()

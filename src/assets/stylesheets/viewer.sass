@@ -12,6 +12,20 @@ header
         ~ section
             margin-top: 1.5em
 
+        &::before
+            display: inline-block
+            margin-left: -3em
+            width: 3em
+            padding-right: 0.5em
+            text-align: right
+
+            [data-kind] &
+                content: "🌐"
+            [data-kind="note"] &
+                content: "🖋"
+            [data-kind="タグ"] &
+                content: "🏷"
+
     .meta
         float: right
         text-align: right
