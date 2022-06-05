@@ -1,15 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { block } from '$lib/vendor/marked/src/rules';
-import type {
-  Entity,
-  EntityWithBody,
-  FileEntity,
-  FileEntityWithBody,
-  HTMLString,
-  LinkGroup,
-  NoteAttributes,
-} from '$lib/@types';
+import type { Entity, EntityWithBody, FileEntity, HTMLString, LinkGroup, NoteAttributes } from '$lib/@types';
 import * as Config from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
 import ParseService from './parse';
@@ -41,21 +33,20 @@ class EntityService {
   }
 
   initialize() {
-    const { all, groups, kinds } = this.initialize1stPass();
+    const { all, kinds } = this.initialize1stPass();
     this.initialize2ndPass(all, kinds);
     const all2 = this.initialize3rdPass(all, kinds);
     this.initialize4thPass(all2);
 
     this.all = all2;
-    this._groups = groups
-      .filter((group) => group)
-      .map(({ name, urlPaths }) => ({
+    this._groups = Config.topTags
+      .map((name) => ({
         name,
-        entities: urlPaths
-          .map((urlPath) => this.get(urlPath)! as FileEntityWithBody)
-          .map<FileEntity>(EntityUtility.strip)
-          .sort(EntityUtility.compare),
-      }));
+        entities: all2
+          .get(encodeURI('/mono/' + name))
+          ?.links.from.entities.filter(({ tags }) => tags.some((tag) => tag.name === name)),
+      }))
+      .filter((group): group is LinkGroup<FileEntity> => !group.entities?.length);
   }
 
   @AutoReload()
@@ -65,7 +56,6 @@ class EntityService {
 
   protected initialize1stPass() {
     const all = new Map<string, EntityWithBody & { source: string }>();
-    const groups: { name: string; urlPaths: string[] }[] = [];
     const seenNames = new Set<string>();
     const kinds = new Map<string, string[]>();
 
@@ -82,20 +72,17 @@ class EntityService {
 
         kinds.get(entity.kind)!.push(entity.urlPath);
       }
-
-      const order = this.getOrderOnTopPage(entity);
-      if (order != null) {
-        (groups[order] ??= { name: Config.topTags[order], urlPaths: [] }).urlPaths.push(entity.urlPath);
-      }
     }
 
-    return { all, groups, kinds };
+    return { all, kinds };
   }
 
   protected initialize2ndPass(
     firstPass: Map<string, EntityWithBody & { source: string }>,
     kinds: Map<string, string[]>,
   ) {
+    kinds.set('タグ', []);
+
     for (const entity of firstPass.values()) {
       for (const tag of entity.attributes?.tags ?? []) {
         const urlPath = encodeURI('/mono/' + tag);
@@ -110,10 +97,6 @@ class EntityService {
             tags: [],
             source: '',
           });
-
-          if (!kinds.has('タグ')) {
-            kinds.set('タグ', []);
-          }
 
           kinds.get('タグ')!.push(urlPath);
         }
