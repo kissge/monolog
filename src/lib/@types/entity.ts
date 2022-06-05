@@ -30,6 +30,7 @@ export interface EntityAttributes {
   title: string;
   date?: Date | string;
   tags?: string[];
+  lang?: string;
 
   /** ヘッダ画像のパス、またはURL、またはfalse（非表示） */
   header?: string | false;
