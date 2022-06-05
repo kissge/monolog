@@ -1,14 +1,22 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { block } from '$lib/vendor/marked/src/rules';
-import type { Entity, EntityWithBody, LinkGroup, Note, NoteAttributes } from '$lib/@types';
+import type {
+  Entity,
+  EntityWithBody,
+  FileEntity,
+  FileEntityWithBody,
+  HTMLString,
+  LinkGroup,
+  NoteAttributes,
+} from '$lib/@types';
 import * as Config from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
 import ParseService from './parse';
 
 class EntityService {
   protected all = new Map<string, EntityWithBody>();
-  protected _groups: LinkGroup[] = [];
+  protected _groups: LinkGroup<FileEntity>[] = [];
 
   protected static readonly blockTagsRegExp = new RegExp(
     `<(?:x-script|${(block as unknown as { _tag: string })._tag})[^>]*>`,
@@ -25,7 +33,7 @@ class EntityService {
   }
 
   @AutoReload()
-  get notes(): Note[] {
+  get notes() {
     return Array.from(this.all.values())
       .filter(EntityUtility.isNote)
       .map(EntityUtility.strip)
@@ -43,8 +51,8 @@ class EntityService {
       .map(({ name, urlPaths }) => ({
         name,
         entities: urlPaths
-          .map((urlPath) => this.get(urlPath)!)
-          .map(EntityUtility.strip)
+          .map((urlPath) => this.get(urlPath)! as FileEntityWithBody)
+          .map<FileEntity>(EntityUtility.strip)
           .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime()),
       }));
   }
@@ -87,11 +95,39 @@ class EntityService {
     firstPass: Map<string, EntityWithBody & { source: string }>,
     kinds: Map<string, string[]>,
   ) {
+    for (const [, entity] of firstPass) {
+      for (const tag of entity.attributes?.tags ?? []) {
+        const urlPath = this.getUrlPathForTag(tag, firstPass);
+        if (!firstPass.has(urlPath)) {
+          firstPass.set(urlPath, {
+            name: tag,
+            kind: 'タグ',
+            urlPath,
+            body: '' as HTMLString,
+            headline: '',
+            links: { to: [], from: [], kind: [] },
+            source: '',
+          });
+
+          if (!kinds.has('タグ')) {
+            kinds.set('タグ', []);
+          }
+
+          kinds.get('タグ')!.push(urlPath);
+        }
+      }
+    }
+
     ParseService.updateEntities(firstPass.values());
 
     return new Map(
-      Array.from(firstPass.entries()).map(([urlPath, { source, ...entity }]) => {
+      Array.from(firstPass.entries()).map<[string, EntityWithBody]>(([urlPath, { source, ...entity }]) => {
         const { body, links } = ParseService.parse(source, urlPath);
+        if (entity.attributes?.tags) {
+          for (const tag of entity.attributes.tags) {
+            links.add(this.getUrlPathForTag(tag, firstPass));
+          }
+        }
 
         return [
           urlPath,
@@ -168,7 +204,16 @@ class EntityService {
   }
 
   protected getOrderOnTopPage(entity: Entity) {
-    return Config.topTags.findIndex((tag) => entity.attributes.tags?.includes(tag));
+    return Config.topTags.findIndex((tag) => entity.attributes?.tags?.includes(tag));
+  }
+
+  protected getUrlPathForTag(tag: string, all: Map<string, EntityWithBody>) {
+    const urlPath = encodeURI('/mono/' + tag);
+    if (all.has(urlPath)) {
+      return urlPath;
+    }
+
+    return encodeURI('/tag/' + tag);
   }
 }
 

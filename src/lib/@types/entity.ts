@@ -4,9 +4,9 @@ export interface Entity<Attributes = EntityAttributes> {
   name: string;
   kind?: string;
   urlPath: string;
-  historyURL: string;
-  lastModified: Date;
-  attributes: Attributes;
+  historyURL?: string;
+  lastModified?: Date;
+  attributes?: Attributes;
 }
 
 export interface EntityWithBody<Attributes = EntityAttributes> extends Entity<Attributes> {
@@ -14,6 +14,14 @@ export interface EntityWithBody<Attributes = EntityAttributes> extends Entity<At
   headline: string;
   links: Record<LinkCategory, Entity[]>;
 }
+
+export interface FileEntity<Attributes = EntityAttributes> extends Entity<Attributes> {
+  historyURL: string;
+  lastModified: Date;
+  attributes: Attributes;
+}
+
+export type FileEntityWithBody<Attributes = EntityAttributes> = FileEntity<Attributes> & EntityWithBody<Attributes>;
 
 export type LinkCategory = 'to' | 'from' | 'kind';
 

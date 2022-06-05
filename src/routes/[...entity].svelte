@@ -10,21 +10,22 @@
 
   $: title =
     entity.name +
-    (entity.attributes.date ? ' - ' + FormatUtility.date(entity.attributes.date) : '') +
+    (entity.attributes?.date ? ' - ' + FormatUtility.date(entity.attributes.date) : '') +
     ' | ' +
     Config.siteTitle;
 
-  $: isMono = $page.url.pathname.startsWith('/mono/');
+  $: name =
+    $page.url.pathname.startsWith('/mono/') || $page.url.pathname.startsWith('/tag/') ? entity.name : 'この記事';
 
   $: hasLink = Object.values(entity.links).some((entities) => entities.length > 0);
   $: links = [
     {
       id: 'to' as const,
-      name: (isMono ? entity.name : 'この記事') + 'がリンクしているもの',
+      name: name + 'がリンクしているもの',
     },
     {
       id: 'from' as const,
-      name: (isMono ? entity.name : 'この記事') + 'にリンクしているもの',
+      name: name + 'にリンクしているもの',
     },
     {
       id: 'kind' as const,
@@ -32,7 +33,7 @@
     },
   ].map(({ id, name }) => ({ name, entities: entity.links[id] }));
 
-  $: noHeaderImage = entity.attributes.header === false || (isMono && !entity.attributes.header);
+  $: noHeaderImage = entity.attributes?.header === false || (entity.kind !== 'note' && !entity.attributes?.header);
 
   onMount(() => {
     defineXScriptCustomElement();
@@ -47,7 +48,7 @@
   <meta property="og:site_name" content={Config.siteTitle} />
   <meta
     property="og:image"
-    content={entity.attributes.header
+    content={entity.attributes?.header
       ? /^\.{0,2}\//.test(entity.attributes.header)
         ? $page.url.origin + '/' + entity.attributes.header
         : entity.attributes.header
@@ -60,23 +61,25 @@
     <header class:noHeaderImage>
       <h1>{entity.name}</h1>
 
-      {#if entity.attributes.definition}
+      {#if entity.attributes?.definition}
         <h2>{entity.attributes.definition}</h2>
       {/if}
 
       <section class="meta">
-        {#if entity.attributes.date}
+        {#if entity.attributes?.date}
           <p>
             <Time date={entity.attributes.date} />
           </p>
         {/if}
 
-        <p>
-          <a href={entity.historyURL}>更新履歴</a>
-        </p>
+        {#if entity.historyURL}
+          <p>
+            <a href={entity.historyURL}>更新履歴</a>
+          </p>
+        {/if}
       </section>
 
-      {#if entity.attributes.tags}
+      {#if entity.attributes?.tags}
         <section>
           {#each entity.attributes.tags as tag}
             <div class="tag">#{tag}</div>
@@ -87,7 +90,7 @@
       <section
         class="header-image"
         class:noHeaderImage
-        style={entity.attributes.header ? `background-image: url(${entity.attributes.header})` : ''}
+        style={entity.attributes?.header ? `background-image: url(${entity.attributes.header})` : ''}
       />
     </header>
 
