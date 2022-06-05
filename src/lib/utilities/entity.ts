@@ -5,6 +5,7 @@ import type { EntityWithBody, Entity, NoteWithBody } from '$lib/@types';
 export function strip<Attributes>({
   body,
   links,
+  headline,
   source,
   ...entityWithoutBody
 }: EntityWithBody<Attributes> & { source?: string }): Entity<Attributes> {
