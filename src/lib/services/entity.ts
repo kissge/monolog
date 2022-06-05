@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { block } from '$lib/vendor/marked/src/rules';
 import type { Entity, EntityWithBody, LinkGroup, NoteAttributes } from '$lib/@types';
 import config, { type Config } from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
@@ -8,6 +9,11 @@ import ParseService from './parse';
 class EntityService {
   protected all = new Map<string, EntityWithBody>();
   protected _groups: LinkGroup[] = [];
+
+  protected static readonly blockTagsRegExp = new RegExp(
+    `<(?:x-script|${(block as unknown as { _tag: string })._tag})[^>]*>`,
+    'g',
+  );
 
   constructor(private config: Config) {
     this.initialize();
@@ -133,7 +139,13 @@ class EntityService {
           lastModified,
           attributes,
           body,
-          headline: body.replace(/<[^>]+>|\n/g, '').slice(0, 512),
+          headline: body
+            .replace(EntityService.blockTagsRegExp, '\n')
+            .replace(/<[^>]+>/g, '')
+            .replace(/(?<=[\w,.])\n/g, ' ')
+            .replace(/\n/g, '')
+            .trim()
+            .slice(0, 512),
           links: { to: [], from: [], kind: [] },
           source,
         };

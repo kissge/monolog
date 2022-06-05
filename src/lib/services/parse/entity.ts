@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import type { marked } from 'marked';
-import { cleanUrl } from '$lib/vendor/helpers';
+import { cleanUrl } from '$lib/vendor/marked/src/helpers';
 import type { ParseService } from '.';
 
 export default class EntityExtension {
