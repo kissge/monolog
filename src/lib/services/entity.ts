@@ -106,7 +106,7 @@ class EntityService {
             urlPath,
             body: '' as HTMLString,
             headline: '',
-            links: { to: [], from: [], kind: [] },
+            links: { to: { urlPath, entities: [] }, from: { urlPath, entities: [] }, kind: { urlPath, entities: [] } },
             tags: [],
             source: '',
           });
@@ -144,28 +144,20 @@ class EntityService {
           links.add(urlPath);
         }
 
-        return [
-          urlPath,
-          {
-            ...entity,
-            body,
-            links: {
-              to: Array.from(links, (urlPath) => EntityUtility.strip(firstPass.get(urlPath)!)).sort(
-                EntityUtility.compare,
-              ),
-              from: [],
-              kind:
-                entity.kind && entity.kind !== 'note'
-                  ? kinds
-                      .get(entity.kind)!
-                      .filter((x) => x !== urlPath)
-                      .map((urlPath) => firstPass.get(urlPath)!)
-                      .map<Entity>(EntityUtility.strip)
-                      .sort(EntityUtility.compare)
-                  : [],
-            },
-          },
-        ];
+        entity.body = body;
+        entity.links.to.entities = Array.from(links, (urlPath) => EntityUtility.strip(firstPass.get(urlPath)!)).sort(
+          EntityUtility.compare,
+        );
+        if (entity.kind && entity.kind !== 'note') {
+          entity.links.kind.entities = kinds
+            .get(entity.kind)!
+            .filter((x) => x !== urlPath)
+            .map((urlPath) => firstPass.get(urlPath)!)
+            .map<Entity>(EntityUtility.strip)
+            .sort(EntityUtility.compare);
+        }
+
+        return [urlPath, entity];
       }),
     );
   }
@@ -174,10 +166,10 @@ class EntityService {
     const linksFrom = new Map<string, string[]>();
 
     for (const fromEntity of all.values()) {
-      fromEntity.links.to.forEach((to) => {
+      fromEntity.links.to.entities.forEach((to) => {
         const toEntity = all.get(to.urlPath)!;
-        if (!toEntity.links.from.some(({ urlPath }) => urlPath === fromEntity.urlPath)) {
-          toEntity.links.from.push(EntityUtility.strip(fromEntity));
+        if (!toEntity.links.from.entities.some(({ urlPath }) => urlPath === fromEntity.urlPath)) {
+          toEntity.links.from.entities.push(EntityUtility.strip(fromEntity));
         }
 
         if (!linksFrom.has(to.urlPath)) {
@@ -189,15 +181,19 @@ class EntityService {
     }
 
     for (const entity of all.values()) {
-      entity.links.to.forEach((to) => {
-        entity.links[EntityUtility.getOneHopCategoryName(to.name)] = linksFrom
-          .get(to.urlPath)!
-          .map((urlPath) => all.get(urlPath)!)
-          .map<Entity>(EntityUtility.strip)
-          .sort(EntityUtility.compare);
+      entity.links.to.entities.forEach((to) => {
+        entity.links[EntityUtility.getOneHopCategoryName(to.name)] = {
+          urlPath: to.urlPath,
+          entities: linksFrom
+            .get(to.urlPath)!
+            .filter((urlPath) => urlPath !== entity.urlPath)
+            .map((urlPath) => all.get(urlPath)!)
+            .map<Entity>(EntityUtility.strip)
+            .sort(EntityUtility.compare),
+        };
       });
 
-      entity.links.from.sort(EntityUtility.compare);
+      entity.links.from.entities.sort(EntityUtility.compare);
     }
   }
 
@@ -232,7 +228,7 @@ class EntityService {
             .replace(/\n/g, '')
             .trim()
             .slice(0, 512),
-          links: { to: [], from: [], kind: [] },
+          links: { to: { urlPath, entities: [] }, from: { urlPath, entities: [] }, kind: { urlPath, entities: [] } },
           source,
         };
       }

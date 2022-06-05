@@ -13,7 +13,7 @@ export interface Entity<Attributes = EntityAttributes> {
 export interface EntityWithBody<Attributes = EntityAttributes> extends Entity<Attributes> {
   body: HTMLString;
   headline: string;
-  links: Record<LinkCategory, Entity[]>;
+  links: Record<LinkCategory, { urlPath: string; entities: Entity[] }>;
 }
 
 export interface FileEntity<Attributes = EntityAttributes> extends Entity<Attributes> {

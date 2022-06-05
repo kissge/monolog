@@ -5,7 +5,7 @@
   export let links: JSON<LinkGroup<Entity>>[];
 </script>
 
-{#each links as { name, entities }}
+{#each links as { name, urlPath, entities }}
   {#if entities.length > 0}
     <li class="link-group">
       <h1 class="link-group-title">{name}</h1>
@@ -25,7 +25,7 @@
             <p>
               {entity.attributes?.definition ?? ''}
               {#each entity.tags as tag}
-                {#if tag.name !== name}
+                {#if tag.name !== name && tag.urlPath !== urlPath}
                   <a sveltekit:prefetch href={tag.urlPath} class="tag">#{tag.name}</a>
                 {/if}
               {/each}

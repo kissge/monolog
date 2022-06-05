@@ -17,7 +17,7 @@
 
   $: name = $page.url.pathname.startsWith('/mono/') ? entity.name : 'この記事';
 
-  $: hasLink = Object.values(entity.links).some((entities) => entities.length > 0);
+  $: hasLink = Object.values(entity.links).some(({ entities }) => entities.length > 0);
   $: links = (
     [
       {
@@ -39,10 +39,7 @@
           name: id.replace(/^one_hop_/, '') + 'にリンクしているもの',
         })),
     ] as { id: LinkCategory; name: string }[]
-  ).map(({ id, name }) => ({
-    name,
-    entities: entity.links[id].filter(({ urlPath }) => urlPath !== $page.url.pathname),
-  }));
+  ).map(({ id, name }) => ({ name, ...entity.links[id] }));
 
   $: noHeaderImage = entity.attributes?.header === false || (entity.kind !== 'note' && !entity.attributes?.header);
 
