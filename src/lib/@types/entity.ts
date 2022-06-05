@@ -3,8 +3,6 @@ import type { HTMLString } from '.';
 export interface Entity<Attributes = EntityAttributes> {
   name: string;
   kind?: string;
-  /** Path to source Markdown file, relative to the data root directory */
-  sourceFilePath: string;
   urlPath: string;
   historyURL: string;
   lastModified: Date;

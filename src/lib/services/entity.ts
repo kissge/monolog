@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { block } from '$lib/vendor/marked/src/rules';
-import type { Entity, EntityWithBody, LinkGroup, NoteAttributes } from '$lib/@types';
+import type { Entity, EntityWithBody, LinkGroup, Note, NoteAttributes } from '$lib/@types';
 import * as Config from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
 import ParseService from './parse';
@@ -25,14 +25,11 @@ class EntityService {
   }
 
   @AutoReload()
-  get notes() {
-    return (
-      (Array.from(this.all.values()) as EntityWithBody<NoteAttributes>[])
-        .filter(({ sourceFilePath }) => sourceFilePath.startsWith('notes/'))
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .map(({ body, ...note }) => note)
-        .sort((a, b) => b.attributes.date.getTime() - a.attributes.date.getTime())
-    );
+  get notes(): Note[] {
+    return Array.from(this.all.values())
+      .filter(EntityUtility.isNote)
+      .map(EntityUtility.strip)
+      .sort((a, b) => b.attributes.date.getTime() - a.attributes.date.getTime());
   }
 
   initialize() {
@@ -147,7 +144,6 @@ class EntityService {
         yield {
           name: (attributes as NoteAttributes).title || name,
           kind,
-          sourceFilePath: path,
           urlPath,
           historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${path}`,
           lastModified,
