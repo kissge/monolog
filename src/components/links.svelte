@@ -24,9 +24,9 @@
             </a>
             <p>
               {entity.attributes?.definition ?? ''}
-              {#each entity.attributes?.tags || [] as tag}
-                {#if tag !== name}
-                  <span class="tag">#{tag}</span>
+              {#each entity.tags as tag}
+                {#if tag.name !== name}
+                  <a sveltekit:prefetch href={tag.urlPath} class="tag">#{tag.name}</a>
                 {/if}
               {/each}
             </p>

@@ -3,16 +3,20 @@
 
   export let date: string | undefined;
 
-  $: [d, t] = FormatUtility.datetime(date).split(' ');
+  $: [d, t] = date && /[0-9+-]+T[0-9:.]+Z/.test(date) ? FormatUtility.datetime(date).split(' ') : [date];
 </script>
 
-<time title={FormatUtility.relative(date)}>{d}<span class="weak">T</span>{t}<span class="weak">+09:00</span></time>
+{#if t}
+  <time title={FormatUtility.relative(date)}>{d}<span>T</span>{t}<span>+09:00</span></time>
+{:else}
+  <time title={FormatUtility.relative(date)}>{d}</time>
+{/if}
 
 <style lang="sass">
 time
   white-space: nowrap
 
-.weak
+span
   opacity: 0.1
   transition: opacity 0.1s ease-in-out
 

@@ -7,6 +7,7 @@ export interface Entity<Attributes = EntityAttributes> {
   historyURL?: string;
   lastModified?: Date;
   attributes?: Attributes;
+  tags: Tag[];
 }
 
 export interface EntityWithBody<Attributes = EntityAttributes> extends Entity<Attributes> {
@@ -27,7 +28,7 @@ export type LinkCategory = 'to' | 'from' | 'kind';
 
 export interface EntityAttributes {
   title: string;
-  date?: Date;
+  date?: Date | string;
   tags?: string[];
 
   /** ヘッダ画像のパス、またはURL、またはfalse（非表示） */
@@ -36,4 +37,9 @@ export interface EntityAttributes {
   from?: string;
 
   definition?: string;
+}
+
+export interface Tag {
+  name: string;
+  urlPath: string;
 }

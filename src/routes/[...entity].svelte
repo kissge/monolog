@@ -79,10 +79,10 @@
         {/if}
       </section>
 
-      {#if entity.attributes?.tags}
+      {#if entity.tags.length > 0}
         <section>
-          {#each entity.attributes.tags as tag}
-            <div class="tag">#{tag}</div>
+          {#each entity.tags as tag}
+            <a sveltekit:prefetch href={tag.urlPath} class="tag">#{tag.name}</a>
           {/each}
         </section>
       {/if}

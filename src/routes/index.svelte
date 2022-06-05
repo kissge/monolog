@@ -40,8 +40,8 @@
             <a sveltekit:prefetch href={note.urlPath}>
               {note.attributes.title}
             </a>
-            {#each note.attributes.tags || [] as tag}
-              <span class="tag">#{tag}</span>
+            {#each note.tags as tag}
+              <a sveltekit:prefetch href={tag.urlPath} class="tag">#{tag.name}</a>
             {/each}
           </li>
         {/each}

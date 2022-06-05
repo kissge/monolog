@@ -37,15 +37,16 @@ class EntityService {
     return Array.from(this.all.values())
       .filter(EntityUtility.isNote)
       .map(EntityUtility.strip)
-      .sort((a, b) => b.attributes.date.getTime() - a.attributes.date.getTime());
+      .sort(EntityUtility.compare);
   }
 
   initialize() {
-    const { firstPass, groups, kinds } = this.initialize1stPass();
-    const all = this.initialize2ndPass(firstPass, kinds);
-    this.initialize3rdPass(all);
+    const { all, groups, kinds } = this.initialize1stPass();
+    this.initialize2ndPass(all, kinds);
+    const all2 = this.initialize3rdPass(all, kinds);
+    this.initialize4thPass(all2);
 
-    this.all = all;
+    this.all = all2;
     this._groups = groups
       .filter((group) => group)
       .map(({ name, urlPaths }) => ({
@@ -53,7 +54,7 @@ class EntityService {
         entities: urlPaths
           .map((urlPath) => this.get(urlPath)! as FileEntityWithBody)
           .map<FileEntity>(EntityUtility.strip)
-          .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime()),
+          .sort(EntityUtility.compare),
       }));
   }
 
@@ -63,13 +64,13 @@ class EntityService {
   }
 
   protected initialize1stPass() {
-    const firstPass = new Map<string, EntityWithBody & { source: string }>();
+    const all = new Map<string, EntityWithBody & { source: string }>();
     const groups: { name: string; urlPaths: string[] }[] = [];
     const seenNames = new Set<string>();
     const kinds = new Map<string, string[]>();
 
     for (const entity of this.listEntitiesRecursive()) {
-      firstPass.set(entity.urlPath, entity);
+      all.set(entity.urlPath, entity);
 
       assert.equal(seenNames.has(entity.name), false, `Duplicate entity name: ${entity.name}`);
       seenNames.add(entity.name);
@@ -88,14 +89,14 @@ class EntityService {
       }
     }
 
-    return { firstPass, groups, kinds };
+    return { all, groups, kinds };
   }
 
   protected initialize2ndPass(
     firstPass: Map<string, EntityWithBody & { source: string }>,
     kinds: Map<string, string[]>,
   ) {
-    for (const [, entity] of firstPass) {
+    for (const entity of firstPass.values()) {
       for (const tag of entity.attributes?.tags ?? []) {
         const urlPath = this.getUrlPathForTag(tag, firstPass);
         if (!firstPass.has(urlPath)) {
@@ -106,6 +107,7 @@ class EntityService {
             body: '' as HTMLString,
             headline: '',
             links: { to: [], from: [], kind: [] },
+            tags: [],
             source: '',
           });
 
@@ -120,13 +122,26 @@ class EntityService {
 
     ParseService.updateEntities(firstPass.values());
 
+    for (const entity of firstPass.values()) {
+      if (entity.attributes?.tags) {
+        entity.tags = entity.attributes.tags.map((name) => ({
+          name,
+          urlPath: this.getUrlPathForTag(name, firstPass),
+        }));
+      }
+    }
+  }
+
+  protected initialize3rdPass(
+    firstPass: Map<string, EntityWithBody & { source: string }>,
+    kinds: Map<string, string[]>,
+  ) {
     return new Map(
       Array.from(firstPass.entries()).map<[string, EntityWithBody]>(([urlPath, { source, ...entity }]) => {
         const { body, links } = ParseService.parse(source, urlPath);
-        if (entity.attributes?.tags) {
-          for (const tag of entity.attributes.tags) {
-            links.add(this.getUrlPathForTag(tag, firstPass));
-          }
+
+        for (const { urlPath } of entity.tags) {
+          links.add(urlPath);
         }
 
         return [
@@ -135,14 +150,18 @@ class EntityService {
             ...entity,
             body,
             links: {
-              to: Array.from(links, (urlPath) => EntityUtility.strip(firstPass.get(urlPath)!)),
+              to: Array.from(links, (urlPath) => EntityUtility.strip(firstPass.get(urlPath)!)).sort(
+                EntityUtility.compare,
+              ),
               from: [],
               kind:
                 entity.kind && entity.kind !== 'note'
                   ? kinds
                       .get(entity.kind)!
                       .filter((x) => x !== urlPath)
-                      .map((urlPath) => EntityUtility.strip(firstPass.get(urlPath)!))
+                      .map((urlPath) => firstPass.get(urlPath)!)
+                      .map<Entity>(EntityUtility.strip)
+                      .sort(EntityUtility.compare)
                   : [],
             },
           },
@@ -151,7 +170,7 @@ class EntityService {
     );
   }
 
-  protected initialize3rdPass(all: Map<string, EntityWithBody>) {
+  protected initialize4thPass(all: Map<string, EntityWithBody>) {
     for (const fromEntity of all.values()) {
       fromEntity.links.to.forEach((to) => {
         const toEntity = all.get(to.urlPath)!;
@@ -159,6 +178,10 @@ class EntityService {
           toEntity.links.from.push(EntityUtility.strip(fromEntity));
         }
       });
+    }
+
+    for (const entity of all.values()) {
+      entity.links.from.sort(EntityUtility.compare);
     }
   }
 
@@ -184,6 +207,7 @@ class EntityService {
           historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${path}`,
           lastModified,
           attributes,
+          tags: [],
           body,
           headline: body
             .replace(EntityService.blockTagsRegExp, '\n')
