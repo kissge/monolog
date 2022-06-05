@@ -23,11 +23,12 @@ class ParseService {
     marked.use(this.footnoteExtension.extension);
   }
 
-  parse<Attributes = EntityAttributes>(source: string, urlPath: string) {
-    this.entityExtension.startParsing(urlPath);
+  parse<Attributes extends EntityAttributes>(source: string, urlPath: string) {
+    const { attributes, body: markdown } = frontMatter<Attributes>(source);
+
+    this.entityExtension.startParsing(attributes.urlPath || urlPath);
     this.footnoteExtension.startParsing();
 
-    const { attributes, body: markdown } = frontMatter<Attributes>(source);
     const body = marked.parse(markdown, { smartypants: true });
 
     const footnotes = this.footnoteExtension.endParsing();

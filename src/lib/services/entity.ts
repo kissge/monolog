@@ -215,7 +215,7 @@ class EntityService {
         yield {
           name: (attributes as NoteAttributes).title || name,
           kind,
-          urlPath,
+          urlPath: attributes.urlPath || urlPath,
           historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${path}`,
           lastModified,
           attributes,

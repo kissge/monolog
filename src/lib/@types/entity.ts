@@ -36,6 +36,8 @@ export interface EntityAttributes {
   /** 別のブログシステムから移植してきた場合、そのソース */
   from?: string;
 
+  urlPath?: string;
+
   definition?: string;
 }
 
