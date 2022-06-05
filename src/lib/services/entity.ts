@@ -98,7 +98,7 @@ class EntityService {
   ) {
     for (const entity of firstPass.values()) {
       for (const tag of entity.attributes?.tags ?? []) {
-        const urlPath = this.getUrlPathForTag(tag, firstPass);
+        const urlPath = encodeURI('/mono/' + tag);
         if (!firstPass.has(urlPath)) {
           firstPass.set(urlPath, {
             name: tag,
@@ -126,7 +126,7 @@ class EntityService {
       if (entity.attributes?.tags) {
         entity.tags = entity.attributes.tags.map((name) => ({
           name,
-          urlPath: this.getUrlPathForTag(name, firstPass),
+          urlPath: encodeURI('/mono/' + name),
         }));
       }
     }
@@ -245,15 +245,6 @@ class EntityService {
 
   protected getOrderOnTopPage(entity: Entity) {
     return Config.topTags.findIndex((tag) => entity.attributes?.tags?.includes(tag));
-  }
-
-  protected getUrlPathForTag(tag: string, all: Map<string, EntityWithBody>) {
-    const urlPath = encodeURI('/mono/' + tag);
-    if (all.has(urlPath)) {
-      return urlPath;
-    }
-
-    return encodeURI('/tag/' + tag);
   }
 }
 

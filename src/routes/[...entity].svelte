@@ -15,8 +15,7 @@
     ' | ' +
     Config.siteTitle;
 
-  $: name =
-    $page.url.pathname.startsWith('/mono/') || $page.url.pathname.startsWith('/tag/') ? entity.name : 'この記事';
+  $: name = $page.url.pathname.startsWith('/mono/') ? entity.name : 'この記事';
 
   $: hasLink = Object.values(entity.links).some((entities) => entities.length > 0);
   $: links = (
