@@ -1,6 +1,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { initGoogleAnalytics } from '../components';
   import * as Config from '$lib/config';
+
+  initGoogleAnalytics();
 
   $: isTop = $page.url.pathname === '/';
 </script>
