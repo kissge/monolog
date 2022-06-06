@@ -102,7 +102,7 @@
       />
     </header>
 
-    <section class="body" lang={entity.attributes?.lang} style:-webkit-locale={"'" + entity.attributes?.lang + "'"}>
+    <section class="body" lang={entity.attributes?.lang}>
       {@html entity.body}
     </section>
 

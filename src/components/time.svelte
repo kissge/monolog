@@ -3,7 +3,7 @@
 
   export let date: string | undefined;
 
-  $: [d, t] = date && /[0-9+-]+T[0-9:.]+Z/.test(date) ? FormatUtility.datetime(date).split(' ') : [date];
+  $: [d, t] = date && /[0-9+-]+T[0-9:.]+[0-9:Z+-]+/.test(date) ? FormatUtility.datetime(date).split(' ') : [date];
 </script>
 
 {#if t}

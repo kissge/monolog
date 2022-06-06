@@ -45,7 +45,7 @@
     "front-matter": "^4.0.2",
     "highlight.js": "^11.5.1",
     "marked": "^4.0.16",
-    "the-new-css-reset": "^1.6.1"
+    "modern-css-reset": "^1.4.0"
   },
   "lint-staged": {
     "*.{ts,svelte}": [

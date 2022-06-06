@@ -1,19 +1,15 @@
-@use 'the-new-css-reset/css/reset'
-
+@use 'modern-css-reset/dist/reset.min.css'
 @use './color-emoji'
 
 @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;800&display=swap')
 
-html
+body
     color: #222
     font-weight: 400
     font-family: Emoji, 'Shippori Mincho B1', serif
     line-height: 1.8
 
     text-underline-offset: 0.1em
-
-*
-    -webkit-locale: auto
 
 a
     color: #3d2fb9
@@ -25,13 +21,14 @@ a
     &:hover
         text-decoration-color: transparent
 
-*:focus:not(:hover)
-    outline: 1px solid #54e
-
 nav
     padding: 1rem 0.5rem
     height: 4rem
     border-bottom: 1px solid #ccc
+
+    ul
+        margin: 0
+        padding: 0
 
     li
         display: inline-block
@@ -47,7 +44,7 @@ nav
 
         &::after
             position: absolute
-            bottom: calc(-1rem - 5px)
+            bottom: calc(-1rem - 7px)
             left: 0
             display: block
             width: 0
@@ -108,6 +105,8 @@ main
 
 .links
     display: table
+    margin: 0
+    padding: 0
     border-spacing: 0 3em
     border-collapse: separate
     line-height: 1.6
@@ -119,11 +118,14 @@ main
     display: table-cell
     padding-right: 1em
     width: 11em
+    font-weight: inherit
+    font-size: 1em
 
 .link-group-links
     display: table-cell
     padding-left: 1em
     border-left: 1px solid #ccc
+    list-style: none
 
 .link
     margin-bottom: 0.4em
@@ -158,3 +160,6 @@ main
 sup
     vertical-align: super
     font-size: smaller
+
+img
+    display: revert

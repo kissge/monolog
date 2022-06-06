@@ -15,8 +15,8 @@ header
         &::before
             display: inline-block
             margin-left: -3em
-            width: 3em
             padding-right: 0.5em
+            width: 3em
             text-align: right
 
             [data-kind] &
@@ -25,6 +25,10 @@ header
                 content: "🖋"
             [data-kind="タグ"] &
                 content: "🏷"
+
+    h2
+        font-weight: inherit
+        font-size: 1em
 
     .meta
         float: right
