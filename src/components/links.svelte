@@ -14,21 +14,24 @@
           <li class="link">
             <a sveltekit:prefetch href={entity.urlPath}>
               {entity.attributes?.title || entity.name}
-              {#if entity.attributes?.date}
-                <small title={entity.attributes.date}>
-                  <time>
-                    {FormatUtility.date(entity.attributes.date)}
-                  </time>
-                </small>
-              {/if}
             </a>
-            <p>
-              {entity.attributes?.definition ?? ''}
-              {#each entity.tags as tag}
-                {#if tag.name !== name && tag.urlPath !== urlPath}
-                  <a sveltekit:prefetch href={tag.urlPath} class="tag">#{tag.name}</a>
+            {#if entity.attributes?.date}
+              <small title={entity.attributes.date}>
+                <time>
+                  {FormatUtility.date(entity.attributes.date)}
+                </time>
+              </small>
+            {/if}
+            <span class="tags">
+              {#each entity.tags.filter((tag) => tag.name !== name && tag.urlPath !== urlPath) as tag, i}
+                <a sveltekit:prefetch href={tag.urlPath} class="tag">#{tag.name}</a>
+                {#if i >= 2}
+                  <wbr />
                 {/if}
               {/each}
+            </span>
+            <p>
+              {entity.attributes?.definition ?? ''}
             </p>
           </li>
         {/each}

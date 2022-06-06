@@ -90,7 +90,7 @@ footer
 main
     margin: 40px auto
     padding: 0 40px
-    max-width: 900px
+    max-width: 1000px
 
 .tag
     display: inline-block
@@ -103,10 +103,14 @@ main
     font-size: 0.7em
     line-height: 1.4
 
+    &:hover
+        background-color: #ddd
+
 .links
     display: table
     border-spacing: 0 3em
     border-collapse: separate
+    line-height: 1.6
 
 .link-group
     display: table-row
@@ -122,17 +126,19 @@ main
     border-left: 1px solid #ccc
 
 .link
-    display: flex
-    flex-wrap: wrap
+    margin-bottom: 0.4em
+    padding-left: 2em
+    text-indent: -2em
 
-    gap: 0 0.5em
+    > *
+        text-indent: 0
 
-    a
-        flex: 0 0 auto
-        max-width: 100%
+    .tags
+        white-space: nowrap
 
     p
-        flex: 1 1 1em
+        display: inline
+        padding-left: 5px
         color: #999
 
     small
