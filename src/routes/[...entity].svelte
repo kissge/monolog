@@ -67,7 +67,9 @@
 <main>
   <article data-kind={entity.kind}>
     <header class:noHeaderImage>
-      <h1>{entity.name}</h1>
+      <h1>
+        {#each entity.nameSegmented as segment, i}{#if i > 0}<wbr />{/if}{segment}{/each}
+      </h1>
 
       {#if entity.attributes?.definition}
         <h2>{entity.attributes.definition}</h2>

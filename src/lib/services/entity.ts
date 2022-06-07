@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import ParseService from './parse';
+import SegmentService from './segment';
 import { block } from '$lib/vendor/marked/src/rules';
 import type { Entity, EntityWithBody, FileEntity, HTMLString, LinkGroup, NoteAttributes, Tag } from '$lib/@types';
 import { wellKnownAttributes } from '$lib/@types';
@@ -51,8 +52,8 @@ class EntityService {
   }
 
   @AutoReload()
-  get<T extends EntityWithBody>(name: string) {
-    return this.all.get(name) as T | undefined;
+  get(urlPath: string) {
+    return this.all.get(urlPath);
   }
 
   protected initialize1stPass() {
@@ -104,6 +105,7 @@ class EntityService {
         if (!firstPass.has(urlPath)) {
           firstPass.set(urlPath, {
             name,
+            nameSegmented: SegmentService.segment(name),
             kind,
             urlPath,
             body: '' as HTMLString,
@@ -197,16 +199,19 @@ class EntityService {
       if (file.isDirectory()) {
         yield* this.listEntitiesRecursive(path);
       } else if (file.isFile() && file.name.endsWith('.md')) {
-        const name = file.name.slice(0, -3);
+        const baseName = file.name.slice(0, -3);
         const kind = path.startsWith('notes/') ? 'note' : dirPath?.split('/').slice(1).pop();
         const lastModified = fs.statSync(`${Config.dataRootDir}/${path}`).mtime;
         const source = fs.readFileSync(`${Config.dataRootDir}/${path}`, 'utf-8');
-        const urlPath = this.isMono(path) ? '/mono/' + encodeURI(name) : '/' + encodeURI(path.slice(0, -3));
+        const urlPath = this.isMono(path) ? '/mono/' + encodeURI(baseName) : '/' + encodeURI(path.slice(0, -3));
 
         const { attributes, body } = ParseService.parse(source, urlPath);
 
+        const name = (attributes as NoteAttributes).title || baseName;
+
         yield {
-          name: (attributes as NoteAttributes).title || name,
+          name,
+          nameSegmented: SegmentService.segment(name),
           kind,
           urlPath: attributes.urlPath || urlPath,
           historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${path}`,

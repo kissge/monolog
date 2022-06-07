@@ -2,6 +2,7 @@ import type { HTMLString } from '.';
 
 export interface Entity<Attributes = EntityAttributes> {
   name: string;
+  nameSegmented: string[];
   kind?: string;
   urlPath: string;
   historyURL?: string;
