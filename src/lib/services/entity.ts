@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import childProcess from 'node:child_process';
+import { dev } from '$app/env';
 import ParseService from './parse';
 import SegmentService from './segment';
 import { block } from '$lib/vendor/marked/src/rules';
@@ -201,7 +203,6 @@ class EntityService {
       } else if (file.isFile() && file.name.endsWith('.md')) {
         const baseName = file.name.slice(0, -3);
         const kind = path.startsWith('notes/') ? 'note' : dirPath?.split('/').slice(1).pop();
-        const lastModified = fs.statSync(`${Config.dataRootDir}/${path}`).mtime;
         const source = fs.readFileSync(`${Config.dataRootDir}/${path}`, 'utf-8');
         const urlPath = this.isMono(path) ? '/mono/' + encodeURI(baseName) : '/' + encodeURI(path.slice(0, -3));
 
@@ -215,7 +216,7 @@ class EntityService {
           kind,
           urlPath: attributes.urlPath || urlPath,
           historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${path}`,
-          lastModified,
+          lastModified: this.getLastModified(path),
           attributes,
           tags: [],
           body,
@@ -235,6 +236,17 @@ class EntityService {
 
   protected isMono(path: string) {
     return path.startsWith('mono/');
+  }
+
+  protected getLastModified(path: string) {
+    return dev
+      ? fs.statSync(`${Config.dataRootDir}/${path}`).mtime
+      : new Date(
+          childProcess.execSync(`git log -1 --format=%ad --date=iso -- "${path}"`, {
+            encoding: 'utf-8',
+            cwd: Config.dataRootDir,
+          }),
+        );
   }
 }
 
