@@ -1,8 +1,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { initGoogleAnalytics } from '../components';
+  import { initGoogleAdSense, initGoogleAnalytics } from '../components';
   import * as Config from '$lib/config';
 
+  initGoogleAdSense();
   initGoogleAnalytics();
 
   $: isTop = $page.url.pathname === '/';

@@ -8,3 +8,4 @@ export const navLinks = JSON.parse(import.meta.env.VITE_NAV_LINKS || '"[]"') as 
 export const topTags = /* @__PURE__ */ JSON.parse(import.meta.env.VITE_TOP_TAGS || '"[]"') as string[];
 export const twitterID = import.meta.env.VITE_TWITTER_ID as string | undefined;
 export const googleAnalyticsID = import.meta.env.VITE_GOOGLE_ANALYTICS_ID as string | undefined;
+export const googleAdSenseID = import.meta.env.VITE_GOOGLE_ADSENSE_ID as string | undefined;
