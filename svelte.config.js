@@ -10,6 +10,7 @@ const config = {
   kit: {
     adapter: adapter(),
     prerender: { default: true },
+    trailingSlash: process.env.NODE_ENV === 'development' ? 'never' : 'always',
   },
 };
 
