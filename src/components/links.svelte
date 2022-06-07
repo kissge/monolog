@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Tags } from '.';
   import type { Entity, JSON, LinkGroup } from '$lib/@types';
   import { FormatUtility } from '$lib/utilities';
 
@@ -23,12 +24,7 @@
               </small>
             {/if}
             <span class="tags">
-              {#each entity.tags.filter((tag) => tag.name !== name && tag.urlPath !== urlPath) as tag, i}
-                <a sveltekit:prefetch href={tag.urlPath} class="tag">#{tag.name}</a>
-                {#if i >= 2}
-                  <wbr />
-                {/if}
-              {/each}
+              <Tags tags={entity.tags.filter((tag) => tag.name !== name && tag.urlPath !== urlPath)} />
             </span>
             <p>
               {entity.attributes?.definition ?? ''}

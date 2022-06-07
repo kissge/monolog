@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import ParseService from './parse';
 import { block } from '$lib/vendor/marked/src/rules';
-import type { Entity, EntityWithBody, FileEntity, HTMLString, LinkGroup, NoteAttributes } from '$lib/@types';
+import type { Entity, EntityWithBody, FileEntity, HTMLString, LinkGroup, NoteAttributes, Tag } from '$lib/@types';
+import { wellKnownAttributes } from '$lib/@types';
 import * as Config from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
 
@@ -81,15 +82,29 @@ class EntityService {
     firstPass: Map<string, EntityWithBody & { source: string }>,
     kinds: Map<string, string[]>,
   ) {
-    kinds.set('タグ', []);
-
     for (const entity of firstPass.values()) {
-      for (const tag of entity.attributes?.tags ?? []) {
-        const urlPath = encodeURI('/mono/' + tag);
+      const tags: (Tag[] | undefined)[] = [
+        entity.attributes?.tags?.map((name) => ({
+          name,
+          kind: 'tag',
+          urlPath: encodeURI('/mono/' + name),
+        })),
+        ...wellKnownAttributes.map((kind) => {
+          const attr = entity.attributes?.[kind];
+          return (typeof attr === 'string' ? [attr] : attr)?.map((name) => ({
+            name,
+            kind,
+            urlPath: encodeURI('/mono/' + name),
+          }));
+        }),
+      ];
+      entity.tags = tags.filter((tags): tags is Tag[] => tags != null).flat();
+
+      for (const { name, kind, urlPath } of entity.tags) {
         if (!firstPass.has(urlPath)) {
           firstPass.set(urlPath, {
-            name: tag,
-            kind: 'タグ',
+            name,
+            kind,
             urlPath,
             body: '' as HTMLString,
             headline: '',
@@ -98,21 +113,16 @@ class EntityService {
             source: '',
           });
 
-          kinds.get('タグ')!.push(urlPath);
+          if (!kinds.has(kind)) {
+            kinds.set(kind, []);
+          }
+
+          kinds.get(kind)!.push(urlPath);
         }
       }
     }
 
     ParseService.updateEntities(firstPass.values());
-
-    for (const entity of firstPass.values()) {
-      if (entity.attributes?.tags) {
-        entity.tags = entity.attributes.tags.map((name) => ({
-          name,
-          urlPath: encodeURI('/mono/' + name),
-        }));
-      }
-    }
   }
 
   protected initialize3rdPass(
@@ -220,10 +230,6 @@ class EntityService {
 
   protected isMono(path: string) {
     return path.startsWith('mono/');
-  }
-
-  protected getOrderOnTopPage(entity: Entity) {
-    return Config.topTags.findIndex((tag) => entity.attributes?.tags?.includes(tag));
   }
 }
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import { Links, Mentions, Time, defineXScriptCustomElement } from '../components';
+  import { Links, Mentions, Tags, Time, defineXScriptCustomElement } from '../components';
   import type { APIResponse } from './[...entity]';
   import * as Config from '$lib/config';
   import { FormatUtility } from '$lib/utilities';
@@ -89,9 +89,7 @@
 
       {#if entity.tags.length > 0}
         <section>
-          {#each entity.tags as tag}
-            <a sveltekit:prefetch href={tag.urlPath} class="tag">#{tag.name}</a>
-          {/each}
+          <Tags tags={entity.tags} large />
         </section>
       {/if}
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import Links from '../components/links.svelte';
+  import { Links, Tags } from '../components';
   import type { APIResponse } from '.';
   import * as Config from '$lib/config';
   import { FormatUtility } from '$lib/utilities';
@@ -40,9 +40,7 @@
             <a sveltekit:prefetch href={note.urlPath}>
               {note.attributes.title}
             </a>
-            {#each note.tags as tag}
-              <a sveltekit:prefetch href={tag.urlPath} class="tag">#{tag.name}</a>
-            {/each}
+            <Tags tags={note.tags} />
           </li>
         {/each}
         <li>

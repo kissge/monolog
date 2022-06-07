@@ -40,9 +40,14 @@ export interface EntityAttributes {
   urlPath?: string;
 
   definition?: string;
+  location?: string | string[];
+  creator?: string | string[];
 }
+
+export const wellKnownAttributes = ['location', 'creator'] as const;
 
 export interface Tag {
   name: string;
+  kind: 'tag' | typeof wellKnownAttributes[number];
   urlPath: string;
 }
