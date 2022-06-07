@@ -16,6 +16,7 @@ class ParseService {
     this.entityExtension = new EntityExtension(this);
     this.footnoteExtension = new FootnoteExtension();
 
+    marked.use(marked.getDefaults());
     marked.use(TableExtension);
     marked.use(this.entityExtension.extension);
     marked.use(ParagraphExtension);
