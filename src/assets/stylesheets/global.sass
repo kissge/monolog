@@ -97,8 +97,17 @@ main
     border-collapse: separate
     line-height: 1.6
 
+    @media screen and (max-width: 800px)
+        display: block
+        margin-top: 3em
+        border-spacing: unset
+
 .link-group
     display: table-row
+
+    @media screen and (max-width: 800px)
+        display: block
+        margin-bottom: 3em
 
 .link-group-title
     display: table-cell
@@ -107,16 +116,32 @@ main
     font-weight: inherit
     font-size: 1em
 
+    @media screen and (max-width: 800px)
+        display: block
+        margin-bottom: 1em
+        padding-right: 0
+        width: auto
+        font-size: 1.2em
+
 .link-group-links
     display: table-cell
     padding-left: 1em
     border-left: 1px solid #ccc
     list-style: none
 
+    @media screen and (max-width: 800px)
+        display: block
+        padding-left: 0
+        border-left: none
+
 .link
     margin-bottom: 0.4em
     padding-left: 2em
     text-indent: -2em
+
+    @media screen and (max-width: 800px)
+        padding-left: 1em
+        text-indent: -1em
 
     > *
         text-indent: 0
