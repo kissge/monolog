@@ -9,6 +9,7 @@ export default class EntityExtension {
   protected state = {
     parsing: false,
     selfUrlPath: '',
+    linkTargets: new Set<string>(),
     links: [] as string[],
   };
 
@@ -44,9 +45,7 @@ export default class EntityExtension {
 
             const urlPath = token.href.replace(/\/$/, '');
 
-            if (token.href.startsWith('/') && new Set(self.service.entities.values()).has(urlPath)) {
-              self.state.links.push(urlPath);
-
+            if (self.state.linkTargets.has(urlPath)) {
               const href = cleanUrl(
                 this.parser.options.sanitize ?? false,
                 this.parser.options.baseUrl ?? '',
@@ -71,7 +70,12 @@ export default class EntityExtension {
 
   startParsing(urlPath: string) {
     assert.equal(this.state.parsing, false);
-    this.state = { parsing: true, selfUrlPath: urlPath, links: [] };
+    this.state = {
+      parsing: true,
+      selfUrlPath: urlPath,
+      linkTargets: new Set(this.service.entities.values()),
+      links: [],
+    };
   }
 
   endParsing() {
