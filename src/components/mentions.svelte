@@ -1,9 +1,9 @@
 <script lang="ts">
   import { afterNavigate } from '$app/navigation';
   import { dev } from '$app/env';
-  import likeIcon from '../assets/heart.svg';
-  import mentionIcon from '../assets/message-circle.svg';
-  import retweetIcon from '../assets/arrows-double-sw-ne.svg';
+  import likeIcon from '../assets/images/heart.svg';
+  import mentionIcon from '../assets/images/message-circle.svg';
+  import retweetIcon from '../assets/images/arrows-double-sw-ne.svg';
   import * as Config from '$lib/config';
   import type { JF2MentionItem } from '$lib/@types';
   import { FormatUtility } from '$lib/utilities';
@@ -128,5 +128,5 @@
 </section>
 
 <style lang="sass">
-  @use '../assets/mentions'
+  @use '../assets/stylesheets/mentions'
 </style>

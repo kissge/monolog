@@ -119,7 +119,7 @@
 </main>
 
 <style lang="sass">
-  @use '../assets/viewer'
+  @use '../assets/stylesheets/viewer'
   :global .body
-    @import '../assets/viewer-body'
+    @import '../assets/stylesheets/viewer-body'
 </style>

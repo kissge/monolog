@@ -54,5 +54,5 @@
 </main>
 
 <style lang="sass">
-  @use '../assets/top'
+  @use '../assets/stylesheets/top'
 </style>

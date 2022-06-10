@@ -36,5 +36,5 @@
 </footer>
 
 <style lang="sass" global>
-  @use '../assets/global'
+  @use '../assets/stylesheets/global'
 </style>
