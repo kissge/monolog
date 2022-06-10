@@ -1,31 +1,79 @@
 .mentions
     margin-top: 40px
+    padding-top: 40px
     border-top: 1px solid #ccc
 
 h1
-    margin-top: 40px
     font-size: 1.3em
 
 ol
     padding-left: 1em
 
-li
-    margin-bottom: 0.4em
+    @media screen and (max-width: 800px)
+        padding-left: 0
 
-a
+li
+    margin-bottom: 1em
+    line-height: 1.4
+
+    &::marker
+        color: #aaa
+
+    span
+        display: inline-block
+
+        @media screen and (max-width: 800px)
+            display: block
+            margin-left: 1em
+
+a.no-color
+    text-decoration: none
+
     &:not(:hover)
         color: currentColor
 
+    img
+        margin: 0 5px
+
 img
-    margin: 0 5px
     width: 1em
     height: 1em
     vertical-align: middle
+    transform: translateY(-2px)
 
 blockquote
+    margin-top: 0.4em
     margin-left: 2em
     padding-left: 1em
     border-left: 1px solid #ccc
     font-style: italic
     font-size: 0.8em
-    line-height: 1.5
+
+.reaction
+    display: flex
+    float: right
+    margin-bottom: 1em
+
+    gap: 0.5em
+
+    a
+        display: block
+        padding-left: 35px
+        background-size: contain
+        background-repeat: no-repeat
+        text-decoration: none
+
+        &:not(:hover)
+            opacity: 0.5
+
+        small
+            display: block
+            margin-bottom: -1.8em
+            font-size: 0.2em
+
+        span
+            display: block
+            font-size: 0.7em
+
+    @media screen and (max-width: 800px)
+        float: none

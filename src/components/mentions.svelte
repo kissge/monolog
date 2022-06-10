@@ -1,10 +1,15 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { afterNavigate } from '$app/navigation';
   import { dev } from '$app/env';
-  import Time from './time.svelte';
+  import likeIcon from '../assets/heart.svg';
+  import mentionIcon from '../assets/message-circle.svg';
+  import retweetIcon from '../assets/arrows-double-sw-ne.svg';
+  import * as Config from '$lib/config';
   import type { JF2MentionItem } from '$lib/@types';
+  import { FormatUtility } from '$lib/utilities';
 
   let mentions: JF2MentionItem[] | undefined;
+  let url = '';
 
   const verb = {
     'in-reply-to': 'mentioned',
@@ -13,9 +18,19 @@
     'bookmark-of': 'liked',
     'mention-of': 'mentioned',
     rsvp: 'mentioned',
-  };
+  } as const;
 
-  onMount(async () => {
+  const icon = { liked: likeIcon, retweeted: retweetIcon, mentioned: mentionIcon };
+
+  $: authorTweetID = mentions
+    ?.find(
+      (mention) =>
+        mention['wm-property'] === 'like-of' &&
+        mention.url.startsWith(`https://twitter.com/${Config.twitterID}/status/`),
+    )
+    ?.url.match(/(?<=status\/)\d+/)?.[0];
+
+  afterNavigate(async () => {
     if (!dev) {
       mentions = undefined;
 
@@ -31,23 +46,72 @@
 
       mentions = jf2.children;
     }
+
+    url = encodeURIComponent(location.href);
   });
 </script>
 
 <section class="mentions">
+  <section class="reaction">
+    {#if authorTweetID}
+      <a
+        href="https://twitter.com/intent/like?tweet_id={authorTweetID}"
+        style:background-image="url({likeIcon})"
+        style:color="#b80b4d"
+      >
+        <small>Twitterで</small>
+        <span>いいねする</span>
+      </a>
+      <a
+        href="https://twitter.com/intent/retweet?tweet_id={authorTweetID}"
+        style:background-image="url({retweetIcon})"
+        style:color="#009988"
+      >
+        <small>Twitterで</small>
+        <span>RTする</span>
+      </a>
+      <a
+        href="https://twitter.com/intent/tweet?in_reply_to={authorTweetID}"
+        style:background-image="url({mentionIcon})"
+        style:color="#3579d1"
+      >
+        <small>Twitterで</small>
+        <span>コメントする</span>
+      </a>
+    {:else}
+      <a
+        href="https://twitter.com/intent/tweet?url={url}"
+        style:background-image="url({mentionIcon})"
+        style:color="#3579d1"
+      >
+        <small>Twitterで</small>
+        <span>コメントする</span>
+      </a>
+    {/if}
+  </section>
+
   <h1>Recent public mentions on Twitter</h1>
   <ol reversed>
     {#if mentions}
       {#each mentions as mention}
         <li>
-          <Time date={mention.published || mention['wm-received']} />
-          <a href={mention.author.url}>
-            <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
-            {#if /^https:\/\/twitter.com\/[^/]+\/?$/.test(mention.author.url)}
-              (@{mention.author.url.split('/')[3]})
-            {/if}
+          <img src={icon[verb[mention['wm-property']]]} alt="" />
+          <a href={mention.url} class="no-color">
+            <small title={mention.published || mention['wm-received']}>
+              <time>
+                {FormatUtility.date(mention.published || mention['wm-received'])}
+              </time>
+            </small>
+            <span>
+              <a href={mention.author.url}>
+                <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
+                {#if /^https:\/\/twitter.com\/[^/]+\/?$/.test(mention.author.url)}
+                  <small>(@{mention.author.url.split('/')[3]})</small>
+                {/if}
+              </a>
+              {verb[mention['wm-property']]}.
+            </span>
           </a>
-          <a href={mention.url}>{verb[mention['wm-property']]}</a>.
           {#if mention.content?.text}
             <blockquote>
               {mention.content.text}
