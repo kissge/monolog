@@ -3,6 +3,9 @@
     padding-top: 40px
     border-top: 1px solid #ccc
 
+    @media screen and (max-width: 512px)
+        padding-top: 20px
+
 h1
     font-size: 1.3em
 
@@ -52,28 +55,35 @@ blockquote
 .reaction
     display: flex
     float: right
+    margin-top: 0.3em
     margin-bottom: 1em
 
     gap: 0.5em
 
     a
         display: block
-        padding-left: 35px
+        padding-left: 2.1875em
+        height: 1.704375em
         background-size: contain
         background-repeat: no-repeat
         text-decoration: none
+        line-height: 1.35
 
         &:not(:hover)
-            opacity: 0.5
+            @media (hover: hover)
+                opacity: 0.5
 
         small
             display: block
-            margin-bottom: -1.8em
             font-size: 0.2em
 
         span
             display: block
             font-size: 0.7em
 
-    @media screen and (max-width: 800px)
+        @media screen and (max-width: 370px)
+            font-size: 0.65em
+
+    @media screen and (max-width: 512px)
         float: none
+        justify-content: space-between

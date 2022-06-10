@@ -28,7 +28,7 @@
         mention['wm-property'] === 'like-of' &&
         mention.url.startsWith(`https://twitter.com/${Config.twitterID}/status/`),
     )
-    ?.url.match(/(?<=status\/)\d+/)?.[0];
+    ?.url.match(/status\/(\d+)/)?.[1];
 
   afterNavigate(async () => {
     if (!dev) {
@@ -90,7 +90,7 @@
     {/if}
   </section>
 
-  <h1>Recent public mentions on Twitter</h1>
+  <h1>Mentions</h1>
   <ol reversed>
     {#if mentions}
       {#each mentions as mention}
