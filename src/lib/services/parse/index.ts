@@ -41,6 +41,7 @@ class ParseService {
   updateEntities(entities: Iterable<Entity>) {
     this.entities = new Map(
       Array.from(entities)
+        .filter(({ name }) => name.trim())
         .map<[string, string]>(({ name, urlPath }) => [name, urlPath])
         // Sort by length (longest first), for longest match
         .sort(([a], [b]) => b.length - a.length),
