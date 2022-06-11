@@ -2,6 +2,7 @@
 
 > *
     margin: 1.5em 0
+    max-width: 100%
 
 h1, h2, h3, h4, h5, h6
     font-weight: bold
@@ -131,6 +132,7 @@ table
         text-align: right
 
 figure
+    max-width: unset
     text-align: center
     transition: margin 1s 2s ease-in-out
 
@@ -223,3 +225,12 @@ a.monolog-link::before, a[href="/"]::before
 
 .ipa
     font-family: 'Charis SIL', 'Doulos SIL', 'DejaVu Sans', 'Code2000', 'Hiragino Kaku Gothic Pro', 'Matrix Unicode', 'Tahoma', 'Microsoft Sans Serif', sans-serif
+
+.float-right
+    @media screen and (min-width: 800px)
+        float: right
+        margin: 0.5em 0 0.8em 1.2em
+        width: 300px
+
+    @media screen and (max-width: 800px)
+        width: 100%
