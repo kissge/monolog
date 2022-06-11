@@ -3,6 +3,7 @@
   import IntersectionObserver from 'svelte-intersection-observer';
   import { page } from '$app/stores';
   import { Links, Mentions, Tags, Time, defineXScriptCustomElement } from '../components';
+  import GitHubIcon from '../assets/images/brand-github.svg';
   import type { APIResponse } from './[...entity]';
   import * as Config from '$lib/config';
   import { FormatUtility } from '$lib/utilities';
@@ -46,6 +47,18 @@
   ).map(({ id, name }) => ({ name, ...entity.links[id] }));
 
   $: noHeaderImage = entity.attributes?.header === false || (entity.kind !== 'note' && !entity.attributes?.header);
+
+  $: url = ((url) => {
+    if (!url) {
+      return;
+    }
+
+    if (url.startsWith('https://github.com/')) {
+      return { type: 'github', url, text: url.split('/').slice(3, 5).join('/') };
+    }
+
+    return { type: null, url, text: url.replace(/^https?:\/\/(?:www\.)?/, '') };
+  })(entity.attributes?.url);
 
   onMount(() => {
     defineXScriptCustomElement();
@@ -98,6 +111,16 @@
           </p>
         {/if}
       </section>
+
+      {#if url}
+        <section class="url">
+          {#if url.type === 'github'}
+            <a href={url.url}><img src={GitHubIcon} alt="GitHub" />{url.text}</a>
+          {:else}
+            <a href={url.url}>{url.text}</a>
+          {/if}
+        </section>
+      {/if}
 
       {#if entity.tags.length > 0}
         <section>

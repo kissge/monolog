@@ -41,6 +41,7 @@ export interface EntityAttributes {
   urlPath?: `/${string}`;
 
   definition?: string;
+  url?: string;
   location?: string | string[];
   creator?: string | string[];
 }
