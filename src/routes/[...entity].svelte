@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import IntersectionObserver from 'svelte-intersection-observer';
   import { page } from '$app/stores';
   import { Links, Mentions, Tags, Time, defineXScriptCustomElement } from '../components';
   import type { APIResponse } from './[...entity]';
@@ -8,6 +9,9 @@
   import type { LinkCategory } from '$lib/@types';
 
   export let entity: APIResponse['entity'];
+
+  let headerElement: HTMLElement;
+  let isHeaderInView = true;
 
   $: title =
     entity.name +
@@ -64,6 +68,12 @@
   />
 </svelte:head>
 
+<div
+  class="nav-background"
+  class:isHeaderInView
+  style={entity.attributes?.header ? `background-image: url(${entity.attributes.header})` : ''}
+/>
+
 <main>
   <article data-kind={entity.kind}>
     <header class:noHeaderImage>
@@ -95,11 +105,14 @@
         </section>
       {/if}
 
-      <section
-        class="header-image"
-        class:noHeaderImage
-        style={entity.attributes?.header ? `background-image: url(${entity.attributes.header})` : ''}
-      />
+      <IntersectionObserver element={headerElement} bind:intersecting={isHeaderInView}>
+        <section
+          class="header-image"
+          class:noHeaderImage
+          style={entity.attributes?.header ? `background-image: url(${entity.attributes.header})` : ''}
+          bind:this={headerElement}
+        />
+      </IntersectionObserver>
     </header>
 
     <section class="body" lang={entity.attributes?.lang}>
