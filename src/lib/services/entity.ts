@@ -5,7 +5,7 @@ import { dev } from '$app/env';
 import ParseService from './parse';
 import SegmentService from './segment';
 import { block } from '$lib/vendor/marked/src/rules';
-import type { Entity, EntityWithBody, FileEntity, HTMLString, LinkGroup, NoteAttributes, Tag } from '$lib/@types';
+import type { Entity, EntityWithBody, FileEntity, HTMLString, LinkGroup, Tag } from '$lib/@types';
 import { wellKnownAttributes } from '$lib/@types';
 import * as Config from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
@@ -225,7 +225,7 @@ class EntityService {
 
         const { attributes, body } = ParseService.parse(source, urlPath);
 
-        const name = (attributes as NoteAttributes).title || baseName;
+        const name = attributes.title ?? baseName;
 
         yield {
           name,
