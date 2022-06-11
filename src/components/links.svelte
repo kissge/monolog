@@ -13,9 +13,7 @@
       <ul class="link-group-links">
         {#each entities as entity}
           <li class="link">
-            <a sveltekit:prefetch href={entity.urlPath}>
-              {entity.attributes?.title || entity.name}
-            </a>
+            <a sveltekit:prefetch href={entity.urlPath}>{entity.name}</a>
             {#if entity.attributes?.date}
               <small title={entity.attributes.date}>
                 <time>

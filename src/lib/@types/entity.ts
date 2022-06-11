@@ -28,7 +28,7 @@ export type FileEntityWithBody<Attributes = EntityAttributes> = FileEntity<Attri
 export type LinkCategory = 'to' | 'from' | 'kind' | `one_hop_${string}`;
 
 export interface EntityAttributes {
-  title: string;
+  title?: string;
   date?: Date | string;
   tags?: string[];
   lang?: string;
@@ -37,8 +37,8 @@ export interface EntityAttributes {
   header?: string | false;
   /** 別のブログシステムから移植してきた場合、そのソース */
   from?: string;
-
-  urlPath?: string;
+  /** ソースのパスから自動生成されるエンドポイントを上書きするパス（スラッシュから始まる文字列） */
+  urlPath?: `/${string}`;
 
   definition?: string;
   location?: string | string[];

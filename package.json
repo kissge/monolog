@@ -16,12 +16,14 @@
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
     "lint:prettier": "prettier --check --plugin-search-dir=.",
     "lint:eslint": "eslint",
-    "format": "prettier --write --plugin-search-dir=. ."
+    "format": "prettier --write --plugin-search-dir=. .",
+    "validate": "ts-node --cwd bin validate"
   },
   "devDependencies": {
     "@playwright/test": "^1.21.0",
     "@sveltejs/adapter-static": "next",
     "@sveltejs/kit": "next",
+    "@ts-morph/bootstrap": "^0.16.0",
     "@types/marked": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
@@ -38,6 +40,7 @@
     "svelte-check": "^2.2.6",
     "svelte-intersection-observer": "^0.10.0",
     "svelte-preprocess": "^4.10.1",
+    "ts-node": "^10.8.1",
     "tslib": "^2.3.1",
     "typescript": "~4.6.2"
   },
