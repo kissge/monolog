@@ -1,9 +1,6 @@
 import * as Config from '$lib/config';
 
-declare const window: {
-  dataLayer: (string | Date)[][];
-  gtag: (...args: (string | Date)[]) => void;
-};
+declare const window: { dataLayer: unknown[] };
 
 export function initGoogleAnalytics() {
   if (typeof window === 'undefined' || typeof document === 'undefined' || !Config.googleAnalyticsID) {
@@ -15,8 +12,14 @@ export function initGoogleAnalytics() {
   document.head.appendChild(script);
 
   window.dataLayer ??= [];
-  window.gtag ??= (...args: (string | Date)[]) => window.dataLayer.push(args);
 
-  window.gtag('js', new Date());
-  window.gtag('config', Config.googleAnalyticsID);
+  function gtag(...args: unknown[]): void;
+  function gtag() {
+    // GA4 is apparently checking if values are Arguments instances *vomit*
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer.push(arguments);
+  }
+
+  gtag('js', new Date());
+  gtag('config', Config.googleAnalyticsID, { user_id: localStorage.getItem('uid') || undefined });
 }
