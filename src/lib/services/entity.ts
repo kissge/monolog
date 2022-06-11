@@ -211,6 +211,10 @@ class EntityService {
     for (const file of fs.readdirSync(`${Config.dataRootDir}/${dirPath ?? ''}`, { withFileTypes: true })) {
       const path = dirPath ? `${dirPath}/${file.name}` : file.name;
 
+      if (Config.dataIgnoredFiles.includes(file.name)) {
+        continue;
+      }
+
       if (file.isDirectory()) {
         yield* this.listEntitiesRecursive(path);
       } else if (file.isFile() && file.name.endsWith('.md')) {
