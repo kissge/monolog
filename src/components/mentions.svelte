@@ -91,7 +91,7 @@
   </section>
 
   <h1>Mentions</h1>
-  <ol reversed>
+  <ol reversed class:loading={!mentions}>
     {#if mentions}
       {#each mentions as mention}
         <li>
@@ -121,8 +121,6 @@
       {:else}
         Twitterで言及していただけると自動的にここに収集されます。
       {/each}
-    {:else}
-      Loading mentions...
     {/if}
   </ol>
 </section>
