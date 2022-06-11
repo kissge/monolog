@@ -7,6 +7,7 @@
 
   export let notes: APIResponse['notes'];
   export let groups: APIResponse['groups'];
+  export let tags: APIResponse['tags'];
 </script>
 
 <svelte:head>
@@ -50,6 +51,17 @@
     </li>
 
     <Links links={groups} />
+
+    <li class="link-group">
+      <h1 class="link-group-title">すべてのtag</h1>
+      <ul class="link-group-links">
+        {#each tags as entity}
+          <li class="link">
+            <a sveltekit:prefetch href={entity.urlPath}>{entity.name}</a>
+          </li>
+        {/each}
+      </ul>
+    </li>
   </ol>
 </main>
 

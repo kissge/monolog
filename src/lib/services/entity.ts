@@ -36,6 +36,19 @@ class EntityService {
       .sort(EntityUtility.compare);
   }
 
+  @AutoReload()
+  get tags() {
+    return Array.from(this.all.values())
+      .filter(({ kind }) => kind === 'tag')
+      .sort(
+        (a, b) =>
+          (Config.topTags.some((name) => name === a.name) ? 1 : 0) -
+            (Config.topTags.some((name) => name === b.name) ? 1 : 0) ||
+          b.links.from.entities.length - a.links.from.entities.length,
+      )
+      .map<Entity>(EntityUtility.strip);
+  }
+
   initialize() {
     const { all, kinds } = this.initialize1stPass();
     this.initialize2ndPass(all, kinds);
