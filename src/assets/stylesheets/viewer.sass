@@ -5,6 +5,10 @@ header
     &:not(.noHeaderImage)
         padding-top: 360px
 
+        @media screen and (max-width: 1050px)
+            h1::before
+                margin-top: -1em
+
     h1
         word-break: keep-all
         font-weight: bold
