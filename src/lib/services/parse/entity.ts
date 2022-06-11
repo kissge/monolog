@@ -46,6 +46,8 @@ export default class EntityExtension {
             const urlPath = token.href.replace(/\/$/, '');
 
             if (self.state.linkTargets.has(urlPath)) {
+              self.state.links.push(urlPath);
+
               const href = cleanUrl(
                 this.parser.options.sanitize ?? false,
                 this.parser.options.baseUrl ?? '',
@@ -103,8 +105,6 @@ export default class EntityExtension {
               if (i === 0) {
                 return { type: 'text', raw: chunk, text: chunk };
               } else {
-                this.state.links.push(href);
-
                 return [
                   {
                     type: 'link',
