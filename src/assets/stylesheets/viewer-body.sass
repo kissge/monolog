@@ -104,6 +104,11 @@ li
 .table-wrapper
     overflow: auto
 
+    @media screen and (min-width: 1400px)
+        margin-right: calc((100% - (100vw - 40px)) / 2)
+        margin-left: calc((100% - (100vw - 40px)) / 2)
+        max-width: calc(100vw - 40px)
+
 table
     margin: 1.5em -0.5em
     margin-right: -550%
@@ -114,6 +119,9 @@ table
     font-size: 0.8em
     line-height: 1.4
 
+    @media screen and (min-width: 1400px)
+        margin: 0 auto
+
     thead
         th
             border-bottom: 2px solid #888
@@ -121,7 +129,7 @@ table
 
     tbody
         tr:nth-child(even)
-            background-color: #fafafa
+            background-color: #f7f1f1
 
     th, td
         padding: 0.4em
