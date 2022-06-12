@@ -128,7 +128,7 @@
         </section>
       {/if}
 
-      <IntersectionObserver element={headerElement} bind:intersecting={isHeaderInView}>
+      <IntersectionObserver element={headerElement} bind:intersecting={isHeaderInView} rootMargin="-64px">
         <section
           class="header-image"
           class:noHeaderImage
