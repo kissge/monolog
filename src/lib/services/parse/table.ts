@@ -63,6 +63,17 @@ const TableExtension: marked.MarkedExtension = {
         return '<div class="table-wrapper">' + this.parser.renderer.table(header, body) + '</div>';
       } as marked.RendererExtension['renderer'],
     },
+    {
+      name: 'html',
+      level: 'block',
+      renderer: function (token) {
+        if (token.text.startsWith('<table')) {
+          return '<div class="table-wrapper">' + token.text + '</div>';
+        }
+
+        return false;
+      },
+    },
   ],
 };
 
