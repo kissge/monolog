@@ -24,6 +24,11 @@ class EntityService {
   }
 
   @AutoReload()
+  get allPaths() {
+    return Array.from(this.all.keys());
+  }
+
+  @AutoReload()
   get groups() {
     return this._groups;
   }
