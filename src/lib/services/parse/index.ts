@@ -27,7 +27,9 @@ class ParseService {
   parse<Attributes extends EntityAttributes>(source: string, urlPath: string) {
     const { attributes, body: markdown } = frontMatter<Attributes>(source);
 
-    this.entityExtension.startParsing(attributes.urlPath || urlPath);
+    const resolvedUrlPath = attributes.external || attributes.urlPath || urlPath;
+
+    this.entityExtension.startParsing(resolvedUrlPath);
     this.footnoteExtension.startParsing();
 
     const body = marked.parse(markdown, { smartypants: true });
@@ -35,7 +37,7 @@ class ParseService {
     const footnotes = this.footnoteExtension.endParsing();
     const links = new Set(this.entityExtension.endParsing());
 
-    return { attributes, body: (body + footnotes) as HTMLString, links };
+    return { attributes, body: (body + footnotes) as HTMLString, links, resolvedUrlPath };
   }
 
   updateEntities(entities: Iterable<Entity>) {

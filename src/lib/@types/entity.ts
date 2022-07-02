@@ -33,6 +33,9 @@ export interface EntityAttributes {
   tags?: string[];
   lang?: string;
 
+  /** 外部サイトへのリンクの場合、URL */
+  external?: string;
+
   /** ヘッダ画像のパス、またはURL、またはfalse（非表示） */
   header?: string | false;
   /** 別のブログシステムから移植してきた場合、そのソース */

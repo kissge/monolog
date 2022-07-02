@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import ExternalLinkIcon from '../assets/images/external-link.svg';
   import { Links, Tags } from '../components';
   import type { APIResponse } from '.';
   import * as Config from '$lib/config';
@@ -38,9 +39,15 @@
             {#if note.attributes.from}
               <span title="インポートされた記事">⚠️</span>
             {/if}
-            <a sveltekit:prefetch href={note.urlPath}>
-              {note.attributes.title}
-            </a>
+            {#if note.attributes.external}
+              <a href={note.urlPath}>
+                <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" />{note.name}
+              </a>
+            {:else}
+              <a sveltekit:prefetch href={note.urlPath}>
+                {note.name}
+              </a>
+            {/if}
             <Tags tags={note.tags} />
           </li>
         {/each}

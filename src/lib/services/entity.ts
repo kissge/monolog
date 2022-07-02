@@ -228,7 +228,7 @@ class EntityService {
         const source = fs.readFileSync(`${Config.dataRootDir}/${path}`, 'utf-8');
         const urlPath = this.isMono(path) ? '/mono/' + encodeURI(baseName) : '/' + encodeURI(path.slice(0, -3));
 
-        const { attributes, body } = ParseService.parse(source, urlPath);
+        const { attributes, body, resolvedUrlPath } = ParseService.parse(source, urlPath);
 
         const name = attributes.title ?? baseName;
 
@@ -236,7 +236,7 @@ class EntityService {
           name,
           nameSegmented: SegmentService.segment(name),
           kind,
-          urlPath: attributes.urlPath || urlPath,
+          urlPath: resolvedUrlPath,
           historyURL: `https://github.com/${Config.dataGitHubRepo}/commits/master/${path}`,
           lastModified: this.getLastModified(path),
           attributes,
