@@ -96,14 +96,14 @@
       {#each mentions as mention}
         <li>
           <img src={icon[verb[mention['wm-property']]]} alt="" />
-          <a href={mention.url} class="no-color">
+          <a href={mention.url} rel="external" class="no-color">
             <small title={mention.published || mention['wm-received']}>
               <time>
                 {FormatUtility.date(mention.published || mention['wm-received'])}
               </time>
             </small>
             <span>
-              <a href={mention.author.url}>
+              <a href={mention.author.url} rel="external">
                 <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
                 {#if /^https:\/\/twitter.com\/[^/]+\/?$/.test(mention.author.url)}
                   <small>(@{mention.author.url.split('/')[3]})</small>

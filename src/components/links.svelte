@@ -15,7 +15,7 @@
         {#each entities as entity}
           <li class="link">
             {#if entity.attributes?.external}
-              <a href={entity.urlPath}>
+              <a href={entity.urlPath} rel="external">
                 <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" />{entity.name}
               </a>
             {:else}

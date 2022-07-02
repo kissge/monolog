@@ -40,7 +40,7 @@
               <span title="インポートされた記事">⚠️</span>
             {/if}
             {#if note.attributes.external}
-              <a href={note.urlPath}>
+              <a href={note.urlPath} rel="external">
                 <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" />{note.name}
               </a>
             {:else}

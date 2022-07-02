@@ -58,9 +58,18 @@ export default class EntityExtension {
                 return text;
               }
 
-              return `<a href="${href}" class="monolog-link" sveltekit:prefetch${
-                token.title ? ' title="' + token.title + '"' : ''
-              }>${text}</a>`;
+              const internalLink = href.startsWith('/');
+              const attrs = [
+                'href="' + href + '"',
+                internalLink ? 'class="monolog-link"' : 'class="monolog-external-link"',
+                internalLink ? 'sveltekit:prefetch' : 'rel="external"',
+              ];
+
+              if (token.title) {
+                attrs.push('title="' + token.title + '"');
+              }
+
+              return '<a ' + attrs.join(' ') + '>' + text + '</a>';
             }
 
             return false;
