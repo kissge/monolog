@@ -39,6 +39,8 @@ export interface EntityAttributes {
   from?: string;
   /** ソースのパスから自動生成されるエンドポイントを上書きするパス（スラッシュから始まる文字列） */
   urlPath?: `/${string}`;
+  /** リスト上で優先的に表示する場合true */
+  pinned?: boolean;
 
   definition?: string;
   url?: string;
