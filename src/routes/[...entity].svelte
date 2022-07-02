@@ -107,7 +107,9 @@
 
         {#if entity.historyURL}
           <p>
-            <a href={entity.historyURL}>更新履歴</a>
+            <a href={entity.historyURL} title={entity.lastModified}>
+              最終更新：{FormatUtility.relative(entity.lastModified)}
+            </a>
           </p>
         {/if}
       </section>
