@@ -8,5 +8,6 @@ export function initGoogleAdSense() {
   const script = document.createElement('script');
   script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${Config.googleAdSenseID}`;
   script.crossOrigin = 'anonymous';
+  script.defer = true;
   document.head.appendChild(script);
 }

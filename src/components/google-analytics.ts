@@ -9,6 +9,7 @@ export function initGoogleAnalytics() {
 
   const script = document.createElement('script');
   script.src = `https://www.googletagmanager.com/gtag/js?id=${Config.googleAnalyticsID}`;
+  script.defer = true;
   document.head.appendChild(script);
 
   window.dataLayer ??= [];
