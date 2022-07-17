@@ -19,7 +19,7 @@
   <meta property="og:image" content="{$page.url.origin}/images/favicon.svg" />
 </svelte:head>
 
-<input type="checkbox" id="notes-expanded" />
+<input type="checkbox" id="notes-expanded" aria-label="もっと見る" />
 
 <main>
   <ol class="links">
