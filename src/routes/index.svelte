@@ -41,7 +41,7 @@
             {/if}
             {#if note.attributes.external}
               <a href={note.urlPath} rel="external">
-                <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" />{note.name}
+                <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" width="16" height="16" />{note.name}
               </a>
             {:else}
               <a sveltekit:prefetch href={note.urlPath}>

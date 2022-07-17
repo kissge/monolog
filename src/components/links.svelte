@@ -16,7 +16,7 @@
           <li class="link">
             {#if entity.attributes?.external}
               <a href={entity.urlPath} rel="external">
-                <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" />{entity.name}
+                <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" width="16" height="16" />{entity.name}
               </a>
             {:else}
               <a sveltekit:prefetch href={entity.urlPath}>

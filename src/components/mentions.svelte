@@ -95,7 +95,7 @@
     {#if mentions}
       {#each mentions as mention}
         <li>
-          <img src={icon[verb[mention['wm-property']]]} alt="" />
+          <img src={icon[verb[mention['wm-property']]]} alt="" width="16" height="16" />
           <a href={mention.url} rel="external" class="no-color">
             <small title={mention.published || mention['wm-received']}>
               <time>
@@ -104,7 +104,7 @@
             </small>
             <span>
               <a href={mention.author.url} rel="external">
-                <img src={mention.author.photo} alt={mention.author.name} />{mention.author.name}
+                <img src={mention.author.photo} alt={mention.author.name} width="16" height="16" />{mention.author.name}
                 {#if /^https:\/\/twitter.com\/[^/]+\/?$/.test(mention.author.url)}
                   <small>(@{mention.author.url.split('/')[3]})</small>
                 {/if}
