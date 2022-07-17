@@ -33,7 +33,7 @@
         font-size: 1em
 
 [data-kind="tag"]::before
-    color: #999
+    color: #757575
     content: '#'
 
 [data-kind="location"]::before
