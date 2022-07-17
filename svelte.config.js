@@ -11,6 +11,7 @@ const config = {
     adapter: adapter(),
     prerender: { default: true },
     trailingSlash: process.env.NODE_ENV === 'development' ? 'never' : 'always',
+    inlineStyleThreshold: 1024 * 1024,
   },
 };
 
