@@ -75,9 +75,9 @@
     property="og:image"
     content={entity.attributes?.header
       ? /^\.{0,2}\//.test(entity.attributes.header)
-        ? $page.url.origin + '/' + entity.attributes.header
+        ? 'https://' + Config.siteHostname + '/' + entity.attributes.header
         : entity.attributes.header
-      : $page.url.origin + '/images/favicon.svg'}
+      : 'https://' + Config.siteHostname + '/images/favicon.svg'}
   />
 </svelte:head>
 

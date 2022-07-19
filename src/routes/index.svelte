@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import ExternalLinkIcon from '../assets/images/external-link.svg';
   import { Links, Tags } from '../components';
   import type { APIResponse } from '.';
@@ -16,7 +15,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content={Config.siteTitle} />
   <meta property="og:site_name" content={Config.siteTitle} />
-  <meta property="og:image" content="{$page.url.origin}/images/favicon.svg" />
+  <meta property="og:image" content="https://{Config.siteHostname}/images/favicon.svg" />
 </svelte:head>
 
 <input type="checkbox" id="notes-expanded" aria-label="もっと見る" />

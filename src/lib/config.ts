@@ -1,6 +1,7 @@
 import { AssertionUtility } from './utilities';
 
 export const siteTitle = AssertionUtility.assertNonEmptyString(import.meta.env.VITE_SITE_TITLE);
+export const siteHostname = AssertionUtility.assertNonEmptyString(import.meta.env.VITE_SITE_HOSTNAME);
 export const dataRootDir = AssertionUtility.assertNonEmptyString(import.meta.env.VITE_DATA_ROOT_DIR);
 export const dataGitHubRepo = AssertionUtility.assertNonEmptyString(import.meta.env.VITE_DATA_GITHUB_REPO);
 export const dataIgnoredFiles = JSONParseAs<string[]>(import.meta.env.VITE_DATA_IGNORED_FILES, '"[]"');
