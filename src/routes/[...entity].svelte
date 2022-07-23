@@ -1,3 +1,16 @@
+<script context="module" lang="ts">
+  // eslint-disable-next-line import/order
+  import type { Load } from './__types/[...entity]';
+
+  export const load: Load = ({ props }) => {
+    if (props.entity.attributes?.header && typeof document !== 'undefined') {
+      new Image().src = props.entity.attributes.header;
+    }
+
+    return { props };
+  };
+</script>
+
 <script lang="ts">
   import { onMount } from 'svelte';
   import IntersectionObserver from 'svelte-intersection-observer';
