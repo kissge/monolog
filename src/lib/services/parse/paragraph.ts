@@ -1,6 +1,19 @@
 import type { marked } from 'marked';
 
 const ParagraphExtension: marked.MarkedExtension = {
+  /**
+   * ブラウザはHTML中の改行をスペースに置き換えてしまうが、日本語の文章には望ましくない挙動である。
+   * 仕方ないので、改行を含めないように事前に書き換える。
+   */
+  walkTokens(token) {
+    if (token.type === 'paragraph') {
+      for (const child of token.tokens) {
+        if (child.type === 'text') {
+          child.text = child.text.replace(/(?<=[、。，．）」』】])\n/g, '');
+        }
+      }
+    }
+  },
   extensions: [
     {
       name: 'paragraph',

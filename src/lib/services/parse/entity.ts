@@ -109,10 +109,10 @@ export default class EntityExtension {
         if (token.type === 'text') {
           assert.equal('tokens' in token, false, JSON.stringify(token));
 
-          if (token.raw.includes(entityName)) {
-            return token.raw.split(entityName).flatMap<marked.Token>((chunk, i) => {
+          if (token.text.includes(entityName)) {
+            return token.text.split(entityName).flatMap<marked.Token>((chunk, i) => {
               if (i === 0) {
-                return { type: 'text', raw: chunk, text: chunk };
+                return { type: 'text', raw: 'n/a', text: chunk };
               } else {
                 return [
                   {
@@ -121,9 +121,9 @@ export default class EntityExtension {
                     href,
                     title: entityName,
                     text: entityName,
-                    tokens: [{ type: 'text', raw: entityName, text: entityName }],
+                    tokens: [{ type: 'text', raw: 'n/a', text: entityName }],
                   },
-                  { type: 'text', raw: chunk, text: chunk },
+                  { type: 'text', raw: 'n/a', text: chunk },
                 ];
               }
             });
