@@ -2,7 +2,7 @@
   "name": "monolog",
   "description": "Beyond (We)Blog: Log of Everything",
   "author": "Yusuke Kido",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "license": "MIT",
   "scripts": {
     "dev": "svelte-kit dev",
