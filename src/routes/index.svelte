@@ -14,7 +14,6 @@
   <title>{Config.siteTitle}</title>
   <meta property="og:type" content="website" />
   <meta property="og:title" content={Config.siteTitle} />
-  <meta property="og:site_name" content={Config.siteTitle} />
   <meta property="og:image" content="https://{Config.siteHostname}/images/favicon.svg" />
 </svelte:head>
 

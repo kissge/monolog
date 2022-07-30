@@ -83,7 +83,6 @@
   <meta property="og:type" content="article" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={entity.headline} />
-  <meta property="og:site_name" content={Config.siteTitle} />
   <meta
     property="og:image"
     content={entity.attributes?.header

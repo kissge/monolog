@@ -18,6 +18,7 @@
     <link rel="webmention" href="https://webmention.io/{Config.siteHostname}/webmention" />
     <link rel="pingback" href="https://webmention.io/{Config.siteHostname}/xmlrpc" />
   {/if}
+  <meta property="og:site_name" content={Config.siteTitle} />
 </svelte:head>
 
 <nav class:isTop>
