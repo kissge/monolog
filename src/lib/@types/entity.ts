@@ -17,6 +17,10 @@ export interface EntityWithBody<Attributes = EntityAttributes> extends Entity<At
   links: Record<LinkCategory, { urlPath: string; entities: Entity[] }>;
 }
 
+export type EntityWithDate<Attributes = EntityAttributes> = Entity<Attributes> & {
+  attributes: { date: string | Date };
+};
+
 export interface FileEntity<Attributes = EntityAttributes> extends Entity<Attributes> {
   historyURL: string;
   lastModified: Date;

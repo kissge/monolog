@@ -9,7 +9,7 @@
     initGoogleAnalytics();
   }
 
-  $: isTop = $page.url.pathname === '/';
+  $: isTop = $page.routeId !== '[...entity]';
 </script>
 
 <svelte:head>
@@ -25,7 +25,7 @@
   <ul>
     {#each Config.navLinks as { href, title }}
       <li>
-        <a sveltekit:prefetch {href} aria-current={href === $page.url.pathname && !isTop ? 'page' : undefined}>
+        <a sveltekit:prefetch {href} aria-current={href === $page.url.pathname ? 'page' : undefined}>
           {title}
         </a>
       </li>

@@ -5,7 +5,7 @@ import { dev } from '$app/env';
 import ParseService from './parse';
 import SegmentService from './segment';
 import { block } from '$lib/vendor/marked/src/rules';
-import type { Entity, EntityWithBody, FileEntity, HTMLString, LinkGroup, Tag } from '$lib/@types';
+import type { Entity, EntityWithBody, EntityWithDate, FileEntity, HTMLString, LinkGroup, Tag } from '$lib/@types';
 import { wellKnownAttributes } from '$lib/@types';
 import * as Config from '$lib/config';
 import { AutoReload, EntityUtility } from '$lib/utilities';
@@ -52,6 +52,28 @@ class EntityService {
           b.links.from.entities.length - a.links.from.entities.length,
       )
       .map<Entity>(EntityUtility.strip);
+  }
+
+  @AutoReload()
+  get timeline() {
+    return Array.from(this.all.values())
+      .filter((entity) => entity.attributes?.date && new Date(entity.attributes.date).getTime())
+      .map((entity) => ({
+        ...(EntityUtility.strip(entity) as EntityWithDate),
+        age: (new Date(entity.attributes!.date!).getTime() - Config.birthday) / (1000 * 60 * 60 * 24 * 365.25),
+      }))
+      .sort((a, b) => b.age - a.age)
+      .reduce<{ age: number; entities: EntityWithDate[] }[]>((ages, entity) => {
+        const age = Math.floor(entity.age);
+
+        if (ages.at(-1)?.age !== age) {
+          ages.push({ age, entities: [] });
+        }
+
+        ages.at(-1)!.entities.push(entity);
+
+        return ages;
+      }, []);
   }
 
   initialize() {
