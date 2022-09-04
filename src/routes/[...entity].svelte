@@ -17,6 +17,7 @@
   import { page } from '$app/stores';
   import { Links, Mentions, Tags, Time, defineXScriptCustomElement } from '../components';
   import GitHubIcon from '../assets/images/brand-github.svg';
+  import PresentationIcon from '../assets/images/presentation.svg';
   import type { APIResponse } from './[...entity]';
   import * as Config from '$lib/config';
   import { FormatUtility } from '$lib/utilities';
@@ -149,8 +150,11 @@
       {/if}
 
       {#if entity.attributes?.slides}
-        <section class="clear">
-          <button on:click={startSlideshow}>プレゼンテーション表示に切り替える</button>
+        <section class="toolbar">
+          <button on:click={startSlideshow}>
+            <img src={PresentationIcon} alt="Presentation" class="link-icon" width="24" height="19.5" />
+            プレゼンテーション表示に切り替える
+          </button>
         </section>
       {/if}
 
