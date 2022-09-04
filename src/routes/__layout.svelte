@@ -35,7 +35,7 @@
 
 <slot />
 
-<footer>
+<footer class="global-footer">
   Built with <a href="https://github.com/kissge/monolog">monolog</a>
 </footer>
 

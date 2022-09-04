@@ -76,6 +76,10 @@
   onMount(() => {
     defineXScriptCustomElement();
   });
+
+  async function startSlideshow() {
+    (await import('../components/slideshow')).default(entity.body);
+  }
 </script>
 
 <svelte:head>
@@ -141,6 +145,12 @@
       {#if entity.tags.length > 0}
         <section>
           <Tags tags={entity.tags} large />
+        </section>
+      {/if}
+
+      {#if entity.attributes?.slides}
+        <section class="clear">
+          <button on:click={startSlideshow}>プレゼンテーション表示に切り替える</button>
         </section>
       {/if}
 

@@ -36,6 +36,7 @@ export interface EntityAttributes {
   date?: Date | string;
   tags?: string[];
   lang?: string;
+  slides?: boolean;
 
   /** 外部サイトへのリンクの場合、URL */
   external?: string;
