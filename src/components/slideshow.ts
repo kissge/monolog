@@ -44,7 +44,7 @@ function postprocess(source: HTMLString) {
     .map((chunk, i) => {
       if (i % 2 === 1) {
         // HTML tag
-        return chunk;
+        return chunk.replace(/sveltekit:prefetch/g, 'target="_self"');
       }
 
       return chunk.replace(/[（(].+?[)）]/g, (paren) => {
