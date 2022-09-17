@@ -1,6 +1,5 @@
 <script lang="ts">
-  import ExternalLinkIcon from '../assets/images/external-link.svg';
-  import { Tags } from '.';
+  import { Link, Tags } from '.';
   import type { Entity, JSON, LinkGroup } from '$lib/@types';
   import { FormatUtility } from '$lib/utilities';
 
@@ -14,15 +13,7 @@
       <ul class="link-group-links">
         {#each entities as entity}
           <li class="link">
-            {#if entity.attributes?.external}
-              <a href={entity.urlPath} rel="external">
-                <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" width="16" height="16" />{entity.name}
-              </a>
-            {:else}
-              <a sveltekit:prefetch href={entity.urlPath}>
-                {entity.name}
-              </a>
-            {/if}
+            <Link {entity} />
             {#if entity.attributes?.date}
               <small title={entity.attributes.date}>
                 <time>

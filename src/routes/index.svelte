@@ -1,6 +1,5 @@
 <script lang="ts">
-  import ExternalLinkIcon from '../assets/images/external-link.svg';
-  import { Links, Tags } from '../components';
+  import { Link, Links, Tags } from '../components';
   import type { APIResponse } from '.';
   import * as Config from '$lib/config';
   import { FormatUtility } from '$lib/utilities';
@@ -37,15 +36,7 @@
             {#if note.attributes.from}
               <span title="インポートされた記事">⚠️</span>
             {/if}
-            {#if note.attributes.external}
-              <a href={note.urlPath} rel="external">
-                <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" width="16" height="16" />{note.name}
-              </a>
-            {:else}
-              <a sveltekit:prefetch href={note.urlPath}>
-                {note.name}
-              </a>
-            {/if}
+            <Link entity={note} />
             <Tags tags={note.tags} />
           </li>
         {/each}
@@ -62,7 +53,7 @@
       <ul class="link-group-links">
         {#each tags as entity}
           <li class="link">
-            <a sveltekit:prefetch href={entity.urlPath}>{entity.name}</a>
+            <Link {entity} />
           </li>
         {/each}
       </ul>
