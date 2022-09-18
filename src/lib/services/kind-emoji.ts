@@ -1,10 +1,9 @@
 import fs from 'node:fs';
 import * as Config from '$lib/config';
-import { AutoReload, type AutoReloadable, JSONUtility } from '$lib/utilities';
+import { AutoReload, AutoReloadable, JSONUtility } from '$lib/utilities';
 
-class KindEmojiService implements AutoReloadable {
-  uid = new Date().toISOString();
-  protected emojis: { kind: string; emoji: string }[] = [];
+class KindEmojiService extends AutoReloadable {
+  protected emojis!: { kind: string; emoji: string }[];
 
   @AutoReload()
   get all() {
