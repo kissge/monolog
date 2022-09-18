@@ -177,6 +177,8 @@ class EntityService extends AutoReloadable {
           links.add(urlPath);
         }
 
+        links.delete(urlPath);
+
         entity.body = body;
         entity.links.to.entities = Array.from(links, (urlPath) => EntityUtility.strip(firstPass.get(urlPath)!)).sort(
           EntityUtility.compare,
