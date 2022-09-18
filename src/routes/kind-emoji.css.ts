@@ -8,7 +8,7 @@ export const get: RequestHandler<string> = () => ({
     KindEmojiService.all
       .map(({ kind, emoji }) => {
         const selector = kind === 'default' ? '' : `[data-kind="${kind}"]`;
-        return `${selector} .viewer-header h1::before { content: '${emoji}' }`;
+        return `${selector} .viewer-header h1::before, .tag${selector}::before { content: '${emoji}' }`;
       })
       .join('') + (dev ? '/*' + new Date() + '*/' : ''),
 });

@@ -32,13 +32,6 @@
         margin-left: 0
         font-size: 1em
 
-[data-kind="tag"]::before
-    color: #757575
-    content: '#'
-
-[data-kind="location"]::before
-    content: '📍'
-
-[data-kind="creator"]::before
-    content: '💁'
+    &::before
+        color: #757575
 </style>
