@@ -19,6 +19,7 @@
     <link rel="pingback" href="https://webmention.io/{Config.siteHostname}/xmlrpc" />
   {/if}
   <meta property="og:site_name" content={Config.siteTitle} />
+  <link rel="stylesheet" href="/kind-emoji.css" />
 </svelte:head>
 
 <nav class:isTop>
