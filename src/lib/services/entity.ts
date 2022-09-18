@@ -5,7 +5,16 @@ import { dev } from '$app/env';
 import ParseService from './parse';
 import SegmentService from './segment';
 import { block } from '$lib/vendor/marked/src/rules';
-import type { Entity, EntityWithBody, EntityWithDate, FileEntity, HTMLString, LinkGroup, Tag } from '$lib/@types';
+import type {
+  Entity,
+  EntityWithBody,
+  EntityWithDate,
+  FileEntity,
+  HTMLString,
+  LinkCategory,
+  LinkGroup,
+  Tag,
+} from '$lib/@types';
 import { wellKnownAttributes } from '$lib/@types';
 import * as Config from '$lib/config';
 import { AutoReload, AutoReloadable, EntityUtility } from '$lib/utilities';
@@ -217,8 +226,11 @@ class EntityService extends AutoReloadable {
     }
 
     for (const entity of all.values()) {
+      const categories: LinkCategory[] = ['to', 'from', 'kind'];
+
       entity.links.to.entities.forEach((to) => {
-        entity.links[EntityUtility.getOneHopCategoryName(to.name)] = {
+        const category = EntityUtility.getOneHopCategoryName(to.name);
+        entity.links[category] = {
           urlPath: to.urlPath,
           entities: linksFrom
             .get(to.urlPath)!
@@ -227,9 +239,25 @@ class EntityService extends AutoReloadable {
             .map<Entity>(EntityUtility.strip)
             .sort(EntityUtility.compare),
         };
+        categories.push(category);
       });
 
       entity.links.from.entities.sort(EntityUtility.compare);
+
+      // Deduplicate links
+      const seen = new Set<string>();
+      for (const category of categories) {
+        const key = entity.links[category].entities
+          .map(({ urlPath }) => urlPath)
+          .sort()
+          .join('\n');
+
+        if (seen.has(key)) {
+          entity.links[category].entities = [];
+        } else {
+          seen.add(key);
+        }
+      }
     }
   }
 
