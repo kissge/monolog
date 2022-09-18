@@ -21,8 +21,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.21.0",
-    "@sveltejs/adapter-static": "next",
-    "@sveltejs/kit": "next",
     "@ts-morph/bootstrap": "^0.16.0",
     "@types/marked": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
@@ -35,22 +33,24 @@
     "lint-staged": ">=10",
     "prettier": "^2.5.1",
     "prettier-plugin-svelte": "^2.5.0",
-    "sass": "^1.52.1",
-    "svelte": "^3.44.0",
     "svelte-check": "^2.2.6",
-    "svelte-intersection-observer": "^0.10.0",
-    "svelte-preprocess": "^4.10.1",
     "ts-node": "^10.8.1",
-    "tslib": "^2.3.1",
-    "typescript": "~4.6.2"
+    "tslib": "^2.3.1"
   },
   "type": "module",
   "dependencies": {
+    "@sveltejs/adapter-static": "1.0.0-next.32",
+    "@sveltejs/kit": "1.0.0-next.345",
     "budoux": "^0.1.0",
     "front-matter": "^4.0.2",
     "highlight.js": "^11.5.1",
     "marked": "^4.0.16",
-    "modern-css-reset": "^1.4.0"
+    "modern-css-reset": "^1.4.0",
+    "sass": "^1.52.1",
+    "svelte": "^3.44.0",
+    "svelte-intersection-observer": "^0.10.0",
+    "svelte-preprocess": "^4.10.1",
+    "typescript": "~4.6.2"
   },
   "lint-staged": {
     "*.{ts,svelte}": [
