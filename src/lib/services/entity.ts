@@ -8,20 +8,16 @@ import { block } from '$lib/vendor/marked/src/rules';
 import type { Entity, EntityWithBody, EntityWithDate, FileEntity, HTMLString, LinkGroup, Tag } from '$lib/@types';
 import { wellKnownAttributes } from '$lib/@types';
 import * as Config from '$lib/config';
-import { AutoReload, EntityUtility } from '$lib/utilities';
+import { AutoReload, AutoReloadable, EntityUtility } from '$lib/utilities';
 
-class EntityService {
-  protected all = new Map<string, EntityWithBody>();
-  protected _groups: LinkGroup<FileEntity>[] = [];
+class EntityService extends AutoReloadable {
+  protected all!: Map<string, EntityWithBody>;
+  protected _groups!: LinkGroup<FileEntity>[];
 
   protected static readonly blockTagsRegExp = new RegExp(
     `<(?:x-script|${(block as unknown as { _tag: string })._tag})[^>]*>`,
     'g',
   );
-
-  constructor() {
-    this.initialize();
-  }
 
   @AutoReload()
   get allPaths() {

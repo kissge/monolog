@@ -1,11 +1,19 @@
 import { dev } from '$app/env';
 
+export abstract class AutoReloadable {
+  constructor() {
+    this.initialize();
+  }
+
+  abstract initialize(): void;
+}
+
 let lastReloaded = 0;
 
 const AutoReload =
   () =>
   (
-    target: { initialize: () => void },
+    target: AutoReloadable,
     propertyKey: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     descriptor: TypedPropertyDescriptor<any>,
@@ -13,7 +21,7 @@ const AutoReload =
     if (descriptor.value) {
       // method
       const original = descriptor.value;
-      descriptor.value = function (this: typeof target, ...args: unknown[]) {
+      descriptor.value = function (this: AutoReloadable, ...args: unknown[]) {
         if (Date.now() - lastReloaded > 10000) {
           lastReloaded = Date.now();
           this.initialize();
@@ -23,7 +31,7 @@ const AutoReload =
     } else if (descriptor.get) {
       // getter
       const original = descriptor.get;
-      descriptor.get = function (this: typeof target) {
+      descriptor.get = function (this: AutoReloadable) {
         if (Date.now() - lastReloaded > 10000) {
           lastReloaded = Date.now();
           this.initialize();
