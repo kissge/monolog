@@ -8,43 +8,54 @@ export abstract class AutoReloadable {
   abstract initialize(): void;
 }
 
-let lastReloaded = 0;
+class AutoReloadService {
+  reloadTargets = new Set<AutoReloadable>();
+  lastReloadedAt = 0;
+  lastReloadedTargetCount = 0;
 
-const AutoReload =
-  () =>
-  (
-    target: AutoReloadable,
-    propertyKey: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    descriptor: TypedPropertyDescriptor<any>,
-  ) => {
+  get propDecorator() {
+    return () => this._decorate.bind(this);
+  }
+
+  reloadIfNecessary(target: AutoReloadable) {
+    this.reloadTargets.add(target);
+
+    const now = Date.now();
+
+    if (now - this.lastReloadedAt > 10000 || this.reloadTargets.size !== this.lastReloadedTargetCount) {
+      this.lastReloadedAt = now;
+      this.lastReloadedTargetCount = this.reloadTargets.size;
+      this.reloadTargets.forEach((t) => t.initialize());
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _decorate(_: AutoReloadable, __: string, descriptor: TypedPropertyDescriptor<any>) {
+    const service = this;
     if (descriptor.value) {
       // method
       const original = descriptor.value;
       descriptor.value = function (this: AutoReloadable, ...args: unknown[]) {
-        if (Date.now() - lastReloaded > 10000) {
-          lastReloaded = Date.now();
-          this.initialize();
-        }
+        service.reloadIfNecessary(this);
+
         return original.apply(this, args);
       };
     } else if (descriptor.get) {
       // getter
       const original = descriptor.get;
       descriptor.get = function (this: AutoReloadable) {
-        if (Date.now() - lastReloaded > 10000) {
-          lastReloaded = Date.now();
-          this.initialize();
-        }
+        service.reloadIfNecessary(this);
+
         return original.apply(this);
       };
     }
-  };
+  }
+}
 
-const _AutoReload = dev
-  ? AutoReload
+const AutoReloadDecorator = dev
+  ? new AutoReloadService().propDecorator
   : () => () => {
       /** Nothing */
     };
 
-export default _AutoReload;
+export default AutoReloadDecorator;
