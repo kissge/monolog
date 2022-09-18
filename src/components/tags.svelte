@@ -23,6 +23,11 @@
     white-space: nowrap
     font-size: 0.7em
     line-height: 1.4
+    opacity: 0.65
+    transition: opacity 0.5s ease-in-out
+
+    :global(li:hover) > &, :global(li:hover > span) > &
+        opacity: 1
 
     &:hover
         background-color: #ddd
@@ -31,6 +36,7 @@
         margin-right: 0.3em
         margin-left: 0
         font-size: 1em
+        opacity: 1
 
     &::before
         color: #757575

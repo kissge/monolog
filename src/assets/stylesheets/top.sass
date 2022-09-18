@@ -48,6 +48,9 @@ small
             background: linear-gradient(to bottom, #ffffff40, #ffffff 85%)
             content: ''
 
+        :global(.tag)
+            opacity: unset !important
+
     // 表示切り替え時時間差
     @for $i from 0 through 10
         &:nth-child(n + #{7 + $i})
