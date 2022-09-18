@@ -9,6 +9,7 @@ export interface Entity<Attributes = EntityAttributes> {
   lastModified?: Date;
   attributes?: Attributes;
   tags: Tag[];
+  isEmpty: boolean;
 }
 
 export interface EntityWithBody<Attributes = EntityAttributes> extends Entity<Attributes> {

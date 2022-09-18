@@ -10,7 +10,7 @@
     <img src={ExternalLinkIcon} alt="外部リンク" class="link-icon" width="16" height="16" />{entity.name}
   </a>
 {:else}
-  <a sveltekit:prefetch href={entity.urlPath} class="monolog-link" data-kind={entity.kind}>
+  <a sveltekit:prefetch href={entity.urlPath} class="monolog-link" data-kind={entity.kind} class:empty={entity.isEmpty}>
     {entity.name}
   </a>
 {/if}

@@ -105,7 +105,7 @@
 />
 
 <main>
-  <article data-kind={entity.kind}>
+  <article data-kind={entity.kind} class:empty={entity.isEmpty}>
     <header class="viewer-header" class:noHeaderImage>
       <h1>
         {#each entity.nameSegmented as segment, i}{#if i > 0}<wbr />{/if}{segment}{/each}

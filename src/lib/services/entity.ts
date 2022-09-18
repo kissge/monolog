@@ -151,6 +151,7 @@ class EntityService extends AutoReloadable {
             links: { to: { urlPath, entities: [] }, from: { urlPath, entities: [] }, kind: { urlPath, entities: [] } },
             tags: [],
             source: '',
+            isEmpty: true,
           });
 
           if (!kinds.has(kind)) {
@@ -271,6 +272,7 @@ class EntityService extends AutoReloadable {
             .slice(0, 512),
           links: { to: { urlPath, entities: [] }, from: { urlPath, entities: [] }, kind: { urlPath, entities: [] } },
           source,
+          isEmpty: body.trim().length === 0,
         };
       }
     }
