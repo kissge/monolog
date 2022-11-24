@@ -13,7 +13,7 @@
   <title>{Config.siteTitle}</title>
   <meta property="og:type" content="website" />
   <meta property="og:title" content={Config.siteTitle} />
-  <meta property="og:image" content="https://{Config.siteHostname}/images/favicon.svg" />
+  <meta property="og:image" content="https://{Config.siteHostname}/images/og.png" />
 </svelte:head>
 
 <input type="checkbox" id="notes-expanded" aria-label="もっと見る" />

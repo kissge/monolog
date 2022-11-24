@@ -10,7 +10,7 @@
   <title>タイムライン | {Config.siteTitle}</title>
   <meta property="og:type" content="website" />
   <meta property="og:title" content="タイムライン | {Config.siteTitle}" />
-  <meta property="og:image" content="https://{Config.siteHostname}/images/favicon.svg" />
+  <meta property="og:image" content="https://{Config.siteHostname}/images/og.png" />
 </svelte:head>
 
 <main>

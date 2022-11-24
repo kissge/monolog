@@ -94,7 +94,7 @@
       ? /^\.{0,2}\//.test(entity.attributes.header)
         ? 'https://' + Config.siteHostname + '/' + entity.attributes.header
         : entity.attributes.header
-      : 'https://' + Config.siteHostname + '/images/favicon.svg'}
+      : 'https://' + Config.siteHostname + '/images/og.png'}
   />
 </svelte:head>
 
