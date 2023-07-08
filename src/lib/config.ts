@@ -13,5 +13,6 @@ export const navLinks = JSONUtility.parseAs<{ href: string; title: string }[]>(i
 export const topTags = JSONUtility.parseAs<string[]>(import.meta.env.VITE_TOP_TAGS, []);
 export const birthday = new Date(AssertionUtility.assertNonEmptyString(import.meta.env.VITE_BIRTHDAY)).getTime();
 export const twitterID: string | undefined = import.meta.env.VITE_TWITTER_ID;
+export const githubID: string | undefined = import.meta.env.VITE_GITHUB_ID;
 export const googleAnalyticsID: string | undefined = import.meta.env.VITE_GOOGLE_ANALYTICS_ID;
 export const googleAdSenseID: string | undefined = import.meta.env.VITE_GOOGLE_ADSENSE_ID;

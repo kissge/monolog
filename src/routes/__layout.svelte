@@ -18,6 +18,9 @@
     <link rel="webmention" href="https://webmention.io/{Config.siteHostname}/webmention" />
     <link rel="pingback" href="https://webmention.io/{Config.siteHostname}/xmlrpc" />
   {/if}
+  {#if Config.githubID}
+    <link href="https://github.com/{Config.githubID}" rel="me" />
+  {/if}
   <meta property="og:site_name" content={Config.siteTitle} />
   <link rel="stylesheet" href="/kind-emoji.css" />
 </svelte:head>
