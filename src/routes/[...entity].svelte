@@ -134,8 +134,8 @@
       {#if url}
         <section class="url">
           {#if url.type === 'github'}
-            <a href={url.url}>
-              <img src={GitHubIcon} alt="GitHub" rel="external" class="link-icon" width="16" height="13" />{url.text}
+            <a href={url.url} rel="external">
+              <img src={GitHubIcon} alt="GitHub" class="link-icon" width="16" height="13" />{url.text}
             </a>
           {:else}
             <a href={url.url} rel="external">{url.text}</a>
