@@ -1,0 +1,244 @@
+@use 'sass:color';
+
+@import 'https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;800&amp;display=swap';
+@import 'modern-css-reset';
+@import 'highlight.js/styles/github';
+@import './color-emoji';
+
+body {
+  padding-top: 4rem;
+  font-family: Emoji, 'Shippori Mincho B1', serif;
+  font-weight: 400;
+  line-height: 1.8;
+  color: #222;
+  text-underline-offset: 0.1em;
+}
+
+a {
+  color: #3d2fb9;
+  text-decoration: underline;
+  text-decoration-color: color.adjust(#54e, $lightness: 30%);
+  transition: text-decoration-color 0.15s ease-in-out;
+
+  &:hover {
+    text-decoration-color: transparent;
+  }
+}
+
+.link-icon {
+  height: 1em;
+  margin-right: 3px;
+  vertical-align: middle;
+  transform: translateY(-1px);
+}
+
+.monolog-link.empty {
+  color: #b92f3d;
+  text-decoration: none;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 4rem;
+  padding: 1rem 0.5rem;
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  a {
+    position: relative;
+    padding: 0 1em;
+    color: #222;
+    text-decoration: none;
+    text-shadow:
+      0 0 8px #fff,
+      0 0 8px #fff,
+      0 0 8px #fff;
+    transition: text-shadow 4s ease-in-out;
+
+    &::after {
+      position: absolute;
+      bottom: calc(-1rem - 7px);
+      left: 0;
+      display: block;
+      width: 0;
+      height: 5px;
+      content: '';
+      background-color: #eee;
+      transition: width 0.2s ease-in-out;
+    }
+
+    &:hover,
+    &[aria-current] {
+      text-shadow:
+        0 0 8px #fff,
+        0 0 8px #fff,
+        0 0 8px #fff,
+        0 0 8px #fff,
+        0 0 8px #fff,
+        0 0 8px #fff,
+        0 0 8px #fff,
+        0 0 8px #fff,
+        0 0 8px #fff;
+      transition-duration: 0.2s;
+
+      &::after {
+        width: 100%;
+      }
+    }
+
+    &[href='/']::before {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      margin-right: 3px;
+      margin-left: 1px;
+      vertical-align: middle;
+      content: '';
+      background-image: url('/images/favicon.svg');
+      background-size: contain;
+    }
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  &.isTop {
+    background-image: url('/images/default.svg');
+    background-position: left top;
+    background-size: cover;
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+.global-footer {
+  padding: 2em;
+  font-size: 0.8em;
+  text-align: center;
+
+  &:not(:hover) {
+    opacity: 0.5;
+  }
+}
+
+main {
+  max-width: 1000px;
+  padding: 0 40px;
+  margin: 40px auto;
+}
+
+.links {
+  display: table;
+  padding: 0;
+  margin: 0;
+  line-height: 1.6;
+  border-spacing: 0 3em;
+  border-collapse: separate;
+
+  @media screen and (width <= 800px) {
+    display: block;
+    margin-top: 3em;
+    border-spacing: unset;
+  }
+}
+
+.link-group {
+  display: table-row;
+
+  @media screen and (width <= 800px) {
+    display: block;
+    margin-bottom: 3em;
+  }
+}
+
+.link-group-title {
+  display: table-cell;
+  width: 11em;
+  padding-right: 1em;
+  font-size: 1em;
+  font-weight: inherit;
+
+  @media screen and (width <= 800px) {
+    display: block;
+    width: auto;
+    padding-right: 0;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+  }
+}
+
+.link-group-links {
+  display: table-cell;
+  padding-left: 1em;
+  list-style: none;
+  border-left: 1px solid #ccc;
+
+  @media screen and (width <= 800px) {
+    display: block;
+    padding-left: 0;
+    border-left: none;
+  }
+}
+
+.link {
+  padding-left: 2em;
+  margin-bottom: 0.4em;
+  text-indent: -2em;
+
+  @media screen and (width <= 800px) {
+    padding-left: 1em;
+    text-indent: -1em;
+  }
+
+  > * {
+    text-indent: 0;
+  }
+
+  .tags {
+    white-space: nowrap;
+  }
+
+  p {
+    display: inline;
+    padding-left: 5px;
+    color: #757575;
+  }
+
+  small {
+    font-size: 0.6em;
+    color: #333;
+    white-space: nowrap;
+  }
+}
+
+:target {
+  animation: target-highlight 1s 3;
+}
+
+@keyframes target-highlight {
+  0% {
+    background: #eee;
+  }
+
+  100% {
+    background: unset;
+  }
+}
+
+sup {
+  font-size: smaller;
+  vertical-align: super;
+}
+
+img {
+  display: revert;
+}
