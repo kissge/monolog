@@ -1,9 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "isolatedModules": false
-  },
-  "ts-node": {
-    "esm": true
-  }
-}

@@ -1,4 +1,4 @@
-import { dev } from '$app/env';
+import { dev } from '$app/environment';
 
 function _assertNonEmptyString(value: unknown): string {
   if (typeof value !== 'string' || !value) {

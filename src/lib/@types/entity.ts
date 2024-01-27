@@ -61,6 +61,6 @@ export const wellKnownAttributes = ['location', 'creator'] as const;
 
 export interface Tag {
   name: string;
-  kind: 'tag' | typeof wellKnownAttributes[number];
+  kind: 'tag' | (typeof wellKnownAttributes)[number];
   urlPath: string;
 }

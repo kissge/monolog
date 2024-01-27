@@ -1,28 +1,45 @@
-// @ts-check
-
-module.exports = /** @type {import('eslint').Linter.Config} */ ({
+/** @type { import("eslint").Linter.Config } */
+module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
-  plugins: ['svelte3', '@typescript-eslint', 'import'],
-  ignorePatterns: ['*.cjs'],
-  overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:svelte/recommended',
+    'plugin:import/recommended',
+    'prettier',
+  ],
+  plugins: ['@typescript-eslint'],
+  overrides: [
+    {
+      files: ['*.svelte'],
+      parser: 'svelte-eslint-parser',
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+      },
+    },
+  ],
   settings: {
-    'svelte3/typescript': () => require('typescript'),
+    'import/resolver': {
+      typescript: true,
+      node: true,
+    },
   },
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
+    extraFileExtensions: ['.svelte'],
   },
   env: {
     browser: true,
     es2017: true,
     node: true,
   },
+
   rules: {
-    '@typescript-eslint/no-non-null-assertion': 'off',
+    // Necessary for marked extension
     '@typescript-eslint/no-this-alias': 'off',
-    'import/order': ['error', { pathGroups: [{ pattern: '$app/*', group: 'external' }] }],
-    'sort-imports': ['error', { ignoreDeclarationSort: true }],
+    // Not working for SvelteKit imports
+    'import/no-unresolved': 'off',
   },
-});
+};

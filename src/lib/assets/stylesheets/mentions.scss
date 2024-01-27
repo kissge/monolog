@@ -1,0 +1,121 @@
+.mentions {
+  padding-top: 40px;
+  margin-top: 40px;
+  border-top: 1px solid #ccc;
+
+  @media screen and (width <= 512px) {
+    padding-top: 20px;
+  }
+}
+
+h1 {
+  font-size: 1.3em;
+}
+
+ol {
+  padding-left: 1em;
+
+  @media screen and (width <= 800px) {
+    padding-left: 0;
+  }
+}
+
+li {
+  margin-bottom: 1em;
+  line-height: 1.4;
+
+  &::marker {
+    color: #aaa;
+  }
+
+  span {
+    display: inline-block;
+
+    @media screen and (width <= 800px) {
+      display: block;
+      margin-left: 1em;
+    }
+  }
+}
+
+a.no-color {
+  text-decoration: none;
+
+  &:not(:hover) {
+    color: currentcolor;
+  }
+
+  img {
+    margin: 0 5px;
+  }
+}
+
+img {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  transform: translateY(-2px);
+}
+
+blockquote {
+  padding-left: 1em;
+  margin-top: 0.4em;
+  margin-left: 2em;
+  font-size: 0.8em;
+  font-style: italic;
+  border-left: 1px solid #ccc;
+}
+
+.reaction {
+  display: flex;
+  gap: 0.5em;
+  float: right;
+  margin-top: 0.3em;
+  margin-bottom: 1em;
+
+  a {
+    display: block;
+    height: 1.7044em;
+    padding-left: 2.1875em;
+    line-height: 1.35;
+    text-decoration: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    &:not(:hover) {
+      @media (hover: hover) {
+        opacity: 0.5;
+      }
+    }
+
+    small {
+      display: block;
+      font-size: 0.2em;
+    }
+
+    span {
+      display: block;
+      font-size: 0.7em;
+    }
+
+    @media screen and (width <= 370px) {
+      font-size: 0.65em;
+    }
+  }
+
+  @media screen and (width <= 512px) {
+    justify-content: space-between;
+    float: none;
+  }
+}
+
+.loading::before {
+  display: block;
+  padding-left: 1.3em;
+  line-height: 0.9;
+  color: #aaa;
+  content: '読み込み中';
+  background-image: url('https://cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
