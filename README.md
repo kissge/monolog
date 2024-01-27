@@ -8,15 +8,15 @@ monolog extends this concept further from Web to _everything_, therefore is name
 
 ```sh-session
 # Install dependencies
-$ yarn
+$ pnpm install
 
 # Set up .env file (see .env.example)
 
 # Start local server
-$ yarn dev
+$ pnpm run dev
 
 # Build and generate a static website
-$ yarn build
+$ pnpm run build
 ```
 
 # License
