@@ -105,10 +105,10 @@ export default class EntityExtension {
         continue;
       }
 
-      let inLink = false;
+      let noLink = false;
 
       token.tokens = token.tokens.flatMap((token) => {
-        if (token.type === 'text' && !inLink) {
+        if (token.type === 'text' && !noLink) {
           assert.equal('tokens' in token, false, JSON.stringify(token));
 
           if (token.text.includes(entityName)) {
@@ -138,8 +138,20 @@ export default class EntityExtension {
           }
         }
 
+        if (token.type === 'html') {
+          if (token.text.match(/^<kbd[^>]*>/)) {
+            noLink = true;
+            return token;
+          }
+
+          if (token.text.match(/^<\/kbd>/)) {
+            noLink = false;
+            return token;
+          }
+        }
+
         if ('inLink' in token) {
-          inLink = token.inLink;
+          noLink = token.inLink;
         }
 
         return token;
