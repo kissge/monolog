@@ -55,8 +55,9 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
       .filter(({ kind }) => kind === 'tag')
       .sort(
         (a, b) =>
-          (Config.topTags.some((name) => name === a.name) ? 1 : 0) -
-            (Config.topTags.some((name) => name === b.name) ? 1 : 0) ||
+          // 1. もので終わるものの方が高い
+          (a.name.endsWith('もの') ? -1 : 0) - (b.name.endsWith('もの') ? -1 : 0) ||
+          // 2. 同率なら、entity数が多いものの方が高い
           (b.links.from?.entities.length ?? 0) - (a.links.from?.entities.length ?? 0),
       )
       .map<Entity>(EntityUtility.strip);
