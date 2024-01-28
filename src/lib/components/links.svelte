@@ -15,7 +15,7 @@
           <li class="link">
             <Link {entity} />
             {#if entity.attributes?.date}
-              <small title={(entity.attributes.date || '').toLocaleString('ja')}>
+              <small title={entity.attributes.date.toLocaleString('ja')}>
                 <time>
                   {FormatUtility.date(entity.attributes.date)}
                 </time>

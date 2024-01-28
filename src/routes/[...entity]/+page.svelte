@@ -121,7 +121,7 @@
 
         {#if data.entity.historyURL}
           <p>
-            <a href={data.entity.historyURL} title={(data.entity.lastModified || '').toLocaleString('ja')}>
+            <a href={data.entity.historyURL} title={data.entity.lastModified?.toLocaleString('ja')}>
               最終更新：{FormatUtility.relative(data.entity.lastModified)}
             </a>
           </p>

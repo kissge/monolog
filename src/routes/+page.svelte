@@ -22,7 +22,7 @@
       <ol class="link-group-links notes">
         {#each data.notes as note}
           <li class="note">
-            <small title={(note.attributes.date || '').toLocaleString()}>
+            <small title={note.attributes.date.toLocaleString()}>
               <time>
                 {FormatUtility.date(note.attributes.date)}
               </time>
