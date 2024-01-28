@@ -306,17 +306,14 @@
     text-decoration: none;
   }
 
-  a.monolog-link::before,
-  a[href='/']::before {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    margin-right: 3px;
+  a.monolog-link,
+  a[href='/'] {
+    padding-left: calc(1em + 3px);
     margin-left: 1px;
-    vertical-align: middle;
-    content: '';
     background-image: url('/images/favicon.svg');
-    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0 0.35em;
+    background-size: 1em;
   }
 
   .ipa {

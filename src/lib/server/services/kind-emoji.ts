@@ -24,7 +24,7 @@ class KindEmojiService extends AutoReloadUtility.AutoReloadable {
     return this.all
       .map(({ kind, emoji }) => {
         const selector = kind === 'default' ? '' : `[data-kind="${kind}"]`;
-        return `${selector} .viewer-header h1::before, .tag${selector}::before, .monolog-link${selector}::before { content: '${emoji}' }`;
+        return `${selector} .viewer-header h1::before, .tag${selector}::before, .links .monolog-link${selector}::before { content: '${emoji}' }`;
       })
       .join('');
   }
