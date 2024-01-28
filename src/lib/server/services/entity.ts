@@ -288,19 +288,25 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
       entity.links.from?.entities.sort(EntityUtility.compare);
 
       // Deduplicate links
+      const isA = new Set(entity.links.is_a?.entities.map(({ urlPath }) => urlPath));
       const seen = new Set<string>();
       for (const category of categories) {
-        const key = entity.links[category]?.entities
+        const links = entity.links[category];
+
+        if (!links) {
+          continue;
+        }
+
+        // is-aリンクがついていたら、他のリンクグループからは除去する
+        links.entities = links.entities.filter(({ urlPath }) => !isA.has(urlPath));
+
+        const key = links.entities
           .map(({ urlPath }) => urlPath)
           .sort()
           .join('\n');
 
-        if (!key) {
-          continue;
-        }
-
         if (seen.has(key)) {
-          entity.links[category]!.entities = [];
+          delete entity.links[category];
         } else {
           seen.add(key);
         }
