@@ -4,7 +4,7 @@ export class SegmentService {
   protected parser = loadDefaultJapaneseParser();
 
   segment(text: string) {
-    const segments = this.parser.parse(text, 1);
+    const segments = this.parser.parse(text);
     for (let i = segments.length - 1; i > 0; --i) {
       if (
         ['）', '？'].includes(segments[i]) ||
