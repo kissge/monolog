@@ -37,7 +37,7 @@ const ParagraphExtension: marked.MarkedExtension = {
 
           if (caption.length > 0) {
             return (
-              '<figure>' +
+              '<figure title="クリックで拡大">' +
               this.parser.parseInline([figure], this.parser.renderer) +
               '<figcaption>' +
               this.parser.parseInline(caption, this.parser.renderer) +

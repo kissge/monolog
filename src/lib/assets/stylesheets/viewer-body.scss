@@ -211,17 +211,11 @@
   }
 
   figure {
-    max-width: unset;
     text-align: center;
-    transition: margin 1s 2s ease-in-out;
+    cursor: pointer;
 
     img {
       box-shadow: 0 0 12px 3px #ccc8;
-    }
-
-    &:hover {
-      margin-right: calc((100vw - 100% - 25px) / -2);
-      margin-left: calc((100vw - 100% - 25px) / -2);
     }
   }
 

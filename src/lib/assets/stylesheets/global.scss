@@ -242,3 +242,13 @@ sup {
 img {
   display: revert;
 }
+
+dialog {
+  button {
+    all: unset;
+  }
+}
+
+::backdrop {
+  background-color: #000a;
+}

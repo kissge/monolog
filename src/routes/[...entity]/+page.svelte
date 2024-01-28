@@ -15,6 +15,8 @@
 
   let headerElement: HTMLElement;
   let isHeaderInView = true;
+  let figureZoom: HTMLDialogElement;
+  let figureZoomContent = '';
 
   $: title =
     data.entity.name +
@@ -74,6 +76,16 @@
   onMount(() => {
     defineXScriptCustomElement();
   });
+
+  function handleBodyClick(event: MouseEvent) {
+    const figure = (event.target as HTMLElement | undefined)?.closest('figure');
+    const link = (event.target as HTMLElement | undefined)?.closest('figure a');
+
+    if (!link && figure) {
+      figureZoomContent = figure.innerHTML;
+      figureZoom.showModal();
+    }
+  }
 
   async function startSlideshow() {
     (await import('$lib/components/slideshow')).default(data.entity.body);
@@ -165,7 +177,9 @@
       </IntersectionObserver>
     </header>
 
-    <section class="body" lang={data.entity.attributes?.lang}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <section class="body" lang={data.entity.attributes?.lang} on:click={handleBodyClick}>
       <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       {@html data.entity.body}
     </section>
@@ -181,6 +195,16 @@
     <Mentions />
   </article>
 </main>
+
+<!-- backdropにクリック処理を足しているだけなのでignoreしてよい -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<dialog bind:this={figureZoom} on:click={() => figureZoom.close()} title="クリックで閉じる">
+  <button on:click={() => figureZoom.close()}>
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+    {@html figureZoomContent}
+  </button>
+</dialog>
 
 <style lang="scss">
   @import '$lib/assets/stylesheets/viewer';
