@@ -8,6 +8,10 @@ declare global {
     // interface PageState {}
     // interface Platform {}
   }
+
+  interface Array<T> {
+    filter(predicate: typeof Boolean): NonNullable<T>[];
+  }
 }
 
 export {};

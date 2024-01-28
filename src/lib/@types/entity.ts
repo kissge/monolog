@@ -3,7 +3,7 @@ import type { HTMLString } from '.';
 export interface Entity<Attributes = EntityAttributes> {
   name: string;
   nameSegmented: string[];
-  kind?: string;
+  kind: string | undefined;
   urlPath: string;
   historyURL?: string;
   lastModified?: Date;
@@ -12,10 +12,17 @@ export interface Entity<Attributes = EntityAttributes> {
   isEmpty: boolean;
 }
 
-export interface EntityWithBody<Attributes = EntityAttributes> extends Entity<Attributes> {
+export interface EntityLinks<Attributes = EntityAttributes, T extends Entity<Attributes> = Entity<Attributes>> {
+  /** タグへのリンク一覧の中で自明なタグを省略するためにリンク先情報が必要 */
+  urlPath: string;
+  entities: T[];
+}
+
+export interface EntityWithBody<Attributes = EntityAttributes, LinkedEntityAttributes = EntityAttributes>
+  extends Entity<Attributes> {
   body: HTMLString;
   headline: string;
-  links: Record<LinkCategory, { urlPath: string; entities: Entity[] }>;
+  links: Partial<Record<LinkCategory, EntityLinks<LinkedEntityAttributes>>>;
 }
 
 export type EntityWithDate<Attributes = EntityAttributes> = Entity<Attributes> & {
@@ -30,7 +37,7 @@ export interface FileEntity<Attributes = EntityAttributes> extends Entity<Attrib
 
 export type FileEntityWithBody<Attributes = EntityAttributes> = FileEntity<Attributes> & EntityWithBody<Attributes>;
 
-export type LinkCategory = 'to' | 'from' | 'kind' | `one_hop_${string}`;
+export type LinkCategory = 'to' | 'from' | 'kind' | 'is_a' | `one_hop_${string}`;
 
 export interface EntityAttributes {
   title?: string;
@@ -63,4 +70,9 @@ export interface Tag {
   name: string;
   kind: 'tag' | (typeof wellKnownAttributes)[number];
   urlPath: string;
+}
+
+export interface LinkGroup<Attributes = EntityAttributes, T extends Entity<Attributes> = Entity<Attributes>>
+  extends EntityLinks<Attributes, T> {
+  name: string;
 }

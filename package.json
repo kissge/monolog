@@ -2,7 +2,7 @@
   "name": "monolog",
   "description": "Beyond (We)Blog: Log of Everything",
   "author": "Yusuke Kido <mail@yusuk.eki.do>",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "license": "MIT",
   "scripts": {
     "dev": "vite dev",

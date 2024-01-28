@@ -1,13 +1,13 @@
 <script lang="ts">
   import { Link, Tags } from '.';
-  import type { Entity, LinkGroup } from '$lib/@types';
+  import type { LinkGroup } from '$lib/@types';
   import { FormatUtility } from '$lib/utilities';
 
-  export let links: LinkGroup<Entity>[];
+  export let links: LinkGroup[];
 </script>
 
 {#each links as { name, urlPath, entities }}
-  {#if entities.length > 0}
+  {#if entities.length}
     <li class="link-group">
       <h1 class="link-group-title">{name}</h1>
       <ul class="link-group-links">

@@ -7,6 +7,7 @@ import SegmentService from './segment';
 import { block } from './parse/marked';
 import type {
   Entity,
+  EntityAttributes,
   EntityWithBody,
   EntityWithDate,
   FileEntity,
@@ -21,7 +22,7 @@ import { AutoReloadUtility, EntityUtility } from '$lib/utilities';
 
 class EntityService extends AutoReloadUtility.AutoReloadable {
   #all!: Map<string, EntityWithBody>;
-  #groups!: LinkGroup<FileEntity>[];
+  #groups!: LinkGroup<EntityAttributes, FileEntity>[];
 
   protected static readonly blockTagsRegExp = new RegExp(`<(?:x-script|${block._tag})[^>]*>`, 'g');
 
@@ -56,7 +57,7 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
         (a, b) =>
           (Config.topTags.some((name) => name === a.name) ? 1 : 0) -
             (Config.topTags.some((name) => name === b.name) ? 1 : 0) ||
-          b.links.from.entities.length - a.links.from.entities.length,
+          (b.links.from?.entities.length ?? 0) - (a.links.from?.entities.length ?? 0),
       )
       .map<Entity>(EntityUtility.strip);
   }
@@ -94,15 +95,16 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
         name,
         entities: all2
           .get(encodeURI('/mono/' + name))
-          ?.links.from.entities.filter(({ tags }) => tags.some((tag) => tag.name === name)),
+          ?.links.from?.entities.filter(({ tags }) => tags.some((tag) => tag.name === name)),
       }))
-      .filter((group): group is LinkGroup<FileEntity> => !!group.entities?.length);
+      .filter((group): group is LinkGroup<EntityAttributes, FileEntity> => !!group.entities?.length);
   }
 
   get(urlPath: string) {
     return this.#all.get(urlPath);
   }
 
+  /** 1st pass: allとkindsをリストアップし、重複チェックするところまで */
   protected initialize1stPass() {
     const all = new Map<string, EntityWithBody & { source: string }>();
     const seenNames = new Set<string>();
@@ -123,9 +125,43 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
       }
     }
 
+    const kindMonos = [];
+    for (const [kind, kindEntities] of kinds.entries()) {
+      if (kind === 'note' || kind === 'pages') {
+        continue;
+      }
+
+      const urlPath = encodeURI('/mono/' + kind);
+      if (!all.has(urlPath)) {
+        all.set(urlPath, {
+          name: kind,
+          nameSegmented: SegmentService.segment(kind),
+          kind: 'kind' as const,
+          urlPath,
+          body: '' as HTMLString,
+          headline: '',
+          links: {
+            is_a: {
+              urlPath,
+              entities: kindEntities.map((urlPath) => all.get(urlPath)!).sort(EntityUtility.compare),
+            },
+          },
+          tags: [],
+          source: '',
+          isEmpty: true,
+        });
+        kindMonos.push(urlPath);
+      }
+    }
+
+    if (kindMonos.length > 0) {
+      kinds.set('kind', kindMonos);
+    }
+
     return { all, kinds };
   }
 
+  /** 2nd: tagsをセットし、tagをentityに追加するところまで */
   protected initialize2ndPass(
     firstPass: Map<string, EntityWithBody & { source: string }>,
     kinds: Map<string, string[]>,
@@ -157,11 +193,7 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
             urlPath,
             body: '' as HTMLString,
             headline: '',
-            links: {
-              to: { urlPath, entities: [] },
-              from: { urlPath, entities: [] },
-              kind: { urlPath, entities: [] },
-            },
+            links: {},
             tags: [],
             source: '',
             isEmpty: true,
@@ -179,6 +211,7 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
     ParseService.updateEntities(firstPass.values());
   }
 
+  /** 3rd: toリンク、kindリンクをつけるところまで */
   protected initialize3rdPass(
     firstPass: Map<string, EntityWithBody & { source: string }>,
     kinds: Map<string, string[]>,
@@ -194,16 +227,19 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
         links.delete(urlPath);
 
         entity.body = body;
-        entity.links.to.entities = Array.from(links, (urlPath) => EntityUtility.strip(firstPass.get(urlPath)!)).sort(
-          EntityUtility.compare,
-        );
-        if (entity.kind && entity.kind !== 'note') {
-          entity.links.kind.entities = kinds
-            .get(entity.kind)!
-            .filter((x) => x !== urlPath)
-            .map((urlPath) => firstPass.get(urlPath)!)
-            .map<Entity>(EntityUtility.strip)
-            .sort(EntityUtility.compare);
+        entity.links.to = {
+          urlPath,
+          entities: Array.from(links, (urlPath) => firstPass.get(urlPath)!).sort(EntityUtility.compare),
+        };
+        if (entity.kind && entity.kind !== 'note' && entity.kind !== 'pages') {
+          entity.links.kind = {
+            urlPath,
+            entities: kinds
+              .get(entity.kind)!
+              .filter((x) => x !== urlPath)
+              .map((urlPath) => firstPass.get(urlPath)!)
+              .sort(EntityUtility.compare),
+          };
         }
 
         return [urlPath, entity];
@@ -211,14 +247,18 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
     );
   }
 
+  /** 4th: fromリンク、1-hopリンクをつけて、リンクの重複を除去し、stripして完成 */
   protected initialize4thPass(all: Map<string, EntityWithBody>) {
     const linksFrom = new Map<string, string[]>();
 
     for (const fromEntity of all.values()) {
-      fromEntity.links.to.entities.forEach((to) => {
+      fromEntity.links.to?.entities.forEach((to) => {
         const toEntity = all.get(to.urlPath)!;
-        if (!toEntity.links.from.entities.some(({ urlPath }) => urlPath === fromEntity.urlPath)) {
-          toEntity.links.from.entities.push(EntityUtility.strip(fromEntity));
+        if (!toEntity.links.from?.entities.some(({ urlPath }) => urlPath === fromEntity.urlPath)) {
+          (toEntity.links.from ??= {
+            urlPath: to.urlPath,
+            entities: [],
+          }).entities.push(fromEntity);
         }
 
         if (!linksFrom.has(to.urlPath)) {
@@ -232,7 +272,7 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
     for (const entity of all.values()) {
       const categories: LinkCategory[] = ['to', 'from', 'kind'];
 
-      entity.links.to.entities.forEach((to) => {
+      entity.links.to?.entities.forEach((to) => {
         const category = EntityUtility.getOneHopCategoryName(to.name);
         entity.links[category] = {
           urlPath: to.urlPath,
@@ -240,27 +280,35 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
             .get(to.urlPath)!
             .filter((urlPath) => urlPath !== entity.urlPath)
             .map((urlPath) => all.get(urlPath)!)
-            .map<Entity>(EntityUtility.strip)
             .sort(EntityUtility.compare),
         };
         categories.push(category);
       });
 
-      entity.links.from.entities.sort(EntityUtility.compare);
+      entity.links.from?.entities.sort(EntityUtility.compare);
 
       // Deduplicate links
       const seen = new Set<string>();
       for (const category of categories) {
-        const key = entity.links[category].entities
+        const key = entity.links[category]?.entities
           .map(({ urlPath }) => urlPath)
           .sort()
           .join('\n');
 
+        if (!key) {
+          continue;
+        }
+
         if (seen.has(key)) {
-          entity.links[category].entities = [];
+          entity.links[category]!.entities = [];
         } else {
           seen.add(key);
         }
+      }
+
+      // Strip
+      for (const links of Object.values(entity.links).filter(Boolean)) {
+        links.entities = (links.entities as EntityWithBody[]).map<Entity>(EntityUtility.strip);
       }
     }
   }
@@ -277,7 +325,7 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
         yield* this.listEntitiesRecursive(path);
       } else if (file.isFile() && file.name.endsWith('.md')) {
         const baseName = file.name.slice(0, -3);
-        const kind = path.startsWith('notes/') ? 'note' : dirPath?.split('/').slice(1).pop();
+        const kind = path.startsWith('notes/') ? 'note' : dirPath?.split('/').pop();
         const source = fs.readFileSync(`${Config.dataRootDir}/${path}`, 'utf-8');
         const urlPath = this.isMono(path) ? '/mono/' + encodeURI(baseName) : '/' + encodeURI(path.slice(0, -3));
 
@@ -302,11 +350,7 @@ class EntityService extends AutoReloadUtility.AutoReloadable {
             .replace(/\n/g, '')
             .trim()
             .slice(0, 512),
-          links: {
-            to: { urlPath, entities: [] },
-            from: { urlPath, entities: [] },
-            kind: { urlPath, entities: [] },
-          },
+          links: {},
           source,
           isEmpty: body.trim().length === 0,
         };

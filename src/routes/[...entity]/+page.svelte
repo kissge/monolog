@@ -24,9 +24,15 @@
 
   $: name = $page.url.pathname.startsWith('/mono/') ? data.entity.name : 'この記事';
 
-  $: hasLink = Object.values(data.entity.links).some(({ entities }) => entities.length > 0);
+  $: hasLink = Object.values(data.entity.links)
+    .filter(Boolean)
+    .some(({ entities }) => entities.length > 0);
   $: links = (
     [
+      {
+        id: 'is_a',
+        name: name + 'であるもの',
+      },
       {
         id: 'to',
         name: name + 'がリンクしているもの',
@@ -40,13 +46,15 @@
         name: data.entity.kind ? 'ほかの' + data.entity.kind : '',
       },
       ...Object.entries(data.entity.links)
-        .filter(([id]) => id.startsWith('one_hop_'))
+        .filter((kv): kv is [LinkCategory, (typeof kv)[1]] => kv[0].startsWith('one_hop_'))
         .map(([id]) => ({
           id,
           name: id.replace(/^one_hop_/, '') + 'にリンクしているもの',
         })),
-    ] as { id: LinkCategory; name: string }[]
-  ).map(({ id, name }) => ({ name, ...data.entity.links[id] }));
+    ] satisfies { id: LinkCategory; name: string }[]
+  )
+    .filter(({ id }) => data.entity.links[id]?.entities?.length)
+    .map(({ id, name }) => ({ name, ...data.entity.links[id]! }));
 
   $: noHeaderImage =
     data.entity.attributes?.header === false || (data.entity.kind !== 'note' && !data.entity.attributes?.header);

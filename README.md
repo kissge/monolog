@@ -10,10 +10,10 @@ monolog extends this concept further from Web to _everything_, therefore is name
 # Install dependencies
 $ pnpm install
 
-# Set up .env file (see .env.example)
+# Set up .env file under data directory (see .env.example)
 
 # Start local server
-$ pnpm run dev
+$ DATA_ROOT_DIR=path/to/data/directory pnpm run dev
 
 # Build and generate a static website
 $ pnpm run build

@@ -95,7 +95,7 @@ export default class EntityExtension {
     return this.state.links;
   }
 
-  protected rewriteBlock(token: { tokens?: marked.Token[] }) {
+  protected rewriteBlock(token: { tokens?: marked.Token[] | undefined }) {
     if (!token.tokens) {
       return;
     }
