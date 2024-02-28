@@ -1,18 +1,21 @@
-import type { ModuleNode, PluginOption } from 'vite';
+import type { PluginOption } from 'vite';
 
-/** Experimental content hot module reloader (which is causing full-reload actually) */
+/** Content hot module replacer */
 export default function monologContentHMR() {
   return {
     name: 'vite-plugin-monolog-content-hmr',
-    handleHotUpdate(ctx) {
-      if (ctx.file.endsWith('.md')) {
-        return [dummyModuleNode];
+    configureServer(server) {
+      server.watcher.add(server.config.env.VITE_DATA_ROOT_DIR);
+      console.log('monolog-content-hmr: watching', server.config.env.VITE_DATA_ROOT_DIR);
+    },
+    handleHotUpdate({ file, server }) {
+      if (file.startsWith(server.config.env.VITE_DATA_ROOT_DIR)) {
+        server.hot.send({
+          type: 'custom',
+          event: 'monolog-content-hmr',
+        });
+        return [];
       }
     },
   } satisfies PluginOption;
 }
-
-const dummyModuleNode = {
-  url: '/src/routes/[...entity]/+page.ts',
-  importers: new Set(),
-} as ModuleNode;

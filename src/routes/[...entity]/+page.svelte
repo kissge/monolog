@@ -90,6 +90,14 @@
   async function startSlideshow() {
     (await import('$lib/components/slideshow')).default(data.entity.body);
   }
+
+  if (import.meta.hot) {
+    import.meta.hot.on('monolog-content-hmr', () =>
+      fetch(location.pathname.replace(/\/$/, '') + '/_reload')
+        .then((res) => res.json())
+        .then((update) => (data = update)),
+    );
+  }
 </script>
 
 <svelte:head>
