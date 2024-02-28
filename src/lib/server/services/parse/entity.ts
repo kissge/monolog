@@ -116,8 +116,8 @@ export default class EntityExtension {
               if (i === 0) {
                 return { type: 'text', raw: 'n/a', text: chunk };
               } else if (
-                /[a-z0-9-_]{2}/i.test(all[i - 1].slice(-1) + entityName.charAt(0)) ||
-                /[a-z0-9-_]{2}/i.test(entityName.slice(-1) + chunk.charAt(0))
+                /[a-z0-9-_]{2}|[\p{sc=Katakana}]{2}/iu.test(all[i - 1].slice(-1) + entityName.charAt(0)) ||
+                /[a-z0-9-_]{2}|[\p{sc=Katakana}]{2}/iu.test(entityName.slice(-1) + chunk.charAt(0))
               ) {
                 // e.g. 「SvelteKit」に対して「Svelte」のリンクはつけない
                 return { type: 'text', raw: 'n/a', text: entityName + chunk };
