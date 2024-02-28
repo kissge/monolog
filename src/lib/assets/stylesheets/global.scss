@@ -5,6 +5,13 @@
 @import 'highlight.js/styles/github';
 @import './color-emoji';
 
+* {
+  text-wrap: pretty;
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  line-break: strict;
+}
+
 body {
   padding-top: 4rem;
   font-family: Emoji, 'Shippori Mincho B1', serif;
