@@ -185,12 +185,14 @@
       </IntersectionObserver>
     </header>
 
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <section class="body" lang={data.entity.attributes?.lang} on:click={handleBodyClick}>
-      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-      {@html data.entity.body}
-    </section>
+    {#if data.entity.body}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <section class="body" lang={data.entity.attributes?.lang} on:click={handleBodyClick}>
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html data.entity.body}
+      </section>
+    {/if}
 
     {#if hasLink}
       <section class="links-section">
