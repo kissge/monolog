@@ -236,9 +236,37 @@
   }
 
   hr {
+    position: relative;
     display: block;
-    margin: 3em 0;
-    border-top: 1px solid #ccc;
+    padding: 4em 0;
+    border: none;
+
+    &::before {
+      position: absolute;
+      left: 15%;
+      display: block;
+      width: 70%;
+      height: 100%;
+      content: '';
+      border-top: 1px dashed #ccc;
+    }
+
+    &::after {
+      position: absolute;
+      top: 0;
+      left: calc(50% - 1.5em);
+      display: block;
+      width: 3em;
+      height: 100%;
+      padding-left: calc(1em + 3px);
+      margin: auto;
+      content: '';
+      background-color: #fff;
+      background-image: url('/images/favicon.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 1em;
+    }
   }
 
   .footnotes {
