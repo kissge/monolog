@@ -177,6 +177,11 @@
 
       <IntersectionObserver element={headerElement} bind:intersecting={isHeaderInView} rootMargin="-64px">
         <section
+          class="header-image header-image-shadow"
+          class:noHeaderImage
+          style={data.entity.attributes?.header ? `background-image: url(${data.entity.attributes.header})` : ''}
+        />
+        <section
           class="header-image"
           class:noHeaderImage
           style={data.entity.attributes?.header ? `background-image: url(${data.entity.attributes.header})` : ''}

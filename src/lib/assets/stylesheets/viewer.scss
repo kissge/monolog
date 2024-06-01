@@ -98,19 +98,29 @@ header {
 .header-image {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 50%;
   z-index: -999;
   width: 100%;
+  max-width: 920px;
   height: 400px;
   margin: 0;
   background-image: url('/images/default.svg');
   background-position: center center;
   background-size: cover;
   transition: height 0.2s ease-in-out;
+  translate: -50% 0;
 
   /* stylelint-disable-next-line selector-class-pattern */
   &.noHeaderImage {
     height: 4rem;
+  }
+
+  &.header-image-shadow {
+    top: -10px;
+    width: calc(100% + 20px);
+    max-width: unset;
+    margin: 0 -10px;
+    filter: blur(10px);
   }
 }
 
