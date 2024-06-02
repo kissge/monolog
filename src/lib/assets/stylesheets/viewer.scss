@@ -152,6 +152,7 @@ header {
   background-image: url('/images/default.svg');
   background-position: center center;
   background-size: cover;
+  backdrop-filter: blur(3px);
   transition: height 0.7s ease-in-out;
 
   &::after {
