@@ -184,6 +184,7 @@
         <section
           class="header-image"
           class:noHeaderImage
+          class:default-header-image={!data.entity.attributes?.header}
           style={data.entity.attributes?.header ? `background-image: url(${data.entity.attributes.header})` : ''}
           bind:this={headerElement}
         />

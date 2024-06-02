@@ -115,6 +115,10 @@ header {
     height: 4rem;
   }
 
+  &.default-header-image {
+    max-width: unset;
+  }
+
   &.header-image-shadow {
     top: -10px;
     width: calc(100% + 20px);
