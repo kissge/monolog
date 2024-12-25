@@ -71,6 +71,29 @@
     border-radius: 3px;
     box-shadow: inset 1px 1px 5px rgb(0 0 0 / 5%);
     -webkit-locale: 'auto';
+
+    &,
+    * {
+      text-wrap: initial;
+      overflow-wrap: initial;
+    }
+  }
+
+  .no-wrap {
+    overflow: auto;
+
+    pre {
+      display: table; /* 横幅を広げるための謎hack https://stackoverflow.com/a/65959468 */
+      width: auto;
+      max-width: 650%;
+      margin-right: -550%;
+    }
+  }
+
+  .dense,
+  .dense * {
+    font-size: 0.8rem;
+    line-height: 0.95;
   }
 
   ol,
